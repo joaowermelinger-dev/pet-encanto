@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { to: '/admin/products', label: 'Produtos' },
   { to: '/admin/sales', label: 'Vendas' },
   { to: '/admin/gallery', label: 'Galeria' },
+  { to: '/admin/updates', label: 'Atualizações' },
   { to: '/admin/settings', label: 'Configurações' },
 ]
 

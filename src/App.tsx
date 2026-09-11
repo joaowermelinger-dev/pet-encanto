@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import ProtectedRoute from './auth/ProtectedRoute'
 import AdminLayout from './pages/admin/AdminLayout'
 import Dashboard from './pages/admin/Dashboard'
+import Updates from './pages/admin/Updates'
 import Placeholder from './pages/admin/Placeholder'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="products" element={<Placeholder title="Produtos" />} />
           <Route path="sales" element={<Placeholder title="Vendas" />} />
           <Route path="gallery" element={<Placeholder title="Galeria" />} />
+          <Route path="updates" element={<Updates />} />
           <Route path="settings" element={<Placeholder title="Configurações" />} />
         </Route>
       </Route>
