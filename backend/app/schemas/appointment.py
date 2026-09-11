@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import BaseModel
 
@@ -12,12 +13,16 @@ class AppointmentCreate(BaseModel):
     pet_id: int
     service_id: int
     scheduled_at: datetime
+    price: Decimal
+    paid: bool = False
     notes: str | None = None
 
 
 class AppointmentUpdate(BaseModel):
     scheduled_at: datetime
     status: AppointmentStatus
+    price: Decimal
+    paid: bool
     notes: str | None = None
 
 
@@ -27,6 +32,8 @@ class AppointmentOut(ORMBase):
     service_id: int
     scheduled_at: datetime
     status: AppointmentStatus
+    price: Decimal
+    paid: bool
     notes: str | None
     pet: PetOut
     service: ServiceOut

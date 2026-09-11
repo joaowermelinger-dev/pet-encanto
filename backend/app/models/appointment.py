@@ -1,8 +1,9 @@
-"""Tabela ``appointments`` — agendamentos de um serviço para um pet."""
+"""Tabela ``appointments`` — atendimentos (ocorrências) de um serviço para um pet."""
 
 from datetime import datetime
+from decimal import Decimal
 
-from sqlalchemy import DateTime, ForeignKey, Text, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, Numeric, Text, func, text
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -30,6 +31,12 @@ class Appointment(Base):
         default=AppointmentStatus.SCHEDULED,
         server_default="scheduled",
     )
+    # Valor cobrado NESSA ocorrência — snapshot editável, não vem sempre do
+    # preço atual do catálogo (permite desconto/ajuste pontual).
+    price: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
+    # Marcação simples de pagamento. Não é um registro financeiro completo
+    # (isso vem na Fase 5 — Vendas/Financeiro); só evita esquecer quem pagou.
+    paid: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text("false"))
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

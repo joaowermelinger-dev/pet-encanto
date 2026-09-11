@@ -1,5 +1,5 @@
-import { useMemo, useState, type FormEvent } from 'react'
-import { CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { CalendarDays, Check, ChevronLeft, ChevronRight, CircleDollarSign, Plus, Trash2, X } from 'lucide-react'
 import { useAppointments, useCreateAppointment, useDeleteAppointment, useUpdateAppointment } from '../../hooks/useAppointments'
 import { useClients } from '../../hooks/useClients'
 import { usePets } from '../../hooks/usePets'
@@ -40,6 +40,10 @@ function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
 }
 
+function formatPrice(price: string): string {
+  return Number(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
 export default function Appointments() {
   const [date, setDate] = useState(todayISO())
   const { data: appointments, isLoading } = useAppointments(`${date}T00:00:00`, `${date}T23:59:59`)
@@ -56,12 +60,25 @@ export default function Appointments() {
   async function handleStatusChange(appointment: Appointment, status: AppointmentStatus) {
     await updateAppointment.mutateAsync({
       id: appointment.id,
-      input: { scheduled_at: appointment.scheduled_at, status, notes: appointment.notes },
+      input: { scheduled_at: appointment.scheduled_at, status, price: Number(appointment.price), paid: appointment.paid, notes: appointment.notes },
+    })
+  }
+
+  async function handleTogglePaid(appointment: Appointment) {
+    await updateAppointment.mutateAsync({
+      id: appointment.id,
+      input: {
+        scheduled_at: appointment.scheduled_at,
+        status: appointment.status,
+        price: Number(appointment.price),
+        paid: !appointment.paid,
+        notes: appointment.notes,
+      },
     })
   }
 
   async function handleDelete(appointment: Appointment) {
-    if (!confirm(`Apagar o agendamento de ${appointment.pet.name}?`)) return
+    if (!confirm(`Apagar o atendimento de ${appointment.pet.name}?`)) return
     await deleteAppointment.mutateAsync(appointment.id)
   }
 
@@ -69,14 +86,14 @@ export default function Appointments() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Agenda</h1>
+          <h1 className="text-2xl font-semibold">Atendimentos</h1>
           <p className="mt-1 text-sm capitalize text-muted">{formatDateLabel(date)}</p>
         </div>
         <button
           onClick={() => setShowForm(true)}
           className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
         >
-          <Plus size={16} /> Novo agendamento
+          <Plus size={16} /> Novo atendimento
         </button>
       </div>
 
@@ -108,9 +125,9 @@ export default function Appointments() {
         ) : sorted.length === 0 ? (
           <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-16 text-center">
             <CalendarDays size={28} className="text-muted" />
-            <p className="text-sm text-muted">Nenhum agendamento para esse dia.</p>
+            <p className="text-sm text-muted">Nenhum atendimento para esse dia.</p>
             <button onClick={() => setShowForm(true)} className="text-sm font-medium text-accent hover:underline">
-              Criar agendamento
+              Criar atendimento
             </button>
           </div>
         ) : (
@@ -122,8 +139,18 @@ export default function Appointments() {
                   <p className="truncate font-medium">
                     {a.pet.name} <span className="font-normal text-muted">· {a.pet.client_name}</span>
                   </p>
-                  <p className="text-sm text-muted">{a.service.name}</p>
+                  <p className="text-sm text-muted">
+                    {a.service.name} · {formatPrice(a.price)}
+                  </p>
                 </div>
+                <button
+                  onClick={() => handleTogglePaid(a)}
+                  className={`flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${
+                    a.paid ? 'bg-green-100 text-green-700' : 'bg-surface-muted text-muted'
+                  }`}
+                >
+                  <CircleDollarSign size={13} /> {a.paid ? 'Pago' : 'Não pago'}
+                </button>
                 <span className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ${STATUS_CLASS[a.status]}`}>
                   {STATUS_LABEL[a.status]}
                 </span>
@@ -147,7 +174,7 @@ export default function Appointments() {
                 )}
                 <button
                   onClick={() => handleDelete(a)}
-                  aria-label="Apagar agendamento"
+                  aria-label="Apagar atendimento"
                   className="shrink-0 rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
                 >
                   <Trash2 size={15} />
@@ -173,8 +200,15 @@ function NewAppointmentModal({ date, onClose }: { date: string; onClose: () => v
   const [petId, setPetId] = useState('')
   const [serviceId, setServiceId] = useState('')
   const [time, setTime] = useState('09:00')
+  const [price, setPrice] = useState('')
+  const [paid, setPaid] = useState(false)
   const [notes, setNotes] = useState('')
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const service = services?.find((s) => String(s.id) === serviceId)
+    if (service) setPrice(service.price)
+  }, [serviceId, services])
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -188,16 +222,18 @@ function NewAppointmentModal({ date, onClose }: { date: string; onClose: () => v
         pet_id: Number(petId),
         service_id: Number(serviceId),
         scheduled_at: `${date}T${time}:00`,
+        price: Number(price),
+        paid,
         notes: notes || null,
       })
       onClose()
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Erro ao criar agendamento.')
+      setError(err instanceof ApiError ? err.message : 'Erro ao criar atendimento.')
     }
   }
 
   return (
-    <Modal title="Novo agendamento" onClose={onClose}>
+    <Modal title="Novo atendimento" onClose={onClose}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label className="text-sm">
           Cliente
@@ -236,7 +272,7 @@ function NewAppointmentModal({ date, onClose }: { date: string; onClose: () => v
           </select>
         </label>
         <label className="text-sm">
-          Serviço
+          Qual serviço
           <select
             required
             value={serviceId}
@@ -251,15 +287,33 @@ function NewAppointmentModal({ date, onClose }: { date: string; onClose: () => v
             ))}
           </select>
         </label>
-        <label className="text-sm">
-          Horário
-          <input
-            type="time"
-            required
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-          />
+        <div className="flex gap-3">
+          <label className="flex-1 text-sm">
+            Horário
+            <input
+              type="time"
+              required
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+            />
+          </label>
+          <label className="flex-1 text-sm">
+            Valor (R$)
+            <input
+              type="number"
+              min={0}
+              step={0.01}
+              required
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+            />
+          </label>
+        </div>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={paid} onChange={(e) => setPaid(e.target.checked)} className="accent-accent" />
+          Já pago
         </label>
         <label className="text-sm">
           Observações (opcional)

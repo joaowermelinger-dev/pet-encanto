@@ -54,6 +54,9 @@ export interface Appointment {
   service_id: number
   scheduled_at: string
   status: AppointmentStatus
+  /** Valor cobrado nessa ocorrência (pode diferir do preço atual do catálogo). Vem como string (Decimal). */
+  price: string
+  paid: boolean
   notes: string | null
   pet: Pet
   service: Service

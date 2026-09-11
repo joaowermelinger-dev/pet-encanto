@@ -3,7 +3,7 @@ import { Clock, Pencil, Plus, Sparkles, Trash2 } from 'lucide-react'
 import { useCreateService, useDeleteService, useServices, useUpdateService } from '../../hooks/useServices'
 import type { Service } from '../../types'
 import { ApiError } from '../../api/client'
-import Modal from '../../components/Modal'
+import Modal from '../Modal'
 
 interface FormState {
   name: string
@@ -27,7 +27,8 @@ function formatPrice(price: string): string {
   return Number(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
-export default function Services() {
+/** Catálogo de tipos de serviço (nome, preço base, duração, visível no site). */
+export default function ServiceCatalog() {
   const { data: services, isLoading } = useServices()
   const createService = useCreateService()
   const updateService = useUpdateService()
@@ -109,32 +110,32 @@ export default function Services() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Serviços</h1>
+          <h2 className="text-lg font-semibold">Catálogo de serviços</h2>
           <p className="mt-1 text-sm text-muted">
-            Catálogo de serviços oferecidos. Marque "Visível no site" para aparecer na landing page.
+            Tipos de serviço disponíveis para os atendimentos. Marque "Visível no site" para aparecer na landing page.
           </p>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
+          className="flex shrink-0 items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
         >
-          <Plus size={16} /> Novo serviço
+          <Plus size={16} /> Novo tipo
         </button>
       </div>
 
       <div className="mt-5">
         {isLoading ? (
           <div className="flex flex-col gap-2">
-            {[0, 1, 2].map((i) => (
+            {[0, 1].map((i) => (
               <div key={i} className="h-16 animate-pulse rounded-xl border border-border bg-surface-muted" />
             ))}
           </div>
         ) : !services || services.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-16 text-center">
-            <Sparkles size={28} className="text-muted" />
-            <p className="text-sm text-muted">Nenhum serviço cadastrado ainda.</p>
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-12 text-center">
+            <Sparkles size={26} className="text-muted" />
+            <p className="text-sm text-muted">Nenhum tipo de serviço cadastrado ainda.</p>
             <button onClick={openCreate} className="text-sm font-medium text-accent hover:underline">
-              Cadastrar o primeiro serviço
+              Cadastrar o primeiro
             </button>
           </div>
         ) : (
@@ -175,7 +176,7 @@ export default function Services() {
       </div>
 
       {showForm && (
-        <Modal title={editing ? 'Editar serviço' : 'Novo serviço'} onClose={() => setShowForm(false)}>
+        <Modal title={editing ? 'Editar tipo de serviço' : 'Novo tipo de serviço'} onClose={() => setShowForm(false)}>
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <label className="text-sm">
               Nome
@@ -209,7 +210,7 @@ export default function Services() {
                 />
               </label>
               <label className="flex-1 text-sm">
-                Preço (R$)
+                Preço base (R$)
                 <input
                   type="number"
                   min={0}
@@ -237,7 +238,7 @@ export default function Services() {
                 onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
                 className="accent-accent"
               />
-              Ativo (aparece para agendar)
+              Ativo (aparece para escolher num atendimento)
             </label>
             {error && <p className="text-sm text-red-600">{error}</p>}
             <div className="mt-2 flex justify-end gap-2">

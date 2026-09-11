@@ -5,12 +5,16 @@ export interface AppointmentCreateInput {
   pet_id: number
   service_id: number
   scheduled_at: string
+  price: number
+  paid: boolean
   notes?: string | null
 }
 
 export interface AppointmentUpdateInput {
   scheduled_at: string
   status: AppointmentStatus
+  price: number
+  paid: boolean
   notes?: string | null
 }
 
