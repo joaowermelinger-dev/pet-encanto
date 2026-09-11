@@ -84,7 +84,7 @@ export default function Appointments() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Atendimentos</h1>
           <p className="mt-1 text-sm capitalize text-muted">{formatDateLabel(date)}</p>
@@ -97,7 +97,7 @@ export default function Appointments() {
         </button>
       </div>
 
-      <div className="mt-4 flex items-center gap-2">
+      <div className="mt-4 flex flex-wrap items-center gap-2">
         <button onClick={() => setDate((d) => addDays(d, -1))} className="rounded-lg border border-border p-2 hover:bg-surface-muted" aria-label="Dia anterior">
           <ChevronLeft size={16} />
         </button>
@@ -133,52 +133,56 @@ export default function Appointments() {
         ) : (
           <div className="flex flex-col divide-y divide-border rounded-xl border border-border bg-surface">
             {sorted.map((a) => (
-              <div key={a.id} className="flex items-center gap-4 p-4">
-                <span className="w-14 shrink-0 text-sm font-medium">{formatTime(a.scheduled_at)}</span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium">
-                    {a.pet.name} <span className="font-normal text-muted">· {a.pet.client_name}</span>
-                  </p>
-                  <p className="text-sm text-muted">
-                    {a.service.name} · {formatPrice(a.price)}
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleTogglePaid(a)}
-                  className={`flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${
-                    a.paid ? 'bg-green-100 text-green-700' : 'bg-surface-muted text-muted'
-                  }`}
-                >
-                  <CircleDollarSign size={13} /> {a.paid ? 'Pago' : 'Não pago'}
-                </button>
-                <span className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ${STATUS_CLASS[a.status]}`}>
-                  {STATUS_LABEL[a.status]}
-                </span>
-                {a.status === 'scheduled' && (
-                  <div className="flex shrink-0 gap-1">
-                    <button
-                      onClick={() => handleStatusChange(a, 'completed')}
-                      aria-label="Marcar como concluído"
-                      className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-green-700"
-                    >
-                      <Check size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleStatusChange(a, 'cancelled')}
-                      aria-label="Cancelar"
-                      className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
-                    >
-                      <X size={16} />
-                    </button>
+              <div key={a.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-4">
+                <div className="flex items-start gap-3 sm:contents">
+                  <span className="w-14 shrink-0 text-sm font-medium">{formatTime(a.scheduled_at)}</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium">
+                      {a.pet.name} <span className="font-normal text-muted">· {a.pet.client_name}</span>
+                    </p>
+                    <p className="text-sm text-muted">
+                      {a.service.name} · {formatPrice(a.price)}
+                    </p>
                   </div>
-                )}
-                <button
-                  onClick={() => handleDelete(a)}
-                  aria-label="Apagar atendimento"
-                  className="shrink-0 rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
-                >
-                  <Trash2 size={15} />
-                </button>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 pl-[4.25rem] sm:shrink-0 sm:pl-0">
+                  <button
+                    onClick={() => handleTogglePaid(a)}
+                    className={`flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${
+                      a.paid ? 'bg-green-100 text-green-700' : 'bg-surface-muted text-muted'
+                    }`}
+                  >
+                    <CircleDollarSign size={13} /> {a.paid ? 'Pago' : 'Não pago'}
+                  </button>
+                  <span className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ${STATUS_CLASS[a.status]}`}>
+                    {STATUS_LABEL[a.status]}
+                  </span>
+                  {a.status === 'scheduled' && (
+                    <div className="flex shrink-0 gap-1">
+                      <button
+                        onClick={() => handleStatusChange(a, 'completed')}
+                        aria-label="Marcar como concluído"
+                        className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-green-700"
+                      >
+                        <Check size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(a, 'cancelled')}
+                        aria-label="Cancelar"
+                        className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    onClick={() => handleDelete(a)}
+                    aria-label="Apagar atendimento"
+                    className="shrink-0 rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

@@ -100,8 +100,8 @@ export default function ClientDetail() {
       </button>
 
       <div className="mt-3 rounded-xl border border-border bg-surface p-5">
-        <div className="flex items-start justify-between">
-          <div>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
             <h1 className="text-xl font-semibold">{client.name}</h1>
             <div className="mt-2 flex flex-col gap-1 text-sm text-muted">
               <span className="flex items-center gap-1.5">
@@ -138,7 +138,7 @@ export default function ClientDetail() {
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-between">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">Pets</h2>
         <button
           onClick={() => setShowPetForm(true)}

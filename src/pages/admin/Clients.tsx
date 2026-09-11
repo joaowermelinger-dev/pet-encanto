@@ -42,7 +42,7 @@ export default function Clients() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Clientes</h1>
           <p className="mt-1 text-sm text-muted">Donos dos pets cadastrados no petshop.</p>
@@ -55,7 +55,7 @@ export default function Clients() {
         </button>
       </div>
 
-      <div className="relative mt-5 w-72">
+      <div className="relative mt-5 w-full max-w-72">
         <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
         <input
           placeholder="Buscar por nome…"

@@ -108,7 +108,7 @@ export default function ServiceCatalog() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold">Catálogo de serviços</h2>
           <p className="mt-1 text-sm text-muted">
