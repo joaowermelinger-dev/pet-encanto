@@ -23,6 +23,30 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.1',
+    version: '1.1',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Clientes & Pets',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Cadastro de clientes (donos dos pets): nome, telefone, e-mail e endereço.',
+          },
+          {
+            kind: 'novo',
+            text: 'Cada cliente pode ter vários pets cadastrados (espécie, raça e porte).',
+          },
+          {
+            kind: 'novo',
+            text: 'Busca de clientes por nome na área administrativa.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.0',
     version: '1.0',
     date: '2026-09-11',
