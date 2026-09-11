@@ -23,6 +23,30 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.7',
+    version: '1.7',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Clubinho',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Aba Clubinho: cadastre um atendimento recorrente (semanal, quinzenal ou mensal) e o sistema já agenda os próximos 3 meses sozinho.',
+          },
+          {
+            kind: 'novo',
+            text: 'Dá pra pausar, retomar, cancelar ou gerar mais atendimentos de um clubinho a qualquer momento.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Atendimentos gerados por um clubinho ganham a etiqueta "clubinho" na lista de Atendimentos.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.6',
     version: '1.6',
     date: '2026-09-11',
