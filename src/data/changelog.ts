@@ -23,6 +23,30 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.4',
+    version: '1.4',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Mobile',
+        changes: [
+          {
+            kind: 'melhoria',
+            text: 'Menu do painel administrativo agora abre como uma gaveta (drawer) no celular, em vez de ocupar a tela toda.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Menu da página inicial vira um botão de hambúrguer no celular.',
+          },
+          {
+            kind: 'correção',
+            text: 'Telas de Clientes, Atendimentos e Configurações não estouram mais a largura em telas pequenas.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.3',
     version: '1.3',
     date: '2026-09-11',
