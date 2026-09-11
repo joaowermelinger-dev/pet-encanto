@@ -382,8 +382,8 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
           </>
         ) : (
           <>
-            <div className="flex gap-3">
-              <label className="flex-1 text-sm">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <label className="text-sm sm:flex-1">
                 Nome do cliente
                 <input
                   required={!registered}
@@ -392,7 +392,7 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
                   className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
                 />
               </label>
-              <label className="flex-1 text-sm">
+              <label className="text-sm sm:flex-1">
                 Número do cliente
                 <input
                   value={guestClientPhone}
@@ -401,8 +401,8 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
                 />
               </label>
             </div>
-            <div className="flex gap-3">
-              <label className="flex-1 text-sm">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <label className="text-sm sm:flex-1">
                 Animal
                 <input
                   required={!registered}
@@ -411,7 +411,7 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
                   className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
                 />
               </label>
-              <label className="flex-1 text-sm">
+              <label className="text-sm sm:flex-1">
                 Raça do animal
                 <input
                   value={guestAnimalBreed}
@@ -450,31 +450,31 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
           </select>
         </label>
 
-        <div className="flex gap-3">
-          <label className="flex-1 text-sm">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <label className="text-sm sm:flex-1">
             Data
             <input
               type="date"
               required
               value={dateValue}
               onChange={(e) => setDateValue(e.target.value)}
-              className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+              className="mt-1 block w-full min-w-0 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
             />
           </label>
-          <label className="flex-1 text-sm">
+          <label className="text-sm sm:flex-1">
             Horário
             <input
               type="time"
               required
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+              className="mt-1 block w-full min-w-0 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
             />
           </label>
         </div>
 
-        <div className="flex gap-3">
-          <label className="flex-1 text-sm">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <label className="text-sm sm:flex-1">
             Valor (R$)
             <input
               type="number"
@@ -487,7 +487,7 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
             />
           </label>
           {isEdit && (
-            <label className="flex-1 text-sm">
+            <label className="text-sm sm:flex-1">
               Status
               <select
                 value={status}
