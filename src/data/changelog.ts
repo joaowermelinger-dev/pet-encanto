@@ -23,6 +23,30 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.3',
+    version: '1.3',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Atendimentos',
+        changes: [
+          {
+            kind: 'melhoria',
+            text: '"Agenda" e "Serviços" viram uma única aba: Atendimentos. Cadastrar e visualizar ficou num só lugar.',
+          },
+          {
+            kind: 'novo',
+            text: 'Cada atendimento agora tem valor cobrado (editável, vem sugerido do catálogo) e marcação de pago/não pago.',
+          },
+          {
+            kind: 'novo',
+            text: 'O catálogo de tipos de serviço (preço base, duração, visibilidade no site) foi para Configurações.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.2',
     version: '1.2',
     date: '2026-09-11',
