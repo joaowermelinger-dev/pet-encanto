@@ -23,6 +23,34 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.8',
+    version: '1.8',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Financeiro',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Aba Financeiro: receita, valor a receber, despesas e saldo, com filtro por período (hoje, semana, mês ou intervalo customizado).',
+          },
+          {
+            kind: 'novo',
+            text: 'Receita separada por forma de pagamento (dinheiro, cartão, pix, outro) e por dia.',
+          },
+          {
+            kind: 'novo',
+            text: 'Lançamento de despesas do petshop, com valor e data.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Atendimentos agora registram a forma de pagamento quando marcados como pagos.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.7',
     version: '1.7',
     date: '2026-09-11',
