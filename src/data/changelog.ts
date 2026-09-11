@@ -23,6 +23,22 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.9',
+    version: '1.9',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Painel',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Painel agora mostra a agenda do dia, o resumo financeiro do mês e um resumo rápido (clientes, pets, atendimentos hoje, receita do mês).',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.8',
     version: '1.8',
     date: '2026-09-11',
