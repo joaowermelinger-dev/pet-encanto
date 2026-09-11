@@ -92,7 +92,7 @@ export default function Clients() {
                 className="flex flex-col rounded-xl border border-border bg-surface p-4 transition hover:border-accent hover:shadow-sm"
               >
                 <div className="flex items-start gap-3">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold/25 text-sm font-semibold text-gold-foreground">
                     {initials(c.name)}
                   </span>
                   <div className="min-w-0">

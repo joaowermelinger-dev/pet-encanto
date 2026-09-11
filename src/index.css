@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
 
-/* Tema quente, aconchegante (petshop) — sem modo escuro por enquanto. */
+/* Paleta da marca: marrom, verde sálvia, dourado, creme, bege claro. */
 @theme inline {
   --color-background: var(--bg);
   --color-surface: var(--surface);
@@ -11,19 +11,23 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-fg);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-fg);
 
   --font-sans: 'Inter Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
 }
 
 :root {
-  --bg: #fefbf6;
+  --bg: #fef7ed; /* creme */
   --surface: #ffffff;
-  --surface-muted: #f6efe4;
-  --border: #ead9c0;
-  --fg: #2c1e12;
-  --muted: #7a6a58;
-  --accent: #d9772f;
+  --surface-muted: #e5dece; /* bege claro */
+  --border: #e5dece; /* bege claro */
+  --fg: #58422a; /* marrom */
+  --muted: #8a7a68; /* marrom suavizado, pra texto secundário */
+  --accent: #8a9884; /* verde sálvia — botões e destaques principais */
   --accent-fg: #ffffff;
+  --gold: #d0ac7d; /* dourado — destaques secundários (avatares, status) */
+  --gold-fg: #58422a;
 
   color-scheme: light;
 }

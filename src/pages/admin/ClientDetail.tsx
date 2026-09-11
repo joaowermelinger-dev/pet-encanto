@@ -161,7 +161,7 @@ export default function ClientDetail() {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {client.pets.map((pet) => (
               <div key={pet.id} className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-lg">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold/25 text-lg">
                   {SPECIES_EMOJI[pet.species]}
                 </span>
                 <div className="min-w-0 flex-1">

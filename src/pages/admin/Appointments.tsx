@@ -15,8 +15,8 @@ const STATUS_LABEL: Record<AppointmentStatus, string> = {
 }
 
 const STATUS_CLASS: Record<AppointmentStatus, string> = {
-  scheduled: 'bg-accent/15 text-accent',
-  completed: 'bg-green-100 text-green-700',
+  scheduled: 'bg-gold/25 text-gold-foreground',
+  completed: 'bg-accent/15 text-accent',
   cancelled: 'bg-surface-muted text-muted line-through',
 }
 
@@ -149,7 +149,7 @@ export default function Appointments() {
                   <button
                     onClick={() => handleTogglePaid(a)}
                     className={`flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${
-                      a.paid ? 'bg-green-100 text-green-700' : 'bg-surface-muted text-muted'
+                      a.paid ? 'bg-accent/15 text-accent' : 'bg-surface-muted text-muted'
                     }`}
                   >
                     <CircleDollarSign size={13} /> {a.paid ? 'Pago' : 'Não pago'}
@@ -162,7 +162,7 @@ export default function Appointments() {
                       <button
                         onClick={() => handleStatusChange(a, 'completed')}
                         aria-label="Marcar como concluído"
-                        className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-green-700"
+                        className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-accent"
                       >
                         <Check size={16} />
                       </button>
