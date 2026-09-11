@@ -1,11 +1,14 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { ArrowLeft, Mail, MapPin, PawPrint, Pencil, Phone, Plus, Trash2 } from 'lucide-react'
 import { useClient, useDeleteClient, useUpdateClient } from '../../hooks/useClients'
 import { useCreatePet, useDeletePet } from '../../hooks/usePets'
 import type { PetSize, PetSpecies } from '../../types'
 import { ApiError } from '../../api/client'
+import Modal from '../../components/Modal'
 
 const SPECIES_LABEL: Record<PetSpecies, string> = { dog: 'Cachorro', cat: 'Gato', other: 'Outro' }
+const SPECIES_EMOJI: Record<PetSpecies, string> = { dog: '🐶', cat: '🐱', other: '🐾' }
 const SIZE_LABEL: Record<PetSize, string> = { small: 'Pequeno', medium: 'Médio', large: 'Grande' }
 
 export default function ClientDetail() {
@@ -30,7 +33,9 @@ export default function ClientDetail() {
   const [petBreed, setPetBreed] = useState('')
   const [error, setError] = useState<string | null>(null)
 
-  if (isLoading) return <p className="text-sm text-muted">Carregando…</p>
+  if (isLoading) {
+    return <div className="h-40 animate-pulse rounded-xl border border-border bg-surface-muted" />
+  }
   if (!client) return <p className="text-sm text-muted">Cliente não encontrado.</p>
 
   function startEdit() {
@@ -38,7 +43,15 @@ export default function ClientDetail() {
     setPhone(client!.phone)
     setEmail(client!.email ?? '')
     setAddress(client!.address ?? '')
+    setError(null)
     setEditing(true)
+  }
+
+  function closePetForm() {
+    setShowPetForm(false)
+    setError(null)
+    setPetName('')
+    setPetBreed('')
   }
 
   async function handleSaveEdit(e: FormEvent) {
@@ -66,9 +79,7 @@ export default function ClientDetail() {
     setError(null)
     try {
       await createPet.mutateAsync({ client_id: clientId, name: petName, species: petSpecies, breed: petBreed || null })
-      setPetName('')
-      setPetBreed('')
-      setShowPetForm(false)
+      closePetForm()
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Erro ao cadastrar pet.')
     }
@@ -81,39 +92,109 @@ export default function ClientDetail() {
 
   return (
     <div>
-      <button onClick={() => navigate('/admin/clients')} className="text-sm text-muted hover:text-foreground">
-        ← Voltar
+      <button
+        onClick={() => navigate('/admin/clients')}
+        className="flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
+      >
+        <ArrowLeft size={15} /> Voltar
       </button>
 
       <div className="mt-3 rounded-xl border border-border bg-surface p-5">
-        {!editing ? (
-          <>
-            <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-xl font-semibold">{client.name}</h1>
-                <p className="mt-1 text-sm text-muted">{client.phone}</p>
-                {client.email && <p className="text-sm text-muted">{client.email}</p>}
-                {client.address && <p className="text-sm text-muted">{client.address}</p>}
-              </div>
-              <div className="flex gap-2">
-                <button onClick={startEdit} className="text-sm text-accent hover:underline">
-                  Editar
-                </button>
-                <button onClick={handleDeleteClient} className="text-sm text-red-600 hover:underline">
-                  Apagar
-                </button>
-              </div>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-xl font-semibold">{client.name}</h1>
+            <div className="mt-2 flex flex-col gap-1 text-sm text-muted">
+              <span className="flex items-center gap-1.5">
+                <Phone size={14} /> {client.phone}
+              </span>
+              {client.email && (
+                <span className="flex items-center gap-1.5">
+                  <Mail size={14} /> {client.email}
+                </span>
+              )}
+              {client.address && (
+                <span className="flex items-center gap-1.5">
+                  <MapPin size={14} /> {client.address}
+                </span>
+              )}
             </div>
-          </>
+          </div>
+          <div className="flex gap-1">
+            <button
+              onClick={startEdit}
+              aria-label="Editar cliente"
+              className="rounded-lg p-2 text-muted hover:bg-surface-muted hover:text-accent"
+            >
+              <Pencil size={16} />
+            </button>
+            <button
+              onClick={handleDeleteClient}
+              aria-label="Apagar cliente"
+              className="rounded-lg p-2 text-muted hover:bg-surface-muted hover:text-red-600"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Pets</h2>
+        <button
+          onClick={() => setShowPetForm(true)}
+          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
+        >
+          <Plus size={16} /> Novo pet
+        </button>
+      </div>
+
+      <div className="mt-4">
+        {client.pets.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-12 text-center">
+            <PawPrint size={28} className="text-muted" />
+            <p className="text-sm text-muted">Nenhum pet cadastrado ainda.</p>
+            <button onClick={() => setShowPetForm(true)} className="text-sm font-medium text-accent hover:underline">
+              Cadastrar o primeiro pet
+            </button>
+          </div>
         ) : (
-          <form onSubmit={handleSaveEdit} className="flex flex-wrap items-end gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {client.pets.map((pet) => (
+              <div key={pet.id} className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-lg">
+                  {SPECIES_EMOJI[pet.species]}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">{pet.name}</p>
+                  <p className="text-sm text-muted">
+                    {SPECIES_LABEL[pet.species]}
+                    {pet.breed ? ` · ${pet.breed}` : ''}
+                    {pet.size ? ` · ${SIZE_LABEL[pet.size]}` : ''}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleDeletePet(pet.id, pet.name)}
+                  aria-label={`Apagar ${pet.name}`}
+                  className="shrink-0 rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {editing && (
+        <Modal title="Editar cliente" onClose={() => setEditing(false)}>
+          <form onSubmit={handleSaveEdit} className="flex flex-col gap-3">
             <label className="text-sm">
               Nome
               <input
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-48 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
               />
             </label>
             <label className="text-sm">
@@ -122,7 +203,7 @@ export default function ClientDetail() {
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="mt-1 block w-40 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
               />
             </label>
             <label className="text-sm">
@@ -131,7 +212,7 @@ export default function ClientDetail() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-56 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
               />
             </label>
             <label className="text-sm">
@@ -139,110 +220,75 @@ export default function ClientDetail() {
               <input
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                className="mt-1 block w-64 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
               />
             </label>
-            <button
-              type="submit"
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
-            >
-              Salvar
-            </button>
-            <button type="button" onClick={() => setEditing(false)} className="text-sm text-muted hover:text-foreground">
-              Cancelar
-            </button>
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            <div className="mt-2 flex justify-end gap-2">
+              <button type="button" onClick={() => setEditing(false)} className="rounded-lg px-4 py-2 text-sm text-muted hover:text-foreground">
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={updateClient.isPending}
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+              >
+                {updateClient.isPending ? 'Salvando…' : 'Salvar'}
+              </button>
+            </div>
           </form>
-        )}
-      </div>
-
-      <div className="mt-6 flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Pets</h2>
-        <button
-          onClick={() => setShowPetForm((v) => !v)}
-          className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
-        >
-          {showPetForm ? 'Cancelar' : 'Novo pet'}
-        </button>
-      </div>
-
-      {showPetForm && (
-        <form onSubmit={handleAddPet} className="mt-3 flex flex-wrap items-end gap-3 rounded-xl border border-border bg-surface p-4">
-          <label className="text-sm">
-            Nome
-            <input
-              required
-              value={petName}
-              onChange={(e) => setPetName(e.target.value)}
-              className="mt-1 block w-40 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-            />
-          </label>
-          <label className="text-sm">
-            Espécie
-            <select
-              value={petSpecies}
-              onChange={(e) => setPetSpecies(e.target.value as PetSpecies)}
-              className="mt-1 block w-36 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-            >
-              <option value="dog">Cachorro</option>
-              <option value="cat">Gato</option>
-              <option value="other">Outro</option>
-            </select>
-          </label>
-          <label className="text-sm">
-            Raça (opcional)
-            <input
-              value={petBreed}
-              onChange={(e) => setPetBreed(e.target.value)}
-              className="mt-1 block w-40 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-            />
-          </label>
-          <button
-            type="submit"
-            disabled={createPet.isPending}
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
-          >
-            {createPet.isPending ? 'Salvando…' : 'Salvar'}
-          </button>
-        </form>
+        </Modal>
       )}
 
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
-
-      <div className="mt-4 overflow-hidden rounded-xl border border-border bg-surface">
-        {client.pets.length === 0 ? (
-          <p className="p-4 text-sm text-muted">Nenhum pet cadastrado ainda.</p>
-        ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-left text-muted">
-                <th className="px-4 py-2 font-medium">Nome</th>
-                <th className="px-4 py-2 font-medium">Espécie</th>
-                <th className="px-4 py-2 font-medium">Porte</th>
-                <th className="px-4 py-2 font-medium">Raça</th>
-                <th className="px-4 py-2" />
-              </tr>
-            </thead>
-            <tbody>
-              {client.pets.map((pet) => (
-                <tr key={pet.id} className="border-b border-border last:border-0">
-                  <td className="px-4 py-2 font-medium">{pet.name}</td>
-                  <td className="px-4 py-2">{SPECIES_LABEL[pet.species]}</td>
-                  <td className="px-4 py-2 text-muted">{pet.size ? SIZE_LABEL[pet.size] : '—'}</td>
-                  <td className="px-4 py-2 text-muted">{pet.breed ?? '—'}</td>
-                  <td className="px-4 py-2 text-right">
-                    <button
-                      onClick={() => handleDeletePet(pet.id, pet.name)}
-                      className="text-sm text-red-600 hover:underline"
-                    >
-                      Apagar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+      {showPetForm && (
+        <Modal title="Novo pet" onClose={closePetForm}>
+          <form onSubmit={handleAddPet} className="flex flex-col gap-3">
+            <label className="text-sm">
+              Nome
+              <input
+                required
+                autoFocus
+                value={petName}
+                onChange={(e) => setPetName(e.target.value)}
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+              />
+            </label>
+            <label className="text-sm">
+              Espécie
+              <select
+                value={petSpecies}
+                onChange={(e) => setPetSpecies(e.target.value as PetSpecies)}
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+              >
+                <option value="dog">Cachorro</option>
+                <option value="cat">Gato</option>
+                <option value="other">Outro</option>
+              </select>
+            </label>
+            <label className="text-sm">
+              Raça (opcional)
+              <input
+                value={petBreed}
+                onChange={(e) => setPetBreed(e.target.value)}
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+              />
+            </label>
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            <div className="mt-2 flex justify-end gap-2">
+              <button type="button" onClick={closePetForm} className="rounded-lg px-4 py-2 text-sm text-muted hover:text-foreground">
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={createPet.isPending}
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+              >
+                {createPet.isPending ? 'Salvando…' : 'Salvar'}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   )
 }

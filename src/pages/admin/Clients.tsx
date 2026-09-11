@@ -1,7 +1,14 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { Mail, Phone, Plus, Search, Users } from 'lucide-react'
 import { useClients, useCreateClient } from '../../hooks/useClients'
 import { ApiError } from '../../api/client'
+import Modal from '../../components/Modal'
+
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/)
+  return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase()
+}
 
 export default function Clients() {
   const [search, setSearch] = useState('')
@@ -14,15 +21,20 @@ export default function Clients() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
 
+  function closeForm() {
+    setShowForm(false)
+    setError(null)
+    setName('')
+    setPhone('')
+    setEmail('')
+  }
+
   async function handleCreate(e: FormEvent) {
     e.preventDefault()
     setError(null)
     try {
       await createClient.mutateAsync({ name, phone, email: email || null })
-      setName('')
-      setPhone('')
-      setEmail('')
-      setShowForm(false)
+      closeForm()
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Erro ao criar cliente.')
     }
@@ -31,92 +43,122 @@ export default function Clients() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Clientes</h1>
+        <div>
+          <h1 className="text-2xl font-semibold">Clientes</h1>
+          <p className="mt-1 text-sm text-muted">Donos dos pets cadastrados no petshop.</p>
+        </div>
         <button
-          onClick={() => setShowForm((v) => !v)}
-          className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
         >
-          {showForm ? 'Cancelar' : 'Novo cliente'}
+          <Plus size={16} /> Novo cliente
         </button>
       </div>
 
-      {showForm && (
-        <form onSubmit={handleCreate} className="mt-4 flex flex-wrap items-end gap-3 rounded-xl border border-border bg-surface p-4">
-          <label className="text-sm">
-            Nome
-            <input
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-48 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-            />
-          </label>
-          <label className="text-sm">
-            Telefone
-            <input
-              required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="mt-1 block w-40 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-            />
-          </label>
-          <label className="text-sm">
-            E-mail (opcional)
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-56 rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-            />
-          </label>
-          <button
-            type="submit"
-            disabled={createClient.isPending}
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
-          >
-            {createClient.isPending ? 'Salvando…' : 'Salvar'}
-          </button>
-          {error && <p className="w-full text-sm text-red-600">{error}</p>}
-        </form>
-      )}
+      <div className="relative mt-5 w-72">
+        <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+        <input
+          placeholder="Buscar por nome…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm outline-none focus:border-accent"
+        />
+      </div>
 
-      <input
-        placeholder="Buscar por nome…"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="mt-4 w-64 rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-accent"
-      />
-
-      <div className="mt-4 overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="mt-4">
         {isLoading ? (
-          <p className="p-4 text-sm text-muted">Carregando…</p>
+          <div className="flex flex-col gap-2">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="h-16 animate-pulse rounded-xl border border-border bg-surface-muted" />
+            ))}
+          </div>
         ) : !clients || clients.length === 0 ? (
-          <p className="p-4 text-sm text-muted">Nenhum cliente cadastrado ainda.</p>
+          <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-16 text-center">
+            <Users size={32} className="text-muted" />
+            <p className="text-sm text-muted">
+              {search ? 'Nenhum cliente encontrado.' : 'Nenhum cliente cadastrado ainda.'}
+            </p>
+            {!search && (
+              <button onClick={() => setShowForm(true)} className="text-sm font-medium text-accent hover:underline">
+                Cadastrar o primeiro cliente
+              </button>
+            )}
+          </div>
         ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-left text-muted">
-                <th className="px-4 py-2 font-medium">Nome</th>
-                <th className="px-4 py-2 font-medium">Telefone</th>
-                <th className="px-4 py-2 font-medium">E-mail</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clients.map((c) => (
-                <tr key={c.id} className="border-b border-border last:border-0 hover:bg-surface-muted">
-                  <td className="px-4 py-2">
-                    <Link to={`/admin/clients/${c.id}`} className="font-medium text-accent hover:underline">
-                      {c.name}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-2">{c.phone}</td>
-                  <td className="px-4 py-2 text-muted">{c.email ?? '—'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {clients.map((c) => (
+              <Link
+                key={c.id}
+                to={`/admin/clients/${c.id}`}
+                className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4 transition hover:border-accent hover:shadow-sm"
+              >
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
+                  {initials(c.name)}
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{c.name}</p>
+                  <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
+                    <Phone size={13} /> {c.phone}
+                  </p>
+                  {c.email && (
+                    <p className="mt-0.5 flex items-center gap-1.5 truncate text-sm text-muted">
+                      <Mail size={13} /> {c.email}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
         )}
       </div>
+
+      {showForm && (
+        <Modal title="Novo cliente" onClose={closeForm}>
+          <form onSubmit={handleCreate} className="flex flex-col gap-3">
+            <label className="text-sm">
+              Nome
+              <input
+                required
+                autoFocus
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+              />
+            </label>
+            <label className="text-sm">
+              Telefone
+              <input
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+              />
+            </label>
+            <label className="text-sm">
+              E-mail (opcional)
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+              />
+            </label>
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            <div className="mt-2 flex justify-end gap-2">
+              <button type="button" onClick={closeForm} className="rounded-lg px-4 py-2 text-sm text-muted hover:text-foreground">
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                disabled={createClient.isPending}
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+              >
+                {createClient.isPending ? 'Salvando…' : 'Salvar'}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   )
 }
