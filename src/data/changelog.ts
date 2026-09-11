@@ -23,6 +23,35 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.5',
+    version: '1.5',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Nova identidade visual',
+        changes: [
+          {
+            kind: 'melhoria',
+            text: 'Paleta de cores do app inteiro trocada: marrom, verde sálvia, dourado, creme e bege claro.',
+          },
+        ],
+      },
+      {
+        title: 'Atendimentos',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Dá pra abrir um atendimento sem cliente cadastrado ("avulso"): nome e telefone do cliente, animal, raça e observações (temperamento, alergia, etc.) direto no formulário.',
+          },
+          {
+            kind: 'novo',
+            text: 'Editar atendimento agora é completo: dá pra mudar serviço, data, horário, valor, pago e status num só lugar.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.4',
     version: '1.4',
     date: '2026-09-11',
