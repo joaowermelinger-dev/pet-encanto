@@ -7,11 +7,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://REPLACE-COM-SUA-URL-DO-RENDER.onrender.com/api/:path*"
+      "destination": "https://pet-encanto-api.onrender.com/api/:path*"
     },
     {
       "source": "/uploads/:path*",
-      "destination": "https://REPLACE-COM-SUA-URL-DO-RENDER.onrender.com/uploads/:path*"
+      "destination": "https://pet-encanto-api.onrender.com/uploads/:path*"
     },
     { "source": "/((?!assets/).*)", "destination": "/index.html" }
   ],
