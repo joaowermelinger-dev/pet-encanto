@@ -37,25 +37,8 @@ class SubscriptionStatus(str, enum.Enum):
     CANCELLED = "cancelled"
 
 
-class StockMovementReason(str, enum.Enum):
-    RESTOCK = "restock"
-    SALE = "sale"
-    ADJUSTMENT = "adjustment"
-    LOSS = "loss"
-
-
 class PaymentMethod(str, enum.Enum):
     CASH = "cash"
     CARD = "card"
     PIX = "pix"
     OTHER = "other"
-
-
-class SaleStatus(str, enum.Enum):
-    COMPLETED = "completed"
-    CANCELLED = "cancelled"
-
-
-class SaleItemType(str, enum.Enum):
-    PRODUCT = "product"
-    SERVICE = "service"

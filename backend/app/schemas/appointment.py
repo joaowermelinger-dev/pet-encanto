@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, model_validator
 
-from app.models.common import AppointmentStatus
+from app.models.common import AppointmentStatus, PaymentMethod
 from app.schemas.base import ORMBase
 from app.schemas.pet import PetOut
 from app.schemas.service import ServiceOut
@@ -34,6 +34,7 @@ class AppointmentCreate(_GuestFields):
     scheduled_at: datetime
     price: Decimal
     paid: bool = False
+    payment_method: PaymentMethod | None = None
     notes: str | None = None
 
 
@@ -43,6 +44,7 @@ class AppointmentUpdate(_GuestFields):
     status: AppointmentStatus
     price: Decimal
     paid: bool
+    payment_method: PaymentMethod | None = None
     notes: str | None = None
 
 
@@ -54,6 +56,7 @@ class AppointmentOut(ORMBase):
     status: AppointmentStatus
     price: Decimal
     paid: bool
+    payment_method: PaymentMethod | None
     notes: str | None
     guest_client_name: str | None
     guest_client_phone: str | None

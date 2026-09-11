@@ -47,6 +47,7 @@ export interface Service {
 }
 
 export type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled'
+export type PaymentMethod = 'cash' | 'card' | 'pix' | 'other'
 
 export interface Appointment {
   id: number
@@ -57,6 +58,7 @@ export interface Appointment {
   /** Valor cobrado nessa ocorrência (pode diferir do preço atual do catálogo). Vem como string (Decimal). */
   price: string
   paid: boolean
+  payment_method: PaymentMethod | null
   notes: string | null
   /** Preenchidos só quando NÃO há pet_id (atendimento avulso, sem cadastro). */
   guest_client_name: string | null
@@ -83,6 +85,35 @@ export interface Subscription {
   pet: Pet
   service: Service
   next_occurrence_at: string | null
+}
+
+export interface Expense {
+  id: number
+  description: string
+  amount: string
+  expense_date: string
+}
+
+export interface DailyTotal {
+  date: string
+  revenue: string
+}
+
+export interface RevenueByMethod {
+  cash: string
+  card: string
+  pix: string
+  other: string
+}
+
+export interface FinanceSummary {
+  total_revenue: string
+  total_pending: string
+  total_expenses: string
+  net: string
+  revenue_by_method: RevenueByMethod
+  daily: DailyTotal[]
+  expenses: Expense[]
 }
 
 export interface ShopInfo {

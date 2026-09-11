@@ -1,5 +1,5 @@
 import { apiRequest } from './client'
-import type { Appointment, AppointmentStatus } from '../types'
+import type { Appointment, AppointmentStatus, PaymentMethod } from '../types'
 
 interface GuestFields {
   pet_id?: number | null
@@ -15,6 +15,7 @@ export interface AppointmentCreateInput extends GuestFields {
   scheduled_at: string
   price: number
   paid: boolean
+  payment_method?: PaymentMethod | null
   notes?: string | null
 }
 
@@ -24,6 +25,7 @@ export interface AppointmentUpdateInput extends GuestFields {
   status: AppointmentStatus
   price: number
   paid: boolean
+  payment_method?: PaymentMethod | null
   notes?: string | null
 }
 

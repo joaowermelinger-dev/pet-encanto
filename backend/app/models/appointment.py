@@ -13,7 +13,7 @@ from sqlalchemy import Enum as SAEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
-from app.models.common import AppointmentStatus
+from app.models.common import AppointmentStatus, PaymentMethod
 
 
 class Appointment(Base):
@@ -44,6 +44,16 @@ class Appointment(Base):
     # Marcação simples de pagamento. Não é um registro financeiro completo
     # (isso vem na Fase 5 — Vendas/Financeiro); só evita esquecer quem pagou.
     paid: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text("false"))
+    # Só faz sentido quando `paid` é True; fica NULL enquanto não pago.
+    payment_method: Mapped[PaymentMethod | None] = mapped_column(
+        SAEnum(
+            PaymentMethod,
+            native_enum=False,
+            length=20,
+            values_callable=lambda enum: [e.value for e in enum],
+        ),
+        nullable=True,
+    )
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # --- Cliente avulso (sem cadastro) — só usados quando pet_id é NULL ---

@@ -4,7 +4,7 @@ import { useAppointments, useCreateAppointment, useDeleteAppointment, useUpdateA
 import { useClients } from '../../hooks/useClients'
 import { usePets } from '../../hooks/usePets'
 import { useServices } from '../../hooks/useServices'
-import type { Appointment, AppointmentStatus } from '../../types'
+import type { Appointment, AppointmentStatus, PaymentMethod } from '../../types'
 import { ApiError } from '../../api/client'
 import Modal from '../../components/Modal'
 
@@ -79,6 +79,7 @@ export default function Appointments() {
         status,
         price: Number(appointment.price),
         paid: appointment.paid,
+        payment_method: appointment.payment_method,
         notes: appointment.notes,
       },
     })
@@ -99,6 +100,7 @@ export default function Appointments() {
         status: appointment.status,
         price: Number(appointment.price),
         paid: !appointment.paid,
+        payment_method: !appointment.paid ? appointment.payment_method ?? 'cash' : null,
         notes: appointment.notes,
       },
     })
@@ -264,6 +266,7 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
   const [time, setTime] = useState(appointment ? appointment.scheduled_at.slice(11, 16) : '09:00')
   const [price, setPrice] = useState(appointment ? appointment.price : '')
   const [paid, setPaid] = useState(appointment?.paid ?? false)
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(appointment?.payment_method ?? 'cash')
   const [status, setStatus] = useState<AppointmentStatus>(appointment?.status ?? 'scheduled')
   const [notes, setNotes] = useState(appointment?.notes ?? '')
   const [error, setError] = useState<string | null>(null)
@@ -301,6 +304,7 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
       scheduled_at: `${dateValue}T${time}:00`,
       price: Number(price),
       paid,
+      payment_method: paid ? paymentMethod : null,
       notes: notes || null,
       pet_id: registered ? Number(petId) : null,
       guest_client_name: registered ? null : guestClientName,
@@ -507,6 +511,21 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
           <input type="checkbox" checked={paid} onChange={(e) => setPaid(e.target.checked)} className="accent-accent" />
           Já pago
         </label>
+        {paid && (
+          <label className="text-sm">
+            Forma de pagamento
+            <select
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
+              className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+            >
+              <option value="cash">Dinheiro</option>
+              <option value="card">Cartão</option>
+              <option value="pix">Pix</option>
+              <option value="other">Outro</option>
+            </select>
+          </label>
+        )}
         <label className="text-sm">
           Observações do atendimento (opcional)
           <input
