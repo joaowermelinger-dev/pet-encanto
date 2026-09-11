@@ -117,7 +117,7 @@ export default function ServiceCatalog() {
         </div>
         <button
           onClick={openCreate}
-          className="flex shrink-0 items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
+          className="flex shrink-0 items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)]"
         >
           <Plus size={16} /> Novo tipo
         </button>
@@ -248,7 +248,7 @@ export default function ServiceCatalog() {
               <button
                 type="submit"
                 disabled={createService.isPending || updateService.isPending}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)] disabled:opacity-60"
               >
                 {createService.isPending || updateService.isPending ? 'Salvando…' : 'Salvar'}
               </button>

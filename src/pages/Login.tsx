@@ -31,9 +31,15 @@ export default function Login() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8">
-        <h1 className="text-xl font-semibold">🐾 Pet Encanto — Admin</h1>
-        <p className="mt-1 text-sm text-muted">Entre para gerenciar o petshop.</p>
+      <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-2xl bg-surface p-8">
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="Pet Encanto" className="size-12 rounded-full object-cover" />
+          <div>
+            <h1 className="font-display text-xl font-semibold text-accent">Pet Encanto</h1>
+            <p className="text-sm text-muted">Área do dono</p>
+          </div>
+        </div>
+        <p className="mt-4 text-sm text-muted">Entre para gerenciar o petshop.</p>
 
         <label className="mt-6 block text-sm font-medium">
           E-mail
@@ -62,7 +68,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={submitting}
-          className="mt-6 w-full rounded-lg bg-accent py-2 font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+          className="mt-6 w-full rounded-lg bg-accent py-2 font-medium text-accent-foreground hover:bg-[var(--accent-hover)] disabled:opacity-60"
         >
           {submitting ? 'Entrando…' : 'Entrar'}
         </button>

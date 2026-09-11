@@ -142,7 +142,7 @@ export default function ClientDetail() {
         <h2 className="text-lg font-semibold">Pets</h2>
         <button
           onClick={() => setShowPetForm(true)}
-          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
+          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)]"
         >
           <Plus size={16} /> Novo pet
         </button>
@@ -231,7 +231,7 @@ export default function ClientDetail() {
               <button
                 type="submit"
                 disabled={updateClient.isPending}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)] disabled:opacity-60"
               >
                 {updateClient.isPending ? 'Salvando…' : 'Salvar'}
               </button>
@@ -281,7 +281,7 @@ export default function ClientDetail() {
               <button
                 type="submit"
                 disabled={createPet.isPending}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)] disabled:opacity-60"
               >
                 {createPet.isPending ? 'Salvando…' : 'Salvar'}
               </button>

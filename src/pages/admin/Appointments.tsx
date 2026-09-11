@@ -16,7 +16,7 @@ const STATUS_LABEL: Record<AppointmentStatus, string> = {
 
 const STATUS_CLASS: Record<AppointmentStatus, string> = {
   scheduled: 'bg-gold/25 text-gold-foreground',
-  completed: 'bg-accent/15 text-accent',
+  completed: 'bg-sage/25 text-sage-foreground',
   cancelled: 'bg-surface-muted text-muted line-through',
 }
 
@@ -119,7 +119,7 @@ export default function Appointments() {
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
+          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)]"
         >
           <Plus size={16} /> Novo atendimento
         </button>
@@ -180,7 +180,7 @@ export default function Appointments() {
                     <button
                       onClick={() => handleTogglePaid(a)}
                       className={`flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${
-                        a.paid ? 'bg-accent/15 text-accent' : 'bg-surface-muted text-muted'
+                        a.paid ? 'bg-sage/25 text-sage-foreground' : 'bg-surface-muted text-muted'
                       }`}
                     >
                       <CircleDollarSign size={13} /> {a.paid ? 'Pago' : 'Não pago'}
@@ -522,7 +522,7 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+            className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)] disabled:opacity-60"
           >
             {saving ? 'Salvando…' : 'Salvar'}
           </button>

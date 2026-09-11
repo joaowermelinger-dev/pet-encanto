@@ -15,7 +15,10 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-surface/90 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-        <span className="text-lg font-semibold text-accent">🐾 Pet Encanto</span>
+        <span className="flex items-center gap-2">
+          <img src="/logo.png" alt="Pet Encanto" className="size-9 rounded-full object-cover" />
+          <span className="font-display text-lg font-semibold text-accent">Pet Encanto</span>
+        </span>
 
         <nav className="hidden items-center gap-6 text-sm text-muted sm:flex">
           {LINKS.map((link) => (
@@ -25,7 +28,7 @@ export default function Header() {
           ))}
           <Link
             to="/login"
-            className="rounded-full bg-accent px-4 py-2 font-medium text-accent-foreground hover:opacity-90"
+            className="rounded-full bg-accent px-4 py-2 font-medium text-accent-foreground hover:bg-[var(--accent-hover)]"
           >
             Entrar
           </Link>
@@ -54,7 +57,7 @@ export default function Header() {
           ))}
           <Link
             to="/login"
-            className="mt-1 rounded-full bg-accent px-4 py-2 text-center font-medium text-accent-foreground hover:opacity-90"
+            className="mt-1 rounded-full bg-accent px-4 py-2 text-center font-medium text-accent-foreground hover:bg-[var(--accent-hover)]"
           >
             Entrar
           </Link>

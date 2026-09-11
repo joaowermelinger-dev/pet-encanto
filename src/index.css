@@ -1,7 +1,12 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
+@import '@fontsource-variable/fraunces';
 
-/* Paleta da marca: marrom, verde sálvia, dourado, creme, bege claro. */
+/*
+  Paleta da marca (inspirada na logo): marrom (ação/texto), verde sálvia
+  (destaque secundário/sucesso), dourado (destaque terciário/decorativo),
+  creme (fundo) e bege claro (bordas/superfícies neutras).
+*/
 @theme inline {
   --color-background: var(--bg);
   --color-surface: var(--surface);
@@ -11,22 +16,28 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-fg);
+  --color-sage: var(--sage);
+  --color-sage-foreground: var(--sage-fg);
   --color-gold: var(--gold);
   --color-gold-foreground: var(--gold-fg);
 
   --font-sans: 'Inter Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, serif;
 }
 
 :root {
   --bg: #fef7ed; /* creme */
   --surface: #ffffff;
-  --surface-muted: #e5dece; /* bege claro */
+  --surface-muted: #f3ead9; /* bege bem claro, para hover/fundos suaves */
   --border: #e5dece; /* bege claro */
-  --fg: #58422a; /* marrom */
-  --muted: #8a7a68; /* marrom suavizado, pra texto secundário */
-  --accent: #8a9884; /* verde sálvia — botões e destaques principais */
-  --accent-fg: #ffffff;
-  --gold: #d0ac7d; /* dourado — destaques secundários (avatares, status) */
+  --fg: #4a3620; /* marrom, um pouco mais escuro que o da logo p/ leitura */
+  --muted: #8a7561; /* marrom suavizado, pra texto secundário */
+  --accent: #58422a; /* marrom — botões, links, foco (mesma cor do texto "Encanto") */
+  --accent-hover: #6b5133;
+  --accent-fg: #fef7ed;
+  --sage: #8a9884; /* verde sálvia — destaque secundário (status positivo, nav ativo) */
+  --sage-fg: #3f4a3b;
+  --gold: #d0ac7d; /* dourado — destaque terciário (avatares, decoração) */
   --gold-fg: #58422a;
 
   color-scheme: light;
@@ -37,4 +48,37 @@ body {
   font-family: var(--font-sans);
   background-color: var(--bg);
   color: var(--fg);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Todo elemento clicável merece cursor de mão + feedback visual — os
+   navegadores NÃO dão cursor:pointer de graça pra <button>, só pra <a>. */
+button:not(:disabled),
+[role='button'],
+a,
+select,
+summary,
+input[type='checkbox'],
+input[type='radio'] {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+button,
+a {
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease,
+    opacity 150ms ease;
+}
+
+/* Sombra leve em toda superfície elevada (cards, modais), sem precisar
+   repetir a classe em cada tela. */
+.bg-surface {
+  box-shadow: 0 1px 3px rgba(74, 54, 32, 0.06);
 }

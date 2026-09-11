@@ -7,8 +7,8 @@ const KIND_LABEL: Record<ChangeKind, string> = {
 }
 
 const KIND_CLASS: Record<ChangeKind, string> = {
-  novo: 'bg-accent/15 text-accent',
-  melhoria: 'bg-surface-muted text-foreground',
+  novo: 'bg-sage/25 text-sage-foreground',
+  melhoria: 'bg-gold/25 text-gold-foreground',
   correção: 'bg-red-100 text-red-700',
 }
 

@@ -49,7 +49,7 @@ export default function Clients() {
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
+          className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)]"
         >
           <Plus size={16} /> Novo cliente
         </button>
@@ -158,7 +158,7 @@ export default function Clients() {
               <button
                 type="submit"
                 disabled={createClient.isPending}
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90 disabled:opacity-60"
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-[var(--accent-hover)] disabled:opacity-60"
               >
                 {createClient.isPending ? 'Salvando…' : 'Salvar'}
               </button>
