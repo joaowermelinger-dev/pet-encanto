@@ -34,3 +34,4 @@ class PetOut(ORMBase):
     size: PetSize | None
     birth_date: date | None
     notes: str | None
+    client_name: str | None = None

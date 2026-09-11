@@ -45,3 +45,7 @@ class Pet(Base):
     )
 
     client: Mapped["Client"] = relationship(back_populates="pets")  # noqa: F821
+
+    @property
+    def client_name(self) -> str:
+        return self.client.name

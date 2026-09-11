@@ -7,6 +7,8 @@ import Dashboard from './pages/admin/Dashboard'
 import Updates from './pages/admin/Updates'
 import Clients from './pages/admin/Clients'
 import ClientDetail from './pages/admin/ClientDetail'
+import Appointments from './pages/admin/Appointments'
+import Services from './pages/admin/Services'
 import Placeholder from './pages/admin/Placeholder'
 
 function App() {
@@ -20,8 +22,8 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="clients" element={<Clients />} />
           <Route path="clients/:id" element={<ClientDetail />} />
-          <Route path="appointments" element={<Placeholder title="Agenda" />} />
-          <Route path="services" element={<Placeholder title="Serviços" />} />
+          <Route path="appointments" element={<Appointments />} />
+          <Route path="services" element={<Services />} />
           <Route path="products" element={<Placeholder title="Produtos" />} />
           <Route path="sales" element={<Placeholder title="Vendas" />} />
           <Route path="gallery" element={<Placeholder title="Galeria" />} />
