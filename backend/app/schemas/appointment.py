@@ -60,5 +60,6 @@ class AppointmentOut(ORMBase):
     guest_animal_name: str | None
     guest_animal_breed: str | None
     guest_animal_notes: str | None
+    subscription_id: int | None
     pet: PetOut | None
     service: ServiceOut

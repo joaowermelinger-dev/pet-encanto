@@ -8,6 +8,7 @@ import Updates from './pages/admin/Updates'
 import Clients from './pages/admin/Clients'
 import ClientDetail from './pages/admin/ClientDetail'
 import Appointments from './pages/admin/Appointments'
+import Clubinho from './pages/admin/Clubinho'
 import Settings from './pages/admin/Settings'
 import Placeholder from './pages/admin/Placeholder'
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="clients" element={<Clients />} />
           <Route path="clients/:id" element={<ClientDetail />} />
           <Route path="appointments" element={<Appointments />} />
+          <Route path="clubinho" element={<Clubinho />} />
           <Route path="products" element={<Placeholder title="Produtos" />} />
           <Route path="sales" element={<Placeholder title="Vendas" />} />
           <Route path="gallery" element={<Placeholder title="Galeria" />} />

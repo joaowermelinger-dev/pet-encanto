@@ -54,6 +54,12 @@ class Appointment(Base):
     # Temperamento/alergias do animal (ex.: "é manso", "tem alergia a X").
     guest_animal_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
+    # Preenchido quando esse atendimento foi gerado automaticamente por um
+    # Clubinho (assinatura recorrente) — ver app/models/subscription.py.
+    subscription_id: Mapped[int | None] = mapped_column(
+        ForeignKey("subscriptions.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

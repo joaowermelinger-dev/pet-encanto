@@ -64,8 +64,25 @@ export interface Appointment {
   guest_animal_name: string | null
   guest_animal_breed: string | null
   guest_animal_notes: string | null
+  /** Preenchido quando esse atendimento veio de um Clubinho (assinatura recorrente). */
+  subscription_id: number | null
   pet: Pet | null
   service: Service
+}
+
+export type SubscriptionFrequency = 'weekly' | 'biweekly' | 'monthly'
+export type SubscriptionStatus = 'active' | 'paused' | 'cancelled'
+
+export interface Subscription {
+  id: number
+  pet_id: number
+  service_id: number
+  frequency: SubscriptionFrequency
+  first_occurrence_at: string
+  status: SubscriptionStatus
+  pet: Pet
+  service: Service
+  next_occurrence_at: string | null
 }
 
 export interface ShopInfo {

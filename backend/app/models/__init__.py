@@ -6,4 +6,5 @@ from app.models.user import User  # noqa: F401
 from app.models.client import Client  # noqa: F401
 from app.models.pet import Pet  # noqa: F401
 from app.models.service import Service  # noqa: F401
+from app.models.subscription import Subscription  # noqa: F401
 from app.models.appointment import Appointment  # noqa: F401

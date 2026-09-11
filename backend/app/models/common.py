@@ -25,6 +25,18 @@ class AppointmentStatus(str, enum.Enum):
     CANCELLED = "cancelled"
 
 
+class SubscriptionFrequency(str, enum.Enum):
+    WEEKLY = "weekly"
+    BIWEEKLY = "biweekly"
+    MONTHLY = "monthly"
+
+
+class SubscriptionStatus(str, enum.Enum):
+    ACTIVE = "active"
+    PAUSED = "paused"
+    CANCELLED = "cancelled"
+
+
 class StockMovementReason(str, enum.Enum):
     RESTOCK = "restock"
     SALE = "sale"

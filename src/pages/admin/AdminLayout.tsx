@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { to: '/admin', label: 'Painel', end: true },
   { to: '/admin/clients', label: 'Clientes' },
   { to: '/admin/appointments', label: 'Atendimentos' },
+  { to: '/admin/clubinho', label: 'Clubinho' },
   { to: '/admin/products', label: 'Produtos' },
   { to: '/admin/sales', label: 'Vendas' },
   { to: '/admin/gallery', label: 'Galeria' },

@@ -170,6 +170,7 @@ export default function Appointments() {
                       <p className="truncate font-medium">
                         {animal} {client && <span className="font-normal text-muted">· {client}</span>}
                         {!a.pet && <span className="ml-1.5 rounded bg-gold/25 px-1.5 py-0.5 text-[10px] font-medium text-gold-foreground">avulso</span>}
+                        {a.subscription_id && <span className="ml-1.5 rounded bg-sage/25 px-1.5 py-0.5 text-[10px] font-medium text-sage-foreground">clubinho</span>}
                       </p>
                       <p className="text-sm text-muted">
                         {a.service.name} · {formatPrice(a.price)}
