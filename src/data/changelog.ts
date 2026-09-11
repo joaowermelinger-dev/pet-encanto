@@ -23,6 +23,38 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.6',
+    version: '1.6',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Nova cara do app',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Logo oficial do Pet Encanto agora aparece na sidebar, no login e no site.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Fonte de destaque para o nome "Pet Encanto", combinando com a identidade visual.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Cores ajustadas: marrom nos botões (melhor contraste), verde sálvia para status positivo, dourado para destaques.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Painel administrativo com visual em cards arredondados; cabeçalho com avatar do usuário.',
+          },
+          {
+            kind: 'correção',
+            text: 'Todo botão e link agora mostra a mãozinha (cursor) e reage ao passar o mouse.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.5',
     version: '1.5',
     date: '2026-09-11',
