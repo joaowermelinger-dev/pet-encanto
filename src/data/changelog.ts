@@ -23,6 +23,39 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '1.2',
+    version: '1.2',
+    date: '2026-09-11',
+    sections: [
+      {
+        title: 'Serviços & Agenda',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Catálogo de serviços (banho, tosa, etc.) com preço, duração e opção de aparecer no site.',
+          },
+          {
+            kind: 'novo',
+            text: 'Agenda diária de atendimentos: criar, marcar como concluído, cancelar ou apagar.',
+          },
+        ],
+      },
+      {
+        title: 'Clientes',
+        changes: [
+          {
+            kind: 'melhoria',
+            text: 'Formulários de cliente e pet agora abrem em janela (modal) em vez de empurrar a lista.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Cards com avatar, ícones de contato e botão "Ver detalhes".',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.1',
     version: '1.1',
     date: '2026-09-11',
