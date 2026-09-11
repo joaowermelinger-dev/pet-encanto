@@ -50,7 +50,7 @@ export type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled'
 
 export interface Appointment {
   id: number
-  pet_id: number
+  pet_id: number | null
   service_id: number
   scheduled_at: string
   status: AppointmentStatus
@@ -58,7 +58,13 @@ export interface Appointment {
   price: string
   paid: boolean
   notes: string | null
-  pet: Pet
+  /** Preenchidos só quando NÃO há pet_id (atendimento avulso, sem cadastro). */
+  guest_client_name: string | null
+  guest_client_phone: string | null
+  guest_animal_name: string | null
+  guest_animal_breed: string | null
+  guest_animal_notes: string | null
+  pet: Pet | null
   service: Service
 }
 

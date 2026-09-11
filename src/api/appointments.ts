@@ -1,8 +1,16 @@
 import { apiRequest } from './client'
 import type { Appointment, AppointmentStatus } from '../types'
 
-export interface AppointmentCreateInput {
-  pet_id: number
+interface GuestFields {
+  pet_id?: number | null
+  guest_client_name?: string | null
+  guest_client_phone?: string | null
+  guest_animal_name?: string | null
+  guest_animal_breed?: string | null
+  guest_animal_notes?: string | null
+}
+
+export interface AppointmentCreateInput extends GuestFields {
   service_id: number
   scheduled_at: string
   price: number
@@ -10,7 +18,8 @@ export interface AppointmentCreateInput {
   notes?: string | null
 }
 
-export interface AppointmentUpdateInput {
+export interface AppointmentUpdateInput extends GuestFields {
+  service_id: number
   scheduled_at: string
   status: AppointmentStatus
   price: number

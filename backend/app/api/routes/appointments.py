@@ -43,7 +43,7 @@ def list_appointments(
 
 @router.post("", response_model=AppointmentOut, status_code=status.HTTP_201_CREATED)
 def create_appointment(payload: AppointmentCreate, user: CurrentUser, db: DbSession) -> Appointment:
-    if db.get(Pet, payload.pet_id) is None:
+    if payload.pet_id is not None and db.get(Pet, payload.pet_id) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Pet não encontrado.")
     if db.get(Service, payload.service_id) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Serviço não encontrado.")
@@ -59,6 +59,10 @@ def update_appointment(
     appointment_id: int, payload: AppointmentUpdate, user: CurrentUser, db: DbSession
 ) -> Appointment:
     appointment = _get_or_404(db, appointment_id)
+    if payload.pet_id is not None and db.get(Pet, payload.pet_id) is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Pet não encontrado.")
+    if db.get(Service, payload.service_id) is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Serviço não encontrado.")
     for field, value in payload.model_dump().items():
         setattr(appointment, field, value)
     db.commit()
