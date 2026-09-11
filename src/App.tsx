@@ -5,6 +5,8 @@ import ProtectedRoute from './auth/ProtectedRoute'
 import AdminLayout from './pages/admin/AdminLayout'
 import Dashboard from './pages/admin/Dashboard'
 import Updates from './pages/admin/Updates'
+import Clients from './pages/admin/Clients'
+import ClientDetail from './pages/admin/ClientDetail'
 import Placeholder from './pages/admin/Placeholder'
 
 function App() {
@@ -16,7 +18,8 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
-          <Route path="clients" element={<Placeholder title="Clientes" />} />
+          <Route path="clients" element={<Clients />} />
+          <Route path="clients/:id" element={<ClientDetail />} />
           <Route path="appointments" element={<Placeholder title="Agenda" />} />
           <Route path="services" element={<Placeholder title="Serviços" />} />
           <Route path="products" element={<Placeholder title="Produtos" />} />

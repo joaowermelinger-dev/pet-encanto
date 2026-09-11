@@ -16,7 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 
-from app.api.routes import auth, public, shop_info
+from app.api.routes import auth, clients, pets, public, shop_info
 from app.core.config import settings
 from app.core.csrf import CsrfMiddleware
 from app.core.http_headers import SecurityHeadersMiddleware
@@ -58,6 +58,8 @@ async def health() -> dict[str, str]:
 
 app.include_router(auth.router, prefix="/api")
 app.include_router(shop_info.router, prefix="/api")
+app.include_router(clients.router, prefix="/api")
+app.include_router(pets.router, prefix="/api")
 app.include_router(public.router, prefix="/api")
 
 # Fotos enviadas no admin (pets, produtos) — servidas como estático.
