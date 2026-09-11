@@ -1,0 +1,16 @@
+# Dependências do backend (FastAPI + PostgreSQL).
+# Instale dentro de um virtualenv:
+#   python -m venv .venv
+#   .venv\Scripts\activate        (Windows)
+#   pip install -r requirements.txt
+
+fastapi==0.141.1              # framework web / API
+uvicorn[standard]==0.52.4     # servidor ASGI para rodar a API
+sqlalchemy==2.0.52            # ORM (acesso ao banco), modo síncrono
+psycopg[binary]==3.3.5        # driver PostgreSQL (psycopg 3)
+alembic==1.19.2               # migrações de schema do banco
+pydantic[email]==2.13.5       # validação de dados (schemas de entrada/saída)
+pydantic-settings==2.15.0     # lê configuração a partir do arquivo .env
+pwdlib[argon2]==0.3.1         # hash de senha com Argon2
+pyjwt==2.13.0                 # geração/verificação dos tokens JWT
+python-multipart==0.0.32      # necessário para upload de arquivos (fotos)

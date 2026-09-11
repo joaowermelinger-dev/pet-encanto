@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+/* Tema quente, aconchegante (petshop) — sem modo escuro por enquanto. */
+@theme inline {
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-foreground: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-fg);
+
+  --font-sans: 'Inter Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root {
+  --bg: #fefbf6;
+  --surface: #ffffff;
+  --surface-muted: #f6efe4;
+  --border: #ead9c0;
+  --fg: #2c1e12;
+  --muted: #7a6a58;
+  --accent: #d9772f;
+  --accent-fg: #ffffff;
+
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--fg);
+}

@@ -1,0 +1,39 @@
+# Blueprint do Render — sobe a API (FastAPI).
+# No painel do Render: New + → Blueprint → aponta pro repo → ele lê este arquivo.
+#
+# O banco (PostgreSQL) fica no Neon (free). Você cola a connection string do Neon
+# na variável DATABASE_URL quando o Render pedir.
+
+services:
+  - type: web
+    name: pet-encanto-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt && alembic upgrade head
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.4"
+      - key: ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SAMESITE
+        value: lax
+      # Você preenche estas no setup do Blueprint (o Render pergunta):
+      - key: DATABASE_URL
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
+      # Conta do dono (rode `python -m scripts.seed_admin` uma vez via Render Shell
+      # depois do primeiro deploy, com estas variáveis já configuradas).
+      - key: FIRST_ADMIN_EMAIL
+        sync: false
+      - key: FIRST_ADMIN_PASSWORD
+        sync: false
+      - key: FIRST_ADMIN_NAME
+        sync: false

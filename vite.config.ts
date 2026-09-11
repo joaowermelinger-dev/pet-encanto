@@ -1,0 +1,21 @@
+import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  server: {
+    // Encaminha /api/* para o backend FastAPI (uvicorn na porta 8000), assim o
+    // navegador enxerga uma única origem e o cookie de sessão funciona sem CORS.
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8001',
+        changeOrigin: true,
+      },
+      '/uploads': {
+        target: 'http://localhost:8001',
+        changeOrigin: true,
+      },
+    },
+  },
+})
