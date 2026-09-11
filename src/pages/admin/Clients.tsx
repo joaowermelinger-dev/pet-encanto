@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { Mail, Phone, Plus, Search, Users } from 'lucide-react'
+import { ChevronRight, Mail, Phone, Plus, Search, Users } from 'lucide-react'
 import { useClients, useCreateClient } from '../../hooks/useClients'
 import { ApiError } from '../../api/client'
 import Modal from '../../components/Modal'
@@ -87,26 +87,33 @@ export default function Clients() {
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {clients.map((c) => (
-              <Link
+              <div
                 key={c.id}
-                to={`/admin/clients/${c.id}`}
-                className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4 transition hover:border-accent hover:shadow-sm"
+                className="flex flex-col rounded-xl border border-border bg-surface p-4 transition hover:border-accent hover:shadow-sm"
               >
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
-                  {initials(c.name)}
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate font-medium">{c.name}</p>
-                  <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
-                    <Phone size={13} /> {c.phone}
-                  </p>
-                  {c.email && (
-                    <p className="mt-0.5 flex items-center gap-1.5 truncate text-sm text-muted">
-                      <Mail size={13} /> {c.email}
+                <div className="flex items-start gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
+                    {initials(c.name)}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{c.name}</p>
+                    <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
+                      <Phone size={13} /> {c.phone}
                     </p>
-                  )}
+                    {c.email && (
+                      <p className="mt-0.5 flex items-center gap-1.5 truncate text-sm text-muted">
+                        <Mail size={13} /> {c.email}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </Link>
+                <Link
+                  to={`/admin/clients/${c.id}`}
+                  className="mt-3 flex items-center justify-center gap-1 self-end rounded-lg px-3 py-1.5 text-sm font-medium text-accent hover:bg-accent/10"
+                >
+                  Ver detalhes <ChevronRight size={15} />
+                </Link>
+              </div>
             ))}
           </div>
         )}
