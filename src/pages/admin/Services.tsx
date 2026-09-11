@@ -89,7 +89,7 @@ export default function Services() {
         name: service.name,
         description: service.description,
         duration_minutes: service.duration_minutes,
-        price: service.price,
+        price: Number(service.price),
         is_public: !service.is_public,
         is_active: service.is_active,
       },
