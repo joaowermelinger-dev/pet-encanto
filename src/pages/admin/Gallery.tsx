@@ -1,5 +1,5 @@
-import { useState, type FormEvent } from 'react'
-import { Camera, Plus, Trash2 } from 'lucide-react'
+import { useEffect, useRef, useState, type DragEvent, type FormEvent } from 'react'
+import { Camera, ImageUp, Plus, Trash2, Upload, X } from 'lucide-react'
 import { useDeletePetPhoto, usePetPhotos, useUpdatePetPhoto, useUploadPetPhoto } from '../../hooks/usePetPhotos'
 import type { PetPhoto } from '../../types'
 import { ApiError } from '../../api/client'
@@ -94,10 +94,34 @@ export default function Gallery() {
 
 function UploadPhotoModal({ onClose }: { onClose: () => void }) {
   const uploadPhoto = useUploadPetPhoto()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [file, setFile] = useState<File | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [caption, setCaption] = useState('')
   const [isPublic, setIsPublic] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [dragOver, setDragOver] = useState(false)
+
+  useEffect(() => {
+    if (!file) {
+      setPreviewUrl(null)
+      return
+    }
+    const url = URL.createObjectURL(file)
+    setPreviewUrl(url)
+    return () => URL.revokeObjectURL(url)
+  }, [file])
+
+  function pickFile(picked: File | null | undefined) {
+    setError(null)
+    setFile(picked ?? null)
+  }
+
+  function handleDrop(e: DragEvent) {
+    e.preventDefault()
+    setDragOver(false)
+    pickFile(e.dataTransfer.files?.[0])
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -117,16 +141,51 @@ function UploadPhotoModal({ onClose }: { onClose: () => void }) {
   return (
     <Modal title="Adicionar foto" onClose={onClose}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label className="text-sm">
-          Foto (JPEG, PNG ou WEBP, até 5MB)
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            required
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            className="mt-1 block w-full text-sm"
-          />
-        </label>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          onChange={(e) => pickFile(e.target.files?.[0])}
+          className="hidden"
+        />
+
+        {previewUrl ? (
+          <div className="relative overflow-hidden rounded-xl border border-border">
+            <img src={previewUrl} alt="Pré-visualização" className="h-48 w-full object-cover" />
+            <button
+              type="button"
+              onClick={() => pickFile(null)}
+              aria-label="Remover imagem escolhida"
+              className="absolute right-2 top-2 rounded-full bg-surface/90 p-1.5 text-muted shadow-soft hover:text-red-600"
+            >
+              <X size={14} />
+            </button>
+            <p className="truncate bg-surface/90 px-3 py-1.5 text-xs text-muted">{file?.name}</p>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            onDragOver={(e) => {
+              e.preventDefault()
+              setDragOver(true)
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+            className={`flex flex-col items-center gap-2 rounded-xl border-2 border-dashed py-8 text-center transition ${
+              dragOver ? 'border-accent bg-accent/5' : 'border-border hover:border-accent/50 hover:bg-surface-muted'
+            }`}
+          >
+            <span className="flex size-10 items-center justify-center rounded-full bg-accent/10 text-accent">
+              <ImageUp size={20} />
+            </span>
+            <span className="flex items-center gap-1.5 text-sm font-medium text-accent">
+              <Upload size={14} /> Enviar imagem
+            </span>
+            <span className="text-xs text-muted">ou arraste e solte aqui — JPEG, PNG ou WEBP, até 5MB</span>
+          </button>
+        )}
+
         <label className="text-sm">
           Legenda (opcional)
           <input
