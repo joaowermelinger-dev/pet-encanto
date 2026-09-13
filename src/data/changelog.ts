@@ -52,6 +52,41 @@ export const CHANGELOG: ChangelogEntry[] = [
           },
         ],
       },
+      {
+        title: 'Atendimentos',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Agora dá pra escolher mais de um serviço no mesmo atendimento (ex.: banho + tosa) — o valor total é somado automaticamente, mas continua editável por serviço.',
+          },
+        ],
+      },
+      {
+        title: 'Galeria',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Nova aba Galeria no admin: envie fotos do dia a dia do petshop e marque quais aparecem na landing page.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'O banner de entrada da landing agora usa a primeira foto pública da Galeria, quando existir.',
+          },
+        ],
+      },
+      {
+        title: 'Configurações',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Novo formulário para editar os dados do petshop (endereço, telefone, WhatsApp, e-mail, Instagram e horário) exibidos na landing page.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Os serviços marcados como "Visível no site" agora aparecem de verdade na landing, com preço e descrição atualizados direto do catálogo.',
+          },
+        ],
+      },
     ],
   },
   {
