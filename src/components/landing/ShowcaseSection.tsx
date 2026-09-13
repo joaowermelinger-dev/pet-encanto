@@ -1,7 +1,10 @@
+import PawDecor from './PawDecor'
+
 export default function ShowcaseSection() {
   return (
-    <section id="mostruario" className="bg-surface-muted py-16">
-      <div className="mx-auto max-w-5xl px-4">
+    <section id="mostruario" className="relative overflow-hidden bg-surface-muted py-16">
+      <PawDecor />
+      <div className="relative mx-auto max-w-5xl px-4">
         <h2 className="text-2xl font-semibold">Mostruário</h2>
         <p className="mt-2 text-muted">Os produtos cadastrados como públicos vão aparecer aqui.</p>
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

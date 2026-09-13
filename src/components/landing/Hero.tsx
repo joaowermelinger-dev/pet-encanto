@@ -1,4 +1,5 @@
-import { PawPrint, Sparkles } from 'lucide-react'
+import { PawPrint } from 'lucide-react'
+import PawDecor from './PawDecor'
 
 /**
  * Banner grande no topo da landing. Por enquanto usa um fundo decorativo
@@ -8,15 +9,7 @@ import { PawPrint, Sparkles } from 'lucide-react'
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-sage/25 via-gold/10 to-background">
-      {/* Patinhas decorativas espalhadas — só efeito visual, escondidas de leitor de tela. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <PawPrint className="absolute left-[8%] top-[18%] rotate-[-15deg] text-sage/40" size={40} />
-        <PawPrint className="absolute right-[10%] top-[28%] rotate-[20deg] text-gold/50" size={32} />
-        <PawPrint className="absolute left-[18%] bottom-[15%] rotate-[10deg] text-gold/40" size={28} />
-        <PawPrint className="absolute right-[20%] bottom-[22%] rotate-[-25deg] text-sage/40" size={36} />
-        <Sparkles className="absolute left-[30%] top-[12%] text-gold/60" size={20} />
-        <Sparkles className="absolute right-[32%] bottom-[18%] text-sage/50" size={18} />
-      </div>
+      <PawDecor variant="hero" />
 
       <div className="relative mx-auto max-w-2xl px-4 py-20 text-center sm:py-28">
         <p className="flex items-center justify-center gap-3 font-display text-3xl font-bold text-accent sm:text-5xl">

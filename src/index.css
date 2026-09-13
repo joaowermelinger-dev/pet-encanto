@@ -18,6 +18,7 @@
   --color-accent-foreground: var(--accent-fg);
   --color-sage: var(--sage);
   --color-sage-foreground: var(--sage-fg);
+  --color-sage-deep: var(--sage-deep);
   --color-gold: var(--gold);
   --color-gold-foreground: var(--gold-fg);
 
@@ -37,6 +38,9 @@
   --accent-fg: #fef7ed;
   --sage: #8a9884; /* verde sálvia — destaque secundário (status positivo, nav ativo) */
   --sage-fg: #3f4a3b;
+  /* Verde sálvia mais escuro — só pra fundo com texto BRANCO em cima (a versão
+     clara não passa no contraste mínimo com branco; ver header da landing). */
+  --sage-deep: #5f6b59;
   --gold: #d0ac7d; /* dourado — destaque terciário (avatares, decoração) */
   --gold-fg: #58422a;
 
