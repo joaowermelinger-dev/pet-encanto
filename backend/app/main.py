@@ -16,7 +16,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 
-from app.api.routes import appointments, auth, clients, expenses, finance, pets, public, services, shop_info, subscriptions
+from app.api.routes import (
+    appointments,
+    auth,
+    clients,
+    expenses,
+    finance,
+    pet_photos,
+    pets,
+    public,
+    services,
+    shop_info,
+    subscriptions,
+)
 from app.core.config import settings
 from app.core.csrf import CsrfMiddleware
 from app.core.http_headers import SecurityHeadersMiddleware
@@ -30,6 +42,9 @@ _DIST = (
 _SERVING_SPA = _DIST.is_dir()
 
 _UPLOADS_DIR = Path(__file__).resolve().parent.parent / settings.UPLOADS_DIR
+# Garante que a pasta já existe no boot — senão o mount abaixo nunca é
+# registrado (o 1º upload cria a pasta em runtime, tarde demais pro mount).
+_UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(
     title="Pet-Encanto — API",
@@ -65,6 +80,7 @@ app.include_router(appointments.router, prefix="/api")
 app.include_router(subscriptions.router, prefix="/api")
 app.include_router(expenses.router, prefix="/api")
 app.include_router(finance.router, prefix="/api")
+app.include_router(pet_photos.router, prefix="/api")
 app.include_router(public.router, prefix="/api")
 
 # Fotos enviadas no admin (pets, produtos) — servidas como estático.

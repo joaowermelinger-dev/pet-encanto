@@ -99,7 +99,7 @@ export default function Dashboard() {
                         <p className="truncate">
                           {animal} <span className="text-muted">· {client}</span>
                         </p>
-                        <p className="truncate text-xs text-muted">{a.service.name}</p>
+                        <p className="truncate text-xs text-muted">{a.items.map((i) => i.service.name).join(' + ')}</p>
                       </div>
                     </div>
                   )

@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 backend/.env
 backend/uploads/
+.claude/

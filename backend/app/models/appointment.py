@@ -23,9 +23,6 @@ class Appointment(Base):
     pet_id: Mapped[int | None] = mapped_column(
         ForeignKey("pets.id", ondelete="CASCADE"), nullable=True, index=True
     )
-    service_id: Mapped[int] = mapped_column(
-        ForeignKey("services.id", ondelete="RESTRICT"), nullable=False, index=True
-    )
     scheduled_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
     status: Mapped[AppointmentStatus] = mapped_column(
         SAEnum(
@@ -38,8 +35,9 @@ class Appointment(Base):
         default=AppointmentStatus.SCHEDULED,
         server_default="scheduled",
     )
-    # Valor cobrado NESSA ocorrência — snapshot editável, não vem sempre do
-    # preço atual do catálogo (permite desconto/ajuste pontual).
+    # Total cobrado NESSA ocorrência — soma dos itens em `items` (ver
+    # AppointmentServiceItem). Mantido pelo backend a cada criação/edição, não
+    # calculado em SQL, pra manter as queries do Financeiro simples.
     price: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
     # Marcação simples de pagamento. Não é um registro financeiro completo
     # (isso vem na Fase 5 — Vendas/Financeiro); só evita esquecer quem pagou.
@@ -75,4 +73,6 @@ class Appointment(Base):
     )
 
     pet: Mapped["Pet | None"] = relationship()  # noqa: F821
-    service: Mapped["Service"] = relationship()  # noqa: F821
+    items: Mapped[list["AppointmentServiceItem"]] = relationship(  # noqa: F821
+        cascade="all, delete-orphan", order_by="AppointmentServiceItem.id"
+    )

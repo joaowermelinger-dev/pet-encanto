@@ -108,18 +108,7 @@ function doFetch(path: string, { method = 'GET', body, query }: RequestOptions):
   })
 }
 
-export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  let response = await doFetch(path, options)
-
-  if (response.status === 401 && shouldAutoRefresh(path)) {
-    const renewed = await tryRefresh()
-    if (renewed) {
-      response = await doFetch(path, options)
-    } else {
-      onUnauthorized?.()
-    }
-  }
-
+async function handleResponse<T>(response: Response): Promise<T> {
   if (response.status === 204) {
     return undefined as T
   }
@@ -142,4 +131,44 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   }
 
   return data as T
+}
+
+export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  let response = await doFetch(path, options)
+
+  if (response.status === 401 && shouldAutoRefresh(path)) {
+    const renewed = await tryRefresh()
+    if (renewed) {
+      response = await doFetch(path, options)
+    } else {
+      onUnauthorized?.()
+    }
+  }
+
+  return handleResponse<T>(response)
+}
+
+/** Envio de arquivos (multipart/form-data) — usado só pelo upload de fotos da galeria. */
+export async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
+  function send() {
+    return fetch(`${BASE_URL}${path}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: csrfHeader(),
+      body: formData,
+    })
+  }
+
+  let response = await send()
+
+  if (response.status === 401) {
+    const renewed = await tryRefresh()
+    if (renewed) {
+      response = await send()
+    } else {
+      onUnauthorized?.()
+    }
+  }
+
+  return handleResponse<T>(response)
 }

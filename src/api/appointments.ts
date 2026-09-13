@@ -10,20 +10,23 @@ interface GuestFields {
   guest_animal_notes?: string | null
 }
 
-export interface AppointmentCreateInput extends GuestFields {
+export interface AppointmentItemInput {
   service_id: number
-  scheduled_at: string
   price: number
+}
+
+export interface AppointmentCreateInput extends GuestFields {
+  items: AppointmentItemInput[]
+  scheduled_at: string
   paid: boolean
   payment_method?: PaymentMethod | null
   notes?: string | null
 }
 
 export interface AppointmentUpdateInput extends GuestFields {
-  service_id: number
+  items: AppointmentItemInput[]
   scheduled_at: string
   status: AppointmentStatus
-  price: number
   paid: boolean
   payment_method?: PaymentMethod | null
   notes?: string | null

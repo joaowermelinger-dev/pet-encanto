@@ -1,7 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 from app.models.common import AppointmentStatus, PaymentMethod
 from app.schemas.base import ORMBase
@@ -29,29 +29,42 @@ class _GuestFields(BaseModel):
         return self
 
 
-class AppointmentCreate(_GuestFields):
+class AppointmentItemIn(BaseModel):
+    """Um serviço cobrado no atendimento — o total é a soma destes itens."""
+
     service_id: int
-    scheduled_at: datetime
     price: Decimal
+
+
+class _ItemsField(BaseModel):
+    items: list[AppointmentItemIn] = Field(min_length=1)
+
+
+class AppointmentCreate(_GuestFields, _ItemsField):
+    scheduled_at: datetime
     paid: bool = False
     payment_method: PaymentMethod | None = None
     notes: str | None = None
 
 
-class AppointmentUpdate(_GuestFields):
-    service_id: int
+class AppointmentUpdate(_GuestFields, _ItemsField):
     scheduled_at: datetime
     status: AppointmentStatus
-    price: Decimal
     paid: bool
     payment_method: PaymentMethod | None = None
     notes: str | None = None
 
 
+class AppointmentServiceItemOut(ORMBase):
+    id: int
+    service_id: int
+    price: Decimal
+    service: ServiceOut
+
+
 class AppointmentOut(ORMBase):
     id: int
     pet_id: int | None
-    service_id: int
     scheduled_at: datetime
     status: AppointmentStatus
     price: Decimal
@@ -65,4 +78,4 @@ class AppointmentOut(ORMBase):
     guest_animal_notes: str | None
     subscription_id: int | None
     pet: PetOut | None
-    service: ServiceOut
+    items: list[AppointmentServiceItemOut]

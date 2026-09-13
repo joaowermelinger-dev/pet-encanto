@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { ApiError } from '../api/client'
 
@@ -30,7 +31,13 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4">
+      <Link
+        to="/"
+        className="flex w-full max-w-sm items-center gap-1.5 text-sm text-muted hover:text-accent"
+      >
+        <ArrowLeft size={15} /> Voltar para o site
+      </Link>
       <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-2xl bg-surface p-8">
         <div className="flex items-center gap-3">
           <img src="/logo.png" alt="Pet Encanto" className="size-12 rounded-full object-cover" />

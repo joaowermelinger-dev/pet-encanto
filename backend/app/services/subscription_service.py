@@ -14,6 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.appointment import Appointment
+from app.models.appointment_service import AppointmentServiceItem
 from app.models.common import AppointmentStatus, SubscriptionFrequency
 from app.models.subscription import Subscription
 
@@ -63,13 +64,15 @@ def generate_occurrences(db: Session, subscription: Subscription, *, from_last_e
     while current <= horizon:
         appointment = Appointment(
             pet_id=subscription.pet_id,
-            service_id=subscription.service_id,
             scheduled_at=current,
             status=AppointmentStatus.SCHEDULED,
             price=subscription.service.price,
             paid=False,
             subscription_id=subscription.id,
         )
+        appointment.items = [
+            AppointmentServiceItem(service_id=subscription.service_id, price=subscription.service.price)
+        ]
         db.add(appointment)
         created.append(appointment)
         current = next_occurrence(current, subscription.frequency)

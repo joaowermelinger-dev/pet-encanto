@@ -49,13 +49,20 @@ export interface Service {
 export type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled'
 export type PaymentMethod = 'cash' | 'card' | 'pix' | 'other'
 
+export interface AppointmentServiceItem {
+  id: number
+  service_id: number
+  /** Vem como string do backend (Decimal). */
+  price: string
+  service: Service
+}
+
 export interface Appointment {
   id: number
   pet_id: number | null
-  service_id: number
   scheduled_at: string
   status: AppointmentStatus
-  /** Valor cobrado nessa ocorrência (pode diferir do preço atual do catálogo). Vem como string (Decimal). */
+  /** Total cobrado nessa ocorrência — soma de `items`. Vem como string (Decimal). */
   price: string
   paid: boolean
   payment_method: PaymentMethod | null
@@ -69,7 +76,8 @@ export interface Appointment {
   /** Preenchido quando esse atendimento veio de um Clubinho (assinatura recorrente). */
   subscription_id: number | null
   pet: Pet | null
-  service: Service
+  /** Um ou mais serviços cobrados (ex.: banho + tosa no mesmo atendimento). */
+  items: AppointmentServiceItem[]
 }
 
 export type SubscriptionFrequency = 'weekly' | 'biweekly' | 'monthly'
@@ -114,6 +122,23 @@ export interface FinanceSummary {
   revenue_by_method: RevenueByMethod
   daily: DailyTotal[]
   expenses: Expense[]
+}
+
+export interface PublicService {
+  id: number
+  name: string
+  description: string | null
+  duration_minutes: number
+  price: string
+}
+
+export interface PetPhoto {
+  id: number
+  pet_id: number | null
+  image_url: string
+  caption: string | null
+  is_public: boolean
+  created_at: string
 }
 
 export interface ShopInfo {

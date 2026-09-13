@@ -11,7 +11,7 @@ import Appointments from './pages/admin/Appointments'
 import Clubinho from './pages/admin/Clubinho'
 import Finance from './pages/admin/Finance'
 import Settings from './pages/admin/Settings'
-import Placeholder from './pages/admin/Placeholder'
+import Gallery from './pages/admin/Gallery'
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
           <Route path="appointments" element={<Appointments />} />
           <Route path="clubinho" element={<Clubinho />} />
           <Route path="finance" element={<Finance />} />
-          <Route path="gallery" element={<Placeholder title="Galeria" />} />
+          <Route path="gallery" element={<Gallery />} />
           <Route path="updates" element={<Updates />} />
           <Route path="settings" element={<Settings />} />
         </Route>

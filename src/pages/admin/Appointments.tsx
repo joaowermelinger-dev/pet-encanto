@@ -1,12 +1,17 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { CalendarDays, Check, ChevronLeft, ChevronRight, CircleDollarSign, Pencil, Plus, Trash2, X } from 'lucide-react'
 import { useAppointments, useCreateAppointment, useDeleteAppointment, useUpdateAppointment } from '../../hooks/useAppointments'
 import { useClients } from '../../hooks/useClients'
 import { usePets } from '../../hooks/usePets'
 import { useServices } from '../../hooks/useServices'
-import type { Appointment, AppointmentStatus, PaymentMethod } from '../../types'
+import type { Appointment, AppointmentStatus, PaymentMethod, Service } from '../../types'
 import { ApiError } from '../../api/client'
 import Modal from '../../components/Modal'
+
+interface ItemDraft {
+  service_id: number
+  price: string
+}
 
 const STATUS_LABEL: Record<AppointmentStatus, string> = {
   scheduled: 'Agendado',
@@ -64,6 +69,10 @@ export default function Appointments() {
     [appointments],
   )
 
+  function itemsPayload(appointment: Appointment) {
+    return appointment.items.map((i) => ({ service_id: i.service_id, price: Number(i.price) }))
+  }
+
   async function handleStatusChange(appointment: Appointment, status: AppointmentStatus) {
     await updateAppointment.mutateAsync({
       id: appointment.id,
@@ -74,10 +83,9 @@ export default function Appointments() {
         guest_animal_name: appointment.guest_animal_name,
         guest_animal_breed: appointment.guest_animal_breed,
         guest_animal_notes: appointment.guest_animal_notes,
-        service_id: appointment.service_id,
+        items: itemsPayload(appointment),
         scheduled_at: appointment.scheduled_at,
         status,
-        price: Number(appointment.price),
         paid: appointment.paid,
         payment_method: appointment.payment_method,
         notes: appointment.notes,
@@ -95,10 +103,9 @@ export default function Appointments() {
         guest_animal_name: appointment.guest_animal_name,
         guest_animal_breed: appointment.guest_animal_breed,
         guest_animal_notes: appointment.guest_animal_notes,
-        service_id: appointment.service_id,
+        items: itemsPayload(appointment),
         scheduled_at: appointment.scheduled_at,
         status: appointment.status,
-        price: Number(appointment.price),
         paid: !appointment.paid,
         payment_method: !appointment.paid ? appointment.payment_method ?? 'cash' : null,
         notes: appointment.notes,
@@ -175,7 +182,7 @@ export default function Appointments() {
                         {a.subscription_id && <span className="ml-1.5 rounded bg-sage/25 px-1.5 py-0.5 text-[10px] font-medium text-sage-foreground">clubinho</span>}
                       </p>
                       <p className="text-sm text-muted">
-                        {a.service.name} · {formatPrice(a.price)}
+                        {a.items.map((i) => i.service.name).join(' + ')} · {formatPrice(a.price)}
                       </p>
                     </div>
                   </div>
@@ -261,10 +268,11 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
   const [guestAnimalBreed, setGuestAnimalBreed] = useState(appointment?.guest_animal_breed ?? '')
   const [guestAnimalNotes, setGuestAnimalNotes] = useState(appointment?.guest_animal_notes ?? '')
 
-  const [serviceId, setServiceId] = useState(appointment ? String(appointment.service_id) : '')
+  const [items, setItems] = useState<ItemDraft[]>(
+    appointment ? appointment.items.map((i) => ({ service_id: i.service_id, price: i.price })) : [],
+  )
   const [dateValue, setDateValue] = useState(appointment ? appointment.scheduled_at.slice(0, 10) : date)
   const [time, setTime] = useState(appointment ? appointment.scheduled_at.slice(11, 16) : '09:00')
-  const [price, setPrice] = useState(appointment ? appointment.price : '')
   const [paid, setPaid] = useState(appointment?.paid ?? false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(appointment?.payment_method ?? 'cash')
   const [status, setStatus] = useState<AppointmentStatus>(appointment?.status ?? 'scheduled')
@@ -272,22 +280,26 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
   const [error, setError] = useState<string | null>(null)
 
   const saving = createAppointment.isPending || updateAppointment.isPending
+  const total = items.reduce((sum, i) => sum + (Number(i.price) || 0), 0)
 
-  // Sugere o preço do catálogo ao trocar de serviço — só quando ainda não tem preço definido
-  // (evita sobrescrever um valor já digitado ou o preço salvo ao abrir para editar).
-  useEffect(() => {
-    if (isEdit) return
-    const service = services?.find((s) => String(s.id) === serviceId)
-    if (service) setPrice(service.price)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [serviceId, services])
+  function toggleService(service: Service) {
+    setItems((prev) => {
+      const exists = prev.some((i) => i.service_id === service.id)
+      if (exists) return prev.filter((i) => i.service_id !== service.id)
+      return [...prev, { service_id: service.id, price: service.price }]
+    })
+  }
+
+  function setItemPrice(serviceId: number, value: string) {
+    setItems((prev) => prev.map((i) => (i.service_id === serviceId ? { ...i, price: value } : i)))
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError(null)
 
-    if (!serviceId) {
-      setError('Escolha o serviço.')
+    if (items.length === 0) {
+      setError('Escolha ao menos um serviço.')
       return
     }
     if (registered && !petId) {
@@ -300,9 +312,8 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
     }
 
     const base = {
-      service_id: Number(serviceId),
+      items: items.map((i) => ({ service_id: i.service_id, price: Number(i.price) || 0 })),
       scheduled_at: `${dateValue}T${time}:00`,
-      price: Number(price),
       paid,
       payment_method: paid ? paymentMethod : null,
       notes: notes || null,
@@ -438,22 +449,41 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
           </>
         )}
 
-        <label className="text-sm">
-          Qual serviço
-          <select
-            required
-            value={serviceId}
-            onChange={(e) => setServiceId(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-          >
-            <option value="">Selecione…</option>
-            {services?.filter((s) => s.is_active).map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name} ({s.duration_minutes} min)
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="text-sm">
+          <p className="mb-1">Quais serviços</p>
+          <div className="flex flex-col gap-1.5 rounded-lg border border-border p-2.5">
+            {services?.filter((s) => s.is_active).map((s) => {
+              const item = items.find((i) => i.service_id === s.id)
+              return (
+                <div key={s.id} className="flex flex-wrap items-center gap-2">
+                  <label className="flex flex-1 items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={!!item}
+                      onChange={() => toggleService(s)}
+                      className="accent-accent"
+                    />
+                    {s.name} <span className="text-xs text-muted">({s.duration_minutes} min)</span>
+                  </label>
+                  {item && (
+                    <input
+                      type="number"
+                      min={0}
+                      step={0.01}
+                      value={item.price}
+                      onChange={(e) => setItemPrice(s.id, e.target.value)}
+                      className="w-24 shrink-0 rounded-lg border border-border bg-background px-2 py-1 text-right outline-none focus:border-accent"
+                    />
+                  )}
+                </div>
+              )
+            })}
+            {(!services || services.filter((s) => s.is_active).length === 0) && (
+              <p className="py-1 text-muted">Nenhum serviço ativo cadastrado — crie um em Configurações.</p>
+            )}
+          </div>
+          <p className="mt-1.5 text-right text-sm font-medium">Total: {formatPrice(String(total))}</p>
+        </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <label className="text-sm sm:flex-1">
@@ -478,34 +508,20 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
           </label>
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <label className="text-sm sm:flex-1">
-            Valor (R$)
-            <input
-              type="number"
-              min={0}
-              step={0.01}
-              required
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+        {isEdit && (
+          <label className="text-sm">
+            Status
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value as AppointmentStatus)}
               className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-            />
+            >
+              <option value="scheduled">Agendado</option>
+              <option value="completed">Concluído</option>
+              <option value="cancelled">Cancelado</option>
+            </select>
           </label>
-          {isEdit && (
-            <label className="text-sm sm:flex-1">
-              Status
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value as AppointmentStatus)}
-                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
-              >
-                <option value="scheduled">Agendado</option>
-                <option value="completed">Concluído</option>
-                <option value="cancelled">Cancelado</option>
-              </select>
-            </label>
-          )}
-        </div>
+        )}
 
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={paid} onChange={(e) => setPaid(e.target.checked)} className="accent-accent" />

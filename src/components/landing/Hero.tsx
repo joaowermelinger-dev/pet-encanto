@@ -1,4 +1,5 @@
 import { Heart, PawPrint, ShieldCheck } from 'lucide-react'
+import { usePublicGallery } from '../../hooks/usePublicGallery'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { whatsappLink } from '../../utils/whatsapp'
 import PawDecor from './PawDecor'
@@ -16,6 +17,8 @@ const TRUST_BADGES = [
  */
 export default function Hero() {
   const { data: shopInfo } = usePublicShopInfo()
+  const { data: gallery } = usePublicGallery()
+  const heroPhoto = gallery?.[0]
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-sage/25 via-gold/10 to-background">
@@ -68,12 +71,20 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Espaço reservado pra uma foto real (dos pets/clientes) — por enquanto,
-            um cartão decorativo com as cores da marca. */}
+        {/* Usa a primeira foto pública da galeria (ver /admin/gallery); sem
+            nenhuma foto ainda, cai num cartão decorativo com as cores da marca. */}
         <div className="relative mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-br from-sage/30 via-gold/20 to-surface-muted shadow-soft-lg">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <PawPrint size={72} className="text-accent/25" />
-          </div>
+          {heroPhoto ? (
+            <img
+              src={heroPhoto.image_url}
+              alt={heroPhoto.caption ?? 'Pet Encanto'}
+              className="size-full object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <PawPrint size={72} className="text-accent/25" />
+            </div>
+          )}
         </div>
       </div>
     </section>
