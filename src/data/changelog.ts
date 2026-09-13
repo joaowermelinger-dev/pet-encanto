@@ -23,6 +23,26 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.0',
+    version: '2.0',
+    date: '2026-09-13',
+    sections: [
+      {
+        title: 'Landing page',
+        changes: [
+          {
+            kind: 'melhoria',
+            text: 'Novo banner de entrada: título "Bem-vindos!" em destaque, com patinhas decorativas e botões de ação.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Menu do topo virou uma faixa colorida, mais chamativa.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '1.9',
     version: '1.9',
     date: '2026-09-11',
