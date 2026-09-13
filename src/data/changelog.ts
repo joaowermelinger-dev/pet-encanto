@@ -23,6 +23,30 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.1',
+    version: '2.1',
+    date: '2026-09-13',
+    sections: [
+      {
+        title: 'Landing page',
+        changes: [
+          {
+            kind: 'melhoria',
+            text: 'Menu do topo agora é uma pílula flutuante arredondada, em vez de uma faixa colada nas bordas.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Patinhas decorativas se repetem em todas as seções (antes só apareciam no banner).',
+          },
+          {
+            kind: 'correção',
+            text: 'Texto branco do menu tinha contraste fraco com o fundo verde — ajustado para um tom mais escuro.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '2.0',
     version: '2.0',
     date: '2026-09-13',
