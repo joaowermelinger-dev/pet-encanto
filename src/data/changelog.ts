@@ -23,6 +23,38 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.2',
+    version: '2.2',
+    date: '2026-09-13',
+    sections: [
+      {
+        title: 'Landing page — redesign completo',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Botão "Agende pelo WhatsApp" no menu, no banner e num novo banner de destaque — separado do login do dono.',
+          },
+          {
+            kind: 'novo',
+            text: 'Serviços ganham ícone e descrição; cada um tem um link direto pra agendar pelo WhatsApp.',
+          },
+          {
+            kind: 'novo',
+            text: 'Nova seção "Por que confiar" com os diferenciais do petshop.',
+          },
+          {
+            kind: 'novo',
+            text: 'Botão "Como chegar" na seção de contato, abre o endereço direto no Google Maps.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Visual todo revisado: cards mais arredondados, sombras suaves, e a Galeria e o Rodapé ganharam mais destaque.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '2.1',
     version: '2.1',
     date: '2026-09-13',
