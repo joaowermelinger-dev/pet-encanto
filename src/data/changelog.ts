@@ -72,6 +72,10 @@ export const CHANGELOG: ChangelogEntry[] = [
             kind: 'melhoria',
             text: 'O banner de entrada da landing agora usa a primeira foto pública da Galeria, quando existir.',
           },
+          {
+            kind: 'melhoria',
+            text: 'Upload de foto ganhou uma área de arrastar-e-soltar com botão "Enviar imagem" e pré-visualização, no lugar do campo padrão do navegador.',
+          },
         ],
       },
       {
@@ -84,6 +88,36 @@ export const CHANGELOG: ChangelogEntry[] = [
           {
             kind: 'melhoria',
             text: 'Os serviços marcados como "Visível no site" agora aparecem de verdade na landing, com preço e descrição atualizados direto do catálogo.',
+          },
+        ],
+      },
+      {
+        title: 'Diferenciais',
+        changes: [
+          {
+            kind: 'melhoria',
+            text: 'Seção "Por que confiar" ganhou um novo layout: lista de diferenciais ao lado de fotos reais (cachorro e gato) numa colagem circular.',
+          },
+        ],
+      },
+      {
+        title: 'Polimento visual',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Seções da landing agora aparecem com uma leve animação (fade + deslocamento) ao rolar a página.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Patinhas decorativas reforçadas nas laterais da página em telas largas, pra não ficar vazio.',
+          },
+          {
+            kind: 'novo',
+            text: 'Rodapé ganha ícones de Instagram e WhatsApp quando configurados em Configurações.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Compartilhar o link do site agora mostra título, descrição e imagem (ex.: ao colar no WhatsApp).',
           },
         ],
       },

@@ -1,4 +1,27 @@
+import { MessageCircle } from 'lucide-react'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
+import { whatsappLink } from '../../utils/whatsapp'
+
+// lucide-react não tem mais ícones de marca (Instagram, etc.) — desenhado à
+// mão no mesmo estilo (stroke, viewBox 24x24) pra combinar com os outros.
+function InstagramIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
+}
 
 const NAV_LINKS = [
   { href: '#servicos', label: 'Serviços' },
@@ -9,6 +32,7 @@ const NAV_LINKS = [
 
 export default function Footer() {
   const { data } = usePublicShopInfo()
+  const hasSocial = data?.instagram_url || data?.whatsapp
 
   return (
     <footer className="bg-accent text-accent-foreground">
@@ -22,6 +46,32 @@ export default function Footer() {
             <p className="mt-3 text-sm text-accent-foreground/70">
               Banho, tosa e muito carinho para o seu melhor amigo.
             </p>
+            {hasSocial && (
+              <div className="mt-4 flex items-center gap-2">
+                {data?.instagram_url && (
+                  <a
+                    href={data.instagram_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="flex size-9 items-center justify-center rounded-full bg-white/10 text-accent-foreground hover:bg-white/20"
+                  >
+                    <InstagramIcon size={16} />
+                  </a>
+                )}
+                {data?.whatsapp && (
+                  <a
+                    href={whatsappLink(data.whatsapp, 'Olá! Gostaria de agendar um horário para meu pet.')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp"
+                    className="flex size-9 items-center justify-center rounded-full bg-white/10 text-accent-foreground hover:bg-white/20"
+                  >
+                    <MessageCircle size={16} />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
           <div>

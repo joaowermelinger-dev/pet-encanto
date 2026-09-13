@@ -1,13 +1,17 @@
 import { MessageCircle } from 'lucide-react'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { whatsappLink } from '../../utils/whatsapp'
+import Reveal from './Reveal'
 
 export default function CtaBanner() {
   const { data: shopInfo } = usePublicShopInfo()
   if (!shopInfo?.whatsapp) return null
 
   return (
-    <section className="mx-4 my-4 rounded-3xl bg-accent px-6 py-14 text-center text-accent-foreground shadow-soft-lg sm:mx-auto sm:max-w-5xl sm:px-12">
+    <Reveal
+      as="section"
+      className="mx-4 my-4 rounded-3xl bg-accent px-6 py-14 text-center text-accent-foreground shadow-soft-lg sm:mx-auto sm:max-w-5xl sm:px-12"
+    >
       <h2 className="font-display text-2xl font-semibold sm:text-3xl">Seu pet merece esse carinho</h2>
       <p className="mx-auto mt-3 max-w-md text-accent-foreground/80">
         Agende um horário e deixe seu pet ainda mais feliz. Fale com a gente pelo WhatsApp e marque uma visita.
@@ -20,6 +24,6 @@ export default function CtaBanner() {
       >
         <MessageCircle size={18} /> Agende agora pelo WhatsApp
       </a>
-    </section>
+    </Reveal>
   )
 }

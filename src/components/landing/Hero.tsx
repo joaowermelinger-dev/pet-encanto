@@ -3,6 +3,7 @@ import { usePublicGallery } from '../../hooks/usePublicGallery'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { whatsappLink } from '../../utils/whatsapp'
 import PawDecor from './PawDecor'
+import Reveal from './Reveal'
 
 const TRUST_BADGES = [
   { icon: Heart, label: 'Atendimento com carinho' },
@@ -25,7 +26,7 @@ export default function Hero() {
       <PawDecor variant="hero" />
 
       <div className="relative mx-auto grid max-w-5xl grid-cols-1 items-center gap-10 px-4 py-16 sm:py-20 lg:grid-cols-2 lg:py-28">
-        <div className="text-center lg:text-left">
+        <Reveal className="text-center lg:text-left">
           <p className="flex items-center justify-center gap-3 font-display text-3xl font-bold text-accent sm:text-5xl lg:justify-start">
             <PawPrint className="shrink-0 text-gold" size={28} />
             Bem-vindos!
@@ -69,11 +70,14 @@ export default function Hero() {
               </span>
             ))}
           </div>
-        </div>
+        </Reveal>
 
         {/* Usa a primeira foto pública da galeria (ver /admin/gallery); sem
             nenhuma foto ainda, cai num cartão decorativo com as cores da marca. */}
-        <div className="relative mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-br from-sage/30 via-gold/20 to-surface-muted shadow-soft-lg">
+        <Reveal
+          delay={150}
+          className="relative mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-br from-sage/30 via-gold/20 to-surface-muted shadow-soft-lg"
+        >
           {heroPhoto ? (
             <img
               src={heroPhoto.image_url}
@@ -85,7 +89,7 @@ export default function Hero() {
               <PawPrint size={72} className="text-accent/25" />
             </div>
           )}
-        </div>
+        </Reveal>
       </div>
     </section>
   )
