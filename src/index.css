@@ -86,3 +86,16 @@ a {
 .bg-surface {
   box-shadow: 0 1px 3px rgba(74, 54, 32, 0.06);
 }
+
+/* Sombras difusas, tingidas de marrom (em vez de preto puro) — usadas na
+   landing pra cards/fotos "flutuarem" de um jeito suave, tipo spa. */
+.shadow-soft {
+  box-shadow:
+    0 8px 30px -4px rgba(74, 54, 32, 0.08),
+    0 2px 8px -2px rgba(74, 54, 32, 0.04);
+}
+.shadow-soft-lg {
+  box-shadow:
+    0 20px 48px -12px rgba(74, 54, 32, 0.14),
+    0 4px 12px -2px rgba(74, 54, 32, 0.05);
+}

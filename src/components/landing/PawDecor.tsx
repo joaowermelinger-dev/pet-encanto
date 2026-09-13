@@ -14,13 +14,13 @@ interface PawDecorProps {
 export default function PawDecor({ variant = 'subtle' }: PawDecorProps) {
   if (variant === 'hero') {
     return (
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <PawPrint className="absolute left-[8%] top-[18%] rotate-[-15deg] text-sage/40" size={40} />
-        <PawPrint className="absolute right-[10%] top-[28%] rotate-[20deg] text-gold/50" size={32} />
-        <PawPrint className="absolute left-[18%] bottom-[15%] rotate-[10deg] text-gold/40" size={28} />
-        <PawPrint className="absolute right-[20%] bottom-[22%] rotate-[-25deg] text-sage/40" size={36} />
-        <Sparkles className="absolute left-[30%] top-[12%] text-gold/60" size={20} />
-        <Sparkles className="absolute right-[32%] bottom-[18%] text-sage/50" size={18} />
+      <div aria-hidden className="pointer-events-none absolute inset-0 hidden overflow-hidden sm:block">
+        <PawPrint className="absolute left-[3%] top-[6%] rotate-[-15deg] text-sage/40" size={40} />
+        <PawPrint className="absolute right-[3%] top-[8%] rotate-[20deg] text-gold/50" size={32} />
+        <PawPrint className="absolute left-[4%] bottom-[6%] rotate-[10deg] text-gold/40" size={28} />
+        <PawPrint className="absolute right-[4%] bottom-[8%] rotate-[-25deg] text-sage/40" size={36} />
+        <Sparkles className="absolute left-[14%] top-[4%] text-gold/60" size={20} />
+        <Sparkles className="absolute right-[14%] bottom-[6%] text-sage/50" size={18} />
       </div>
     )
   }

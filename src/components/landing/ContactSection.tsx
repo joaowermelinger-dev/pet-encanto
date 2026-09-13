@@ -1,31 +1,61 @@
-import { useQuery } from '@tanstack/react-query'
-import { getPublicShopInfo } from '../../api/public'
+import { Clock, MapPin, Navigation, Phone } from 'lucide-react'
+import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import PawDecor from './PawDecor'
 
 export default function ContactSection() {
-  const { data } = useQuery({ queryKey: ['public', 'shop-info'], queryFn: getPublicShopInfo })
+  const { data } = usePublicShopInfo()
+  const mapsLink = data?.address
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address)}`
+    : undefined
 
   return (
-    <section id="contato" className="relative overflow-hidden bg-surface-muted py-16">
+    <section id="contato" className="relative overflow-hidden py-16 sm:py-24">
       <PawDecor />
       <div className="relative mx-auto max-w-5xl px-4">
-        <h2 className="text-2xl font-semibold">Contato & localização</h2>
-        <div className="mt-6 grid grid-cols-1 gap-2 text-muted sm:grid-cols-2">
-          <p>
-            <strong className="text-foreground">Endereço:</strong> {data?.address ?? 'carregando…'}
+        <div className="text-center">
+          <h2 className="font-display text-3xl font-semibold sm:text-4xl">Estamos esperando por vocês</h2>
+          <p className="mx-auto mt-3 max-w-xl text-muted">
+            Vem conhecer o espaço e tirar suas dúvidas — será um prazer receber você e seu pet.
           </p>
-          <p>
-            <strong className="text-foreground">Telefone:</strong> {data?.phone ?? 'carregando…'}
-          </p>
-          <p>
-            <strong className="text-foreground">Horário:</strong> {data?.opening_hours ?? 'carregando…'}
-          </p>
-          {data?.whatsapp && (
-            <p>
-              <strong className="text-foreground">WhatsApp:</strong> {data.whatsapp}
-            </p>
-          )}
         </div>
+
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="flex items-start gap-3 rounded-2xl border border-border bg-surface p-5 shadow-soft">
+            <MapPin size={18} className="mt-0.5 shrink-0 text-accent" />
+            <div>
+              <p className="font-medium">Endereço</p>
+              <p className="mt-0.5 text-sm text-muted">{data?.address ?? 'carregando…'}</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 rounded-2xl border border-border bg-surface p-5 shadow-soft">
+            <Phone size={18} className="mt-0.5 shrink-0 text-accent" />
+            <div>
+              <p className="font-medium">Telefone</p>
+              <p className="mt-0.5 text-sm text-muted">{data?.phone ?? 'carregando…'}</p>
+              {data?.whatsapp && <p className="text-sm text-muted">WhatsApp: {data.whatsapp}</p>}
+            </div>
+          </div>
+          <div className="flex items-start gap-3 rounded-2xl border border-border bg-surface p-5 shadow-soft">
+            <Clock size={18} className="mt-0.5 shrink-0 text-accent" />
+            <div>
+              <p className="font-medium">Horário</p>
+              <p className="mt-0.5 text-sm text-muted">{data?.opening_hours ?? 'carregando…'}</p>
+            </div>
+          </div>
+        </div>
+
+        {mapsLink && (
+          <div className="mt-8 flex justify-center">
+            <a
+              href={mapsLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground hover:bg-[var(--accent-hover)]"
+            >
+              <Navigation size={16} /> Como chegar
+            </a>
+          </div>
+        )}
       </div>
     </section>
   )
