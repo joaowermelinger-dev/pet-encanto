@@ -13,16 +13,16 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-10 border-b border-border bg-surface/90 backdrop-blur">
+    <header className="sticky top-0 z-10 bg-sage">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
         <span className="flex items-center gap-2">
-          <img src="/logo.png" alt="Pet Encanto" className="size-9 rounded-full object-cover" />
-          <span className="font-display text-lg font-semibold text-accent">Pet Encanto</span>
+          <img src="/logo.png" alt="Pet Encanto" className="size-9 rounded-full object-cover ring-2 ring-white/40" />
+          <span className="font-display text-lg font-semibold text-white">Pet Encanto</span>
         </span>
 
-        <nav className="hidden items-center gap-6 text-sm text-muted sm:flex">
+        <nav className="hidden items-center gap-6 text-sm font-medium text-white/90 sm:flex">
           {LINKS.map((link) => (
-            <a key={link.href} href={link.href} className="hover:text-foreground">
+            <a key={link.href} href={link.href} className="hover:text-white">
               {link.label}
             </a>
           ))}
@@ -37,20 +37,20 @@ export default function Header() {
         <button
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Abrir menu"
-          className="rounded-lg p-2 text-foreground sm:hidden"
+          className="rounded-lg p-2 text-white sm:hidden"
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {menuOpen && (
-        <nav className="flex flex-col gap-1 border-t border-border px-4 py-3 text-sm sm:hidden">
+        <nav className="flex flex-col gap-1 border-t border-white/20 px-4 py-3 text-sm sm:hidden">
           {LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="rounded-lg px-2 py-2 text-muted hover:bg-surface-muted hover:text-foreground"
+              className="rounded-lg px-2 py-2 font-medium text-white/90 hover:bg-white/10 hover:text-white"
             >
               {link.label}
             </a>
