@@ -4,7 +4,7 @@ import { useAppointments, useCreateAppointment, useDeleteAppointment, useUpdateA
 import { useClients } from '../../hooks/useClients'
 import { usePets } from '../../hooks/usePets'
 import { useServices } from '../../hooks/useServices'
-import type { Appointment, AppointmentStatus, PaymentMethod, Service } from '../../types'
+import type { Appointment, AppointmentStatus, PaymentMethod } from '../../types'
 import { ApiError } from '../../api/client'
 import Modal from '../../components/Modal'
 
@@ -93,7 +93,8 @@ export default function Appointments() {
     })
   }
 
-  async function handleTogglePaid(appointment: Appointment) {
+  async function handlePaymentChange(appointment: Appointment, value: string) {
+    const method = value === '' ? null : (value as PaymentMethod)
     await updateAppointment.mutateAsync({
       id: appointment.id,
       input: {
@@ -106,8 +107,8 @@ export default function Appointments() {
         items: itemsPayload(appointment),
         scheduled_at: appointment.scheduled_at,
         status: appointment.status,
-        paid: !appointment.paid,
-        payment_method: !appointment.paid ? appointment.payment_method ?? 'cash' : null,
+        paid: method !== null,
+        payment_method: method,
         notes: appointment.notes,
       },
     })
@@ -187,14 +188,24 @@ export default function Appointments() {
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 pl-[4.25rem] sm:shrink-0 sm:pl-0">
-                    <button
-                      onClick={() => handleTogglePaid(a)}
+                    <label
                       className={`flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${
                         a.paid ? 'bg-sage/25 text-sage-foreground' : 'bg-surface-muted text-muted'
                       }`}
                     >
-                      <CircleDollarSign size={13} /> {a.paid ? 'Pago' : 'Não pago'}
-                    </button>
+                      <CircleDollarSign size={13} />
+                      <select
+                        value={a.paid ? a.payment_method ?? 'cash' : ''}
+                        onChange={(e) => handlePaymentChange(a, e.target.value)}
+                        className="bg-transparent outline-none"
+                      >
+                        <option value="">Não pago</option>
+                        <option value="cash">Pago · Dinheiro</option>
+                        <option value="card">Pago · Cartão</option>
+                        <option value="pix">Pago · Pix</option>
+                        <option value="other">Pago · Outro</option>
+                      </select>
+                    </label>
                     <span className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ${STATUS_CLASS[a.status]}`}>
                       {STATUS_LABEL[a.status]}
                     </span>
@@ -282,12 +293,14 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
   const saving = createAppointment.isPending || updateAppointment.isPending
   const total = items.reduce((sum, i) => sum + (Number(i.price) || 0), 0)
 
-  function toggleService(service: Service) {
-    setItems((prev) => {
-      const exists = prev.some((i) => i.service_id === service.id)
-      if (exists) return prev.filter((i) => i.service_id !== service.id)
-      return [...prev, { service_id: service.id, price: service.price }]
-    })
+  function addService(serviceId: number) {
+    if (!serviceId || items.some((i) => i.service_id === serviceId)) return
+    const service = services?.find((s) => s.id === serviceId)
+    setItems((prev) => [...prev, { service_id: serviceId, price: service?.price ?? '0' }])
+  }
+
+  function removeService(serviceId: number) {
+    setItems((prev) => prev.filter((i) => i.service_id !== serviceId))
   }
 
   function setItemPrice(serviceId: number, value: string) {
@@ -450,36 +463,55 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
         )}
 
         <div className="text-sm">
-          <p className="mb-1">Quais serviços</p>
-          <div className="flex flex-col gap-1.5 rounded-lg border border-border p-2.5">
-            {services?.filter((s) => s.is_active).map((s) => {
-              const item = items.find((i) => i.service_id === s.id)
-              return (
-                <div key={s.id} className="flex flex-wrap items-center gap-2">
-                  <label className="flex flex-1 items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={!!item}
-                      onChange={() => toggleService(s)}
-                      className="accent-accent"
-                    />
-                    {s.name} <span className="text-xs text-muted">({s.duration_minutes} min)</span>
-                  </label>
-                  {item && (
+          <label>
+            Adicionar serviço
+            <select
+              value=""
+              onChange={(e) => addService(Number(e.target.value))}
+              className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 outline-none focus:border-accent"
+            >
+              <option value="">Selecione…</option>
+              {services
+                ?.filter((s) => s.is_active && !items.some((i) => i.service_id === s.id))
+                .map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name} ({s.duration_minutes} min)
+                  </option>
+                ))}
+            </select>
+          </label>
+          {(!services || services.filter((s) => s.is_active).length === 0) && (
+            <p className="mt-1 text-xs text-muted">Nenhum serviço ativo cadastrado — crie um em Configurações.</p>
+          )}
+
+          <div className="mt-2.5 flex flex-col gap-1.5 rounded-lg border border-border p-2.5">
+            {items.length === 0 ? (
+              <p className="py-1 text-center text-muted">Nenhum serviço adicionado ainda.</p>
+            ) : (
+              items.map((item) => {
+                const service = services?.find((s) => s.id === item.service_id)
+                return (
+                  <div key={item.service_id} className="flex items-center gap-2">
+                    <span className="flex-1 truncate">{service?.name ?? `Serviço #${item.service_id}`}</span>
                     <input
                       type="number"
                       min={0}
                       step={0.01}
                       value={item.price}
-                      onChange={(e) => setItemPrice(s.id, e.target.value)}
+                      onChange={(e) => setItemPrice(item.service_id, e.target.value)}
                       className="w-24 shrink-0 rounded-lg border border-border bg-background px-2 py-1 text-right outline-none focus:border-accent"
                     />
-                  )}
-                </div>
-              )
-            })}
-            {(!services || services.filter((s) => s.is_active).length === 0) && (
-              <p className="py-1 text-muted">Nenhum serviço ativo cadastrado — crie um em Configurações.</p>
+                    <button
+                      type="button"
+                      onClick={() => removeService(item.service_id)}
+                      aria-label={`Remover ${service?.name ?? 'serviço'}`}
+                      className="shrink-0 rounded-lg p-1 text-muted hover:bg-surface-muted hover:text-red-600"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                )
+              })
             )}
           </div>
           <p className="mt-1.5 text-right text-sm font-medium">Total: {formatPrice(String(total))}</p>

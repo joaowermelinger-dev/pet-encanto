@@ -26,13 +26,3 @@ class ServiceOut(ORMBase):
     price: Decimal
     is_public: bool
     is_active: bool
-
-
-class ServicePublicOut(ORMBase):
-    """Só os campos seguros para expor sem autenticação, na landing page."""
-
-    id: int
-    name: str
-    description: str | None
-    duration_minutes: int
-    price: Decimal

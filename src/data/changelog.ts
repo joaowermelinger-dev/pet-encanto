@@ -23,6 +23,39 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.3',
+    version: '2.3',
+    date: '2026-09-15',
+    sections: [
+      {
+        title: 'Landing page',
+        changes: [
+          {
+            kind: 'melhoria',
+            text: 'Os serviços exibidos no site agora são uma lista fixa, sem preço — o valor é combinado direto pelo WhatsApp.',
+          },
+        ],
+      },
+      {
+        title: 'Atendimentos',
+        changes: [
+          {
+            kind: 'correção',
+            text: 'A lista de serviços no formulário estava esticando a tela e escondia o botão "Salvar" — trocada por um campo de busca que adiciona o serviço numa listinha embaixo, com o total continuando a somar.',
+          },
+          {
+            kind: 'novo',
+            text: 'Agora dá pra escolher a forma de pagamento direto na lista de atendimentos (dinheiro, cartão, pix ou outro), sem precisar abrir o formulário de edição.',
+          },
+          {
+            kind: 'correção',
+            text: 'Mudar a forma de pagamento ou o status de um atendimento não estava atualizando a tela de Financeiro corretamente.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '2.2',
     version: '2.2',
     date: '2026-09-13',

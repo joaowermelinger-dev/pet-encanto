@@ -124,14 +124,6 @@ export interface FinanceSummary {
   expenses: Expense[]
 }
 
-export interface PublicService {
-  id: number
-  name: string
-  description: string | null
-  duration_minutes: number
-  price: string
-}
-
 export interface PetPhoto {
   id: number
   pet_id: number | null

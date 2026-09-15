@@ -5,11 +5,15 @@ import type { SubscriptionStatus } from '../types'
 
 const SUBSCRIPTIONS = ['subscriptions'] as const
 const APPOINTMENTS = ['appointments'] as const
+const FINANCE = ['finance'] as const
 
 export function useSubscriptions() {
   return useQuery({ queryKey: SUBSCRIPTIONS, queryFn: subscriptionsApi.listSubscriptions })
 }
 
+// Gerar/cancelar ocorrências cria ou muda `Appointment`s, o que também afeta
+// o Financeiro (receita a receber) — sem invalidar essa query, a tela fica
+// desatualizada até navegar pra outro lugar e voltar.
 export function useCreateSubscription() {
   const queryClient = useQueryClient()
   return useMutation({
@@ -17,6 +21,7 @@ export function useCreateSubscription() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SUBSCRIPTIONS })
       queryClient.invalidateQueries({ queryKey: APPOINTMENTS })
+      queryClient.invalidateQueries({ queryKey: FINANCE })
     },
   })
 }
@@ -29,6 +34,7 @@ export function useUpdateSubscriptionStatus() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SUBSCRIPTIONS })
       queryClient.invalidateQueries({ queryKey: APPOINTMENTS })
+      queryClient.invalidateQueries({ queryKey: FINANCE })
     },
   })
 }
@@ -40,6 +46,7 @@ export function useExtendSubscription() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SUBSCRIPTIONS })
       queryClient.invalidateQueries({ queryKey: APPOINTMENTS })
+      queryClient.invalidateQueries({ queryKey: FINANCE })
     },
   })
 }

@@ -10,7 +10,6 @@ interface FormState {
   description: string
   duration_minutes: string
   price: string
-  is_public: boolean
   is_active: boolean
 }
 
@@ -19,7 +18,6 @@ const EMPTY_FORM: FormState = {
   description: '',
   duration_minutes: '30',
   price: '',
-  is_public: false,
   is_active: true,
 }
 
@@ -27,7 +25,7 @@ function formatPrice(price: string): string {
   return Number(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 
-/** Catálogo de tipos de serviço (nome, preço base, duração, visível no site). */
+/** Catálogo de tipos de serviço (nome, preço base, duração) usado nos atendimentos. */
 export default function ServiceCatalog() {
   const { data: services, isLoading } = useServices()
   const createService = useCreateService()
@@ -53,7 +51,6 @@ export default function ServiceCatalog() {
       description: service.description ?? '',
       duration_minutes: String(service.duration_minutes),
       price: String(service.price),
-      is_public: service.is_public,
       is_active: service.is_active,
     })
     setError(null)
@@ -68,7 +65,7 @@ export default function ServiceCatalog() {
       description: form.description || null,
       duration_minutes: Number(form.duration_minutes),
       price: Number(form.price),
-      is_public: form.is_public,
+      is_public: false,
       is_active: form.is_active,
     }
     try {
@@ -81,20 +78,6 @@ export default function ServiceCatalog() {
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Erro ao salvar serviço.')
     }
-  }
-
-  async function handleTogglePublic(service: Service) {
-    await updateService.mutateAsync({
-      id: service.id,
-      input: {
-        name: service.name,
-        description: service.description,
-        duration_minutes: service.duration_minutes,
-        price: Number(service.price),
-        is_public: !service.is_public,
-        is_active: service.is_active,
-      },
-    })
   }
 
   async function handleDelete(service: Service) {
@@ -112,7 +95,8 @@ export default function ServiceCatalog() {
         <div>
           <h2 className="text-lg font-semibold">Catálogo de serviços</h2>
           <p className="mt-1 text-sm text-muted">
-            Tipos de serviço disponíveis para os atendimentos. Marque "Visível no site" para aparecer na landing page.
+            Tipos de serviço disponíveis para os atendimentos (não aparecem na landing page — os serviços do site são
+            fixos e ficam sem preço).
           </p>
         </div>
         <button
@@ -165,10 +149,6 @@ export default function ServiceCatalog() {
                   <Clock size={13} /> {s.duration_minutes} min · {formatPrice(s.price)}
                 </p>
                 {!s.is_active && <span className="mt-2 w-fit rounded bg-surface-muted px-2 py-0.5 text-xs text-muted">Inativo</span>}
-                <label className="mt-3 flex items-center gap-2 text-sm">
-                  <input type="checkbox" checked={s.is_public} onChange={() => handleTogglePublic(s)} className="accent-accent" />
-                  Visível no site
-                </label>
               </div>
             ))}
           </div>
@@ -222,15 +202,6 @@ export default function ServiceCatalog() {
                 />
               </label>
             </div>
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={form.is_public}
-                onChange={(e) => setForm({ ...form, is_public: e.target.checked })}
-                className="accent-accent"
-              />
-              Visível no site (landing page)
-            </label>
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
