@@ -24,9 +24,9 @@ export default function Modal({ title, onClose, children }: ModalProps) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-xl"
+        className="flex max-h-[90vh] w-full max-w-md flex-col rounded-2xl border border-border bg-surface shadow-xl"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex shrink-0 items-center justify-between p-6 pb-0">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button
             onClick={onClose}
@@ -36,7 +36,9 @@ export default function Modal({ title, onClose, children }: ModalProps) {
             <X size={18} />
           </button>
         </div>
-        <div className="mt-4">{children}</div>
+        {/* min-h-0 é o que deixa esse filho flex encolher e rolar em vez de
+            empurrar o modal pra fora da tela quando o conteúdo é grande. */}
+        <div className="min-h-0 flex-1 overflow-y-auto p-6 pt-4">{children}</div>
       </div>
     </div>
   )

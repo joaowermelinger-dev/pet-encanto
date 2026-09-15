@@ -484,7 +484,7 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
             <p className="mt-1 text-xs text-muted">Nenhum serviço ativo cadastrado — crie um em Configurações.</p>
           )}
 
-          <div className="mt-2.5 flex flex-col gap-1.5 rounded-lg border border-border p-2.5">
+          <div className="mt-2.5 flex max-h-48 flex-col gap-1.5 overflow-y-auto rounded-lg border border-border p-2.5">
             {items.length === 0 ? (
               <p className="py-1 text-center text-muted">Nenhum serviço adicionado ainda.</p>
             ) : (
