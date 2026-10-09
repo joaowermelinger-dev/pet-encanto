@@ -14,3 +14,4 @@ pydantic-settings==2.15.0     # lê configuração a partir do arquivo .env
 pwdlib[argon2]==0.3.1         # hash de senha com Argon2
 pyjwt==2.13.0                 # geração/verificação dos tokens JWT
 python-multipart==0.0.32      # necessário para upload de arquivos (fotos)
+tzdata==2025.2                # fusos horários (America/Sao_Paulo) mesmo sem tzdata no sistema

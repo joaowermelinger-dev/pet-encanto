@@ -23,6 +23,35 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.4',
+    version: '2.4',
+    date: '2026-10-09',
+    sections: [
+      {
+        title: 'Atendimentos',
+        changes: [
+          {
+            kind: 'correção',
+            text: 'O horário agendado agora aparece igual ao que foi cadastrado (antes um atendimento marcado às 14:00 aparecia como 11:00).',
+          },
+          {
+            kind: 'correção',
+            text: 'O botão "Hoje" da agenda, do painel e do financeiro não pula mais para o dia seguinte depois das 21h.',
+          },
+        ],
+      },
+      {
+        title: 'Clubinho e Financeiro',
+        changes: [
+          {
+            kind: 'correção',
+            text: 'Horários do Clubinho e os totais por dia do Financeiro passam a usar o horário de Brasília.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '2.3',
     version: '2.3',
     date: '2026-09-15',

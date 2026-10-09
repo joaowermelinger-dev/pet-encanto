@@ -2,14 +2,15 @@ import { useState, type FormEvent } from 'react'
 import { Banknote, CreditCard, Plus, QrCode, Trash2, Wallet } from 'lucide-react'
 import { useCreateExpense, useDeleteExpense, useFinanceSummary } from '../../hooks/useFinance'
 import { ApiError } from '../../api/client'
+import { localISODate } from '../../utils/date'
 
 function todayISO(): string {
-  return new Date().toISOString().slice(0, 10)
+  return localISODate()
 }
 
 function firstOfMonthISO(): string {
   const d = new Date()
-  return new Date(d.getFullYear(), d.getMonth(), 1).toISOString().slice(0, 10)
+  return localISODate(new Date(d.getFullYear(), d.getMonth(), 1))
 }
 
 function formatPrice(value: string): string {
@@ -46,7 +47,7 @@ export default function Finance() {
       const day = now.getDay()
       const monday = new Date(now)
       monday.setDate(now.getDate() - ((day + 6) % 7))
-      setDateFrom(monday.toISOString().slice(0, 10))
+      setDateFrom(localISODate(monday))
       setDateTo(todayISO())
     } else {
       setDateFrom(firstOfMonthISO())

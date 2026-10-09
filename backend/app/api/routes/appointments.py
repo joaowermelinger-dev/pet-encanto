@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import CurrentUser, DbSession
+from app.core.timezone import to_local
 from app.models.appointment import Appointment
 from app.models.appointment_service import AppointmentServiceItem
 from app.models.pet import Pet
@@ -49,9 +50,9 @@ def list_appointments(
 ) -> list[Appointment]:
     stmt = select(Appointment).options(*_LOAD_OPTS).order_by(Appointment.scheduled_at)
     if date_from is not None:
-        stmt = stmt.where(Appointment.scheduled_at >= date_from)
+        stmt = stmt.where(Appointment.scheduled_at >= to_local(date_from))
     if date_to is not None:
-        stmt = stmt.where(Appointment.scheduled_at <= date_to)
+        stmt = stmt.where(Appointment.scheduled_at <= to_local(date_to))
     return list(db.scalars(stmt))
 
 

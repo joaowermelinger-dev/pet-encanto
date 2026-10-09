@@ -1,13 +1,14 @@
 """Resumo financeiro: receita dos atendimentos pagos + despesas, num período."""
 
 from collections import defaultdict
-from datetime import date, datetime, time, timedelta
+from datetime import date, timedelta
 from decimal import Decimal
 
 from fastapi import APIRouter
 from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession
+from app.core.timezone import local_day_bounds, to_local
 from app.models.appointment import Appointment
 from app.models.common import AppointmentStatus, PaymentMethod
 from app.models.expense import Expense
@@ -18,8 +19,7 @@ router = APIRouter(prefix="/finance", tags=["finance"])
 
 @router.get("/summary", response_model=FinanceSummary)
 def get_summary(date_from: date, date_to: date, user: CurrentUser, db: DbSession) -> FinanceSummary:
-    range_start = datetime.combine(date_from, time.min)
-    range_end = datetime.combine(date_to, time.max)
+    range_start, range_end = local_day_bounds(date_from, date_to)
 
     appointments = list(
         db.scalars(
@@ -40,7 +40,7 @@ def get_summary(date_from: date, date_to: date, user: CurrentUser, db: DbSession
             total_revenue += appointment.price
             method = appointment.payment_method.value if appointment.payment_method else PaymentMethod.OTHER.value
             by_method[method] += appointment.price
-            daily[appointment.scheduled_at.date().isoformat()] += appointment.price
+            daily[to_local(appointment.scheduled_at).date().isoformat()] += appointment.price
         elif appointment.status != AppointmentStatus.CANCELLED:
             total_pending += appointment.price
 

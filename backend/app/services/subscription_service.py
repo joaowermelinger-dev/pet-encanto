@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.timezone import to_local
 from app.models.appointment import Appointment
 from app.models.appointment_service import AppointmentServiceItem
 from app.models.common import AppointmentStatus, SubscriptionFrequency
@@ -31,6 +32,7 @@ def _add_months(dt: datetime, months: int) -> datetime:
 
 
 def next_occurrence(dt: datetime, frequency: SubscriptionFrequency) -> datetime:
+    dt = to_local(dt)  # conta dia/mês no horário de Brasília, não em UTC
     if frequency == SubscriptionFrequency.WEEKLY:
         return dt + timedelta(days=7)
     if frequency == SubscriptionFrequency.BIWEEKLY:

@@ -4,14 +4,15 @@ import { useAppointments } from '../../hooks/useAppointments'
 import { useClients } from '../../hooks/useClients'
 import { usePets } from '../../hooks/usePets'
 import { useFinanceSummary } from '../../hooks/useFinance'
+import { localISODate } from '../../utils/date'
 
 function todayISO(): string {
-  return new Date().toISOString().slice(0, 10)
+  return localISODate()
 }
 
 function firstOfMonthISO(): string {
   const d = new Date()
-  return new Date(d.getFullYear(), d.getMonth(), 1).toISOString().slice(0, 10)
+  return localISODate(new Date(d.getFullYear(), d.getMonth(), 1))
 }
 
 function formatPrice(value: string): string {

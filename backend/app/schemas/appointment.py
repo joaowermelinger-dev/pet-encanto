@@ -1,8 +1,8 @@
-from datetime import datetime
 from decimal import Decimal
 
 from pydantic import BaseModel, Field, model_validator
 
+from app.core.timezone import LocalDateTime
 from app.models.common import AppointmentStatus, PaymentMethod
 from app.schemas.base import ORMBase
 from app.schemas.pet import PetOut
@@ -41,14 +41,14 @@ class _ItemsField(BaseModel):
 
 
 class AppointmentCreate(_GuestFields, _ItemsField):
-    scheduled_at: datetime
+    scheduled_at: LocalDateTime
     paid: bool = False
     payment_method: PaymentMethod | None = None
     notes: str | None = None
 
 
 class AppointmentUpdate(_GuestFields, _ItemsField):
-    scheduled_at: datetime
+    scheduled_at: LocalDateTime
     status: AppointmentStatus
     paid: bool
     payment_method: PaymentMethod | None = None
@@ -65,7 +65,7 @@ class AppointmentServiceItemOut(ORMBase):
 class AppointmentOut(ORMBase):
     id: int
     pet_id: int | None
-    scheduled_at: datetime
+    scheduled_at: LocalDateTime
     status: AppointmentStatus
     price: Decimal
     paid: bool

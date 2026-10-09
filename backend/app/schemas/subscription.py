@@ -1,7 +1,6 @@
-from datetime import datetime
-
 from pydantic import BaseModel
 
+from app.core.timezone import LocalDateTime
 from app.models.common import SubscriptionFrequency, SubscriptionStatus
 from app.schemas.base import ORMBase
 from app.schemas.pet import PetOut
@@ -12,7 +11,7 @@ class SubscriptionCreate(BaseModel):
     pet_id: int
     service_id: int
     frequency: SubscriptionFrequency
-    first_occurrence_at: datetime
+    first_occurrence_at: LocalDateTime
 
 
 class SubscriptionUpdate(BaseModel):
@@ -24,8 +23,8 @@ class SubscriptionOut(ORMBase):
     pet_id: int
     service_id: int
     frequency: SubscriptionFrequency
-    first_occurrence_at: datetime
+    first_occurrence_at: LocalDateTime
     status: SubscriptionStatus
     pet: PetOut
     service: ServiceOut
-    next_occurrence_at: datetime | None = None
+    next_occurrence_at: LocalDateTime | None = None

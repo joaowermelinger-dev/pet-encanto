@@ -7,6 +7,7 @@ import { useServices } from '../../hooks/useServices'
 import type { Appointment, AppointmentStatus, PaymentMethod } from '../../types'
 import { ApiError } from '../../api/client'
 import Modal from '../../components/Modal'
+import { localISODate } from '../../utils/date'
 
 interface ItemDraft {
   service_id: number
@@ -26,7 +27,7 @@ const STATUS_CLASS: Record<AppointmentStatus, string> = {
 }
 
 function todayISO(): string {
-  return new Date().toISOString().slice(0, 10)
+  return localISODate()
 }
 
 function formatDateLabel(iso: string): string {
@@ -38,7 +39,7 @@ function addDays(iso: string, delta: number): string {
   const [y, m, d] = iso.split('-').map(Number)
   const date = new Date(y, m - 1, d)
   date.setDate(date.getDate() + delta)
-  return date.toISOString().slice(0, 10)
+  return localISODate(date)
 }
 
 function formatTime(iso: string): string {
