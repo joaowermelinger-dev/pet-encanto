@@ -47,6 +47,10 @@ export const CHANGELOG: ChangelogEntry[] = [
             kind: 'correção',
             text: 'Horários do Clubinho e os totais por dia do Financeiro passam a usar o horário de Brasília.',
           },
+          {
+            kind: 'correção',
+            text: 'Os atendimentos e Clubinhos já cadastrados foram ajustados para o horário certo.',
+          },
         ],
       },
     ],
