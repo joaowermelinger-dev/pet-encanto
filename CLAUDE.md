@@ -50,7 +50,7 @@ src/pages/admin/<Página>.tsx   tela
 | Serviços (catálogo) | `service.py` / `services.py` (CRUD) | `api/services.ts`, `useServices.ts`, `components/settings/ServiceCatalog.tsx` |
 | Atendimentos | `appointment.py`, `appointment_service.py` / `appointments.py` (GET, POST, PATCH, DELETE; GET sem datas traz todos) | `api/appointments.ts`, `useAppointments.ts` (`useAllAppointments` para histórico/sumidos), `admin/Appointments.tsx` (visão Dia/Semana; aviso de horário ocupado no formulário; maior tela) |
 | Clubinho | `subscription.py` / `subscriptions.py` (+ `/{id}/extend`), lógica em `services/subscription_service.py` | `api/subscriptions.ts`, `useSubscriptions.ts`, `admin/Clubinho.tsx` |
-| Financeiro | `expense.py` / `expenses.py`, `finance.py` (`/finance/summary`) | `api/expenses.ts`, `api/finance.ts`, `useFinance.ts`, `admin/Finance.tsx`, relatório CSV em `utils/financeReport.ts` |
+| Financeiro | `expense.py` / `expenses.py`, `finance.py` (`/finance/summary`) | `api/expenses.ts`, `api/finance.ts`, `useFinance.ts`, `admin/Finance.tsx` |
 | Galeria | `pet_photo.py` / `pet_photos.py` (upload em `backend/uploads/`) | `api/petPhotos.ts`, `usePetPhotos.ts`, `admin/Gallery.tsx` |
 | Dados do petshop | `shop_info.py` (linha única id=1) / `shop_info.py` | `api/shopInfo.ts`, `useShopInfo.ts`, `components/settings/ShopInfoForm.tsx` |
 | Rotas públicas | / `public.py` (`/public/shop-info`, `/public/gallery`) | `api/public.ts`, `usePublicShopInfo.ts`, `usePublicGallery.ts` |
