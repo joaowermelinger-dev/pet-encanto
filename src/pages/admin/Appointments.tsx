@@ -57,6 +57,18 @@ function formatWeekLabel(monday: string): string {
   return `Semana de ${fmt(monday)} a ${fmt(addDays(monday, 6))}`
 }
 
+/** Duração usada quando os serviços não têm duração cadastrada. */
+const DEFAULT_DURATION = 60
+
+function toMinutes(hhmm: string): number {
+  const [h, m] = hhmm.split(':').map(Number)
+  return h * 60 + m
+}
+
+function appointmentDuration(a: Appointment): number {
+  return a.items.reduce((sum, i) => sum + (i.service.duration_minutes ?? 0), 0)
+}
+
 function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
 }
@@ -415,6 +427,24 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
   const saving = createAppointment.isPending || updateAppointment.isPending
   const total = items.reduce((sum, i) => sum + (Number(i.price) || 0), 0)
 
+  // Aviso (não bloqueia) quando o horário bate com outro atendimento do mesmo dia.
+  const { data: sameDay } = useAppointments(`${dateValue}T00:00:00`, `${dateValue}T23:59:59`)
+  const conflicts = useMemo(() => {
+    if (!time || status === 'cancelled') return []
+    const start = toMinutes(time)
+    const ownDuration = items.reduce(
+      (sum, i) => sum + (services?.find((s) => s.id === i.service_id)?.duration_minutes ?? 0),
+      0,
+    )
+    const end = start + (ownDuration || DEFAULT_DURATION)
+    return (sameDay ?? []).filter((a) => {
+      if (a.id === appointment?.id || a.status === 'cancelled') return false
+      const otherStart = toMinutes(a.scheduled_at.slice(11, 16))
+      const otherEnd = otherStart + (appointmentDuration(a) || DEFAULT_DURATION)
+      return start < otherEnd && otherStart < end
+    })
+  }, [sameDay, time, items, services, status, appointment?.id])
+
   function addService(serviceId: number) {
     if (!serviceId || items.some((i) => i.service_id === serviceId)) return
     const service = services?.find((s) => s.id === serviceId)
@@ -661,6 +691,15 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
             />
           </label>
         </div>
+        {conflicts.length > 0 && (
+          <p className="rounded-lg bg-gold/20 px-3 py-2 text-sm text-gold-foreground">
+            ⚠ Esse horário já tem{' '}
+            {conflicts
+              .map((a) => `${appointmentNames(a).animal} às ${formatTime(a.scheduled_at)}`)
+              .join(', ')}
+            . Dá para salvar mesmo assim.
+          </p>
+        )}
 
         {isEdit && (
           <label className="text-sm">

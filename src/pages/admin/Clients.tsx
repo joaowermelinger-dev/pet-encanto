@@ -1,12 +1,18 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronRight, Mail, MessageCircle, Phone, Plus, Search, Users } from 'lucide-react'
+import { ChevronRight, Mail, MessageCircle, PawPrint, Phone, Plus, Search, Users } from 'lucide-react'
 import { useClients, useCreateClient } from '../../hooks/useClients'
 import { useAllAppointments } from '../../hooks/useAppointments'
+import { usePets } from '../../hooks/usePets'
 import { ApiError } from '../../api/client'
 import Modal from '../../components/Modal'
 import { daysSince, formatShortDate, isPastVisit } from '../../utils/visits'
 import { whatsappLink } from '../../utils/whatsapp'
+
+/** Minúsculas e sem acento, para "joão" achar "Joao". */
+function normalize(text: string): string {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+}
 
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/)
@@ -24,7 +30,27 @@ interface VisitInfo {
 export default function Clients() {
   const [search, setSearch] = useState('')
   const [away, setAway] = useState<AwayFilter>('all')
-  const { data: allClients, isLoading } = useClients(search)
+  // Busca feita aqui no navegador: nome do dono, telefone (só os dígitos) ou nome do pet.
+  const { data: everyClient, isLoading } = useClients()
+  const { data: allPets } = usePets()
+
+  const petsByClient = useMemo(() => {
+    const map = new Map<number, string[]>()
+    for (const p of allPets ?? []) map.set(p.client_id, [...(map.get(p.client_id) ?? []), p.name])
+    return map
+  }, [allPets])
+
+  const allClients = useMemo(() => {
+    const term = normalize(search.trim())
+    if (!term) return everyClient
+    const digits = search.replace(/\D/g, '')
+    return (everyClient ?? []).filter(
+      (c) =>
+        normalize(c.name).includes(term) ||
+        (digits.length >= 3 && c.phone.replace(/\D/g, '').includes(digits)) ||
+        (petsByClient.get(c.id) ?? []).some((pet) => normalize(pet).includes(term)),
+    )
+  }, [everyClient, search, petsByClient])
   const { data: appointments } = useAllAppointments()
 
   const visitsByClient = useMemo(() => {
@@ -100,7 +126,7 @@ export default function Clients() {
         <div className="relative w-full max-w-72">
           <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
           <input
-            placeholder="Buscar por nome…"
+            placeholder="Buscar por nome, telefone ou pet…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm outline-none focus:border-accent"
@@ -170,6 +196,11 @@ export default function Clients() {
                     {c.email && (
                       <p className="mt-0.5 flex items-center gap-1.5 truncate text-sm text-muted">
                         <Mail size={13} /> {c.email}
+                      </p>
+                    )}
+                    {(petsByClient.get(c.id)?.length ?? 0) > 0 && (
+                      <p className="mt-0.5 flex items-center gap-1.5 truncate text-sm text-muted">
+                        <PawPrint size={13} /> {petsByClient.get(c.id)!.join(', ')}
                       </p>
                     )}
                     {away !== 'all' && visitsByClient.get(c.id)?.lastVisit && (

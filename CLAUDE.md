@@ -45,10 +45,10 @@ src/pages/admin/<Página>.tsx   tela
 | Funcionalidade | Backend (models / routes) | Frontend (api / hooks / tela) |
 |---|---|---|
 | Login | `user.py`, `refresh_token.py` / `auth.py` (`/auth/login, logout, me, refresh`) | `api/auth.ts`, `auth/AuthContext.tsx`, `auth/ProtectedRoute.tsx`, `pages/Login.tsx` |
-| Clientes | `client.py` / `clients.py` (CRUD; GET `/{id}` traz pets) | `api/clients.ts`, `useClients.ts`, `admin/Clients.tsx` (filtro "Sumidos"), `admin/ClientDetail.tsx` (histórico dos pets) |
-| Pets | `pet.py` / `pets.py` (CRUD) | `api/pets.ts`, `usePets.ts`, dentro de `ClientDetail.tsx` |
+| Clientes | `client.py` / `clients.py` (CRUD; GET `/{id}` traz pets) | `api/clients.ts`, `useClients.ts`, `admin/Clients.tsx` (filtro "Sumidos"; busca por nome/telefone/pet feita no navegador), `admin/ClientDetail.tsx` (histórico dos pets) |
+| Pets | `pet.py` / `pets.py` (CRUD) | `api/pets.ts`, `usePets.ts`, dentro de `ClientDetail.tsx` (`PetFormModal`: criar/editar com porte, nascimento, observações) |
 | Serviços (catálogo) | `service.py` / `services.py` (CRUD) | `api/services.ts`, `useServices.ts`, `components/settings/ServiceCatalog.tsx` |
-| Atendimentos | `appointment.py`, `appointment_service.py` / `appointments.py` (GET, POST, PATCH, DELETE; GET sem datas traz todos) | `api/appointments.ts`, `useAppointments.ts` (`useAllAppointments` para histórico/sumidos), `admin/Appointments.tsx` (visão Dia/Semana; maior tela) |
+| Atendimentos | `appointment.py`, `appointment_service.py` / `appointments.py` (GET, POST, PATCH, DELETE; GET sem datas traz todos) | `api/appointments.ts`, `useAppointments.ts` (`useAllAppointments` para histórico/sumidos), `admin/Appointments.tsx` (visão Dia/Semana; aviso de horário ocupado no formulário; maior tela) |
 | Clubinho | `subscription.py` / `subscriptions.py` (+ `/{id}/extend`), lógica em `services/subscription_service.py` | `api/subscriptions.ts`, `useSubscriptions.ts`, `admin/Clubinho.tsx` |
 | Financeiro | `expense.py` / `expenses.py`, `finance.py` (`/finance/summary`) | `api/expenses.ts`, `api/finance.ts`, `useFinance.ts`, `admin/Finance.tsx`, relatório CSV em `utils/financeReport.ts` |
 | Galeria | `pet_photo.py` / `pet_photos.py` (upload em `backend/uploads/`) | `api/petPhotos.ts`, `usePetPhotos.ts`, `admin/Gallery.tsx` |
