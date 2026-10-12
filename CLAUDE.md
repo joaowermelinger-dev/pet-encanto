@@ -5,7 +5,7 @@
 > Ao terminar uma alteração, atualize este mapa (se a estrutura mudou) e
 > adicione a entrada no changelog (`src/data/changelog.ts`).
 >
-> Última atualização do mapa: 2026-10-09 (versão do app: 2.4)
+> Última atualização do mapa: 2026-10-12 (versão do app: 2.4)
 
 ## O que é
 
@@ -22,6 +22,8 @@ Interface toda em português. No ar: pet-encanto.vercel.app
 | Frontend | React 19 + Vite 8 + Tailwind 4 + react-query + react-router 7, TypeScript | `src/` |
 | Backend | FastAPI + SQLAlchemy + Alembic (PostgreSQL) | `backend/` |
 | Deploy | Vercel (front, `vercel.json`), Render (API, `render.yaml`), Neon (banco) | `DEPLOY.md` |
+
+Deploy: push na `main` publica o front na Vercel sozinho. A API no Render **não** publica sozinha (o `render.yaml` diz `autoDeploy: true`, mas o serviço no painel não segue isso): mudança no backend exige Manual Deploy → Deploy latest commit no painel do Render.
 
 Local: backend `uvicorn app.main:app --reload --port 8001`; frontend `npm run dev` (5173). O Vite faz proxy de `/api` e `/uploads` para a porta 8001 (`vite.config.ts`). Passo a passo em `README.md`.
 
@@ -74,7 +76,6 @@ Apoio: `PawDecor` (enfeites de patinha), `Reveal` (animação ao rolar). Link de
 - Enums ficam em `backend/app/models/common.py` e espelhados em `src/types/index.ts`.
 - Valores em dinheiro vêm do backend como **string** (Decimal).
 - **Fuso horário**: tudo em horário de Brasília. `backend/app/core/timezone.py` (`LOCAL_TZ`, `to_local`, `LocalDateTime`, `local_day_bounds`): horário sem fuso que chega na API é tratado como Brasília e a API devolve sempre com `-03:00`. Nos schemas use `LocalDateTime` em vez de `datetime` para horários de agenda. No front, data de hoje via `src/utils/date.ts` (`localISODate`), nunca `toISOString().slice(0, 10)` (dá a data em UTC).
-- **Fuso horário**: tudo é horário de Brasília (-03:00, `backend/app/core/timezone.py`). Schemas usam `ShopDateTime` (`schemas/base.py`): horário sem fuso vindo do front vira Brasília, e a API responde em -03:00. Datas "AAAA-MM-DD" no front: use `localDateISO()` de `src/utils/date.ts`, nunca `toISOString().slice(0, 10)`.
 
 ## Infra e segurança (raramente precisa mexer)
 
