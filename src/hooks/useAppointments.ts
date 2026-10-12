@@ -12,6 +12,14 @@ export function useAppointments(dateFrom: string, dateTo: string) {
   })
 }
 
+// Usa a mesma raiz de chave, então criar/editar/apagar já atualiza esse cache.
+export function useAllAppointments() {
+  return useQuery({
+    queryKey: [...APPOINTMENTS, 'all'],
+    queryFn: () => appointmentsApi.listAllAppointments(),
+  })
+}
+
 // Preço, status de pagamento e forma de pagamento do atendimento entram na
 // conta do Financeiro — sem invalidar essa query também, a tela fica com
 // dado desatualizado até o usuário navegar pra outro lugar e voltar.

@@ -36,6 +36,11 @@ export function listAppointments(dateFrom: string, dateTo: string): Promise<Appo
   return apiRequest<Appointment[]>('/appointments', { query: { date_from: dateFrom, date_to: dateTo } })
 }
 
+/** Todos os atendimentos, sem filtro de data (histórico do pet, clientes sumidos). */
+export function listAllAppointments(): Promise<Appointment[]> {
+  return apiRequest<Appointment[]>('/appointments')
+}
+
 export function createAppointment(input: AppointmentCreateInput): Promise<Appointment> {
   return apiRequest<Appointment>('/appointments', { method: 'POST', body: input })
 }

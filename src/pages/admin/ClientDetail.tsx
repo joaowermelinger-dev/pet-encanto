@@ -1,15 +1,31 @@
-import { useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Mail, MapPin, PawPrint, Pencil, Phone, Plus, Trash2 } from 'lucide-react'
+import { ArrowLeft, History, Mail, MapPin, PawPrint, Pencil, Phone, Plus, Trash2 } from 'lucide-react'
 import { useClient, useDeleteClient, useUpdateClient } from '../../hooks/useClients'
 import { useCreatePet, useDeletePet } from '../../hooks/usePets'
-import type { PetSize, PetSpecies } from '../../types'
+import { useAllAppointments } from '../../hooks/useAppointments'
+import type { Appointment, AppointmentStatus, PetSize, PetSpecies } from '../../types'
 import { ApiError } from '../../api/client'
 import Modal from '../../components/Modal'
+import { formatPrice, formatShortDate, isPastVisit } from '../../utils/visits'
 
 const SPECIES_LABEL: Record<PetSpecies, string> = { dog: 'Cachorro', cat: 'Gato', other: 'Outro' }
 const SPECIES_EMOJI: Record<PetSpecies, string> = { dog: '🐶', cat: '🐱', other: '🐾' }
 const SIZE_LABEL: Record<PetSize, string> = { small: 'Pequeno', medium: 'Médio', large: 'Grande' }
+const STATUS_LABEL: Record<AppointmentStatus, string> = {
+  scheduled: 'Agendado',
+  completed: 'Concluído',
+  cancelled: 'Cancelado',
+}
+
+/** Quantos atendimentos do histórico aparecem antes do "Ver todos". */
+const HISTORY_PREVIEW = 10
+
+interface PetStats {
+  lastVisit: string | null
+  visits: number
+  totalPaid: number
+}
 
 export default function ClientDetail() {
   const { id } = useParams<{ id: string }>()
@@ -20,6 +36,32 @@ export default function ClientDetail() {
   const deleteClient = useDeleteClient()
   const createPet = useCreatePet()
   const deletePet = useDeletePet()
+  const { data: allAppointments } = useAllAppointments()
+  const [showAllHistory, setShowAllHistory] = useState(false)
+
+  // Atendimentos dos pets deste cliente, do mais recente para o mais antigo.
+  const history = useMemo<Appointment[]>(
+    () =>
+      (allAppointments ?? [])
+        .filter((a) => a.pet?.client_id === clientId)
+        .sort((a, b) => b.scheduled_at.localeCompare(a.scheduled_at)),
+    [allAppointments, clientId],
+  )
+
+  const statsByPet = useMemo(() => {
+    const stats = new Map<number, PetStats>()
+    for (const a of history) {
+      if (a.pet_id === null) continue
+      const s = stats.get(a.pet_id) ?? { lastVisit: null, visits: 0, totalPaid: 0 }
+      if (isPastVisit(a)) {
+        s.visits += 1
+        if (!s.lastVisit || a.scheduled_at > s.lastVisit) s.lastVisit = a.scheduled_at
+      }
+      if (a.paid) s.totalPaid += Number(a.price)
+      stats.set(a.pet_id, s)
+    }
+    return stats
+  }, [history])
 
   const [editing, setEditing] = useState(false)
   const [name, setName] = useState('')
@@ -171,6 +213,17 @@ export default function ClientDetail() {
                     {pet.breed ? ` · ${pet.breed}` : ''}
                     {pet.size ? ` · ${SIZE_LABEL[pet.size]}` : ''}
                   </p>
+                  {(() => {
+                    const s = statsByPet.get(pet.id)
+                    if (!s || s.visits === 0) return <p className="mt-1.5 text-xs text-muted">Ainda sem atendimentos.</p>
+                    return (
+                      <p className="mt-1.5 text-xs text-muted">
+                        Última visita {formatShortDate(s.lastVisit!)} · {s.visits}{' '}
+                        {s.visits === 1 ? 'visita' : 'visitas'} · gastou{' '}
+                        <span className="font-medium text-foreground">{formatPrice(s.totalPaid)}</span>
+                      </p>
+                    )
+                  })()}
                 </div>
                 <button
                   onClick={() => handleDeletePet(pet.id, pet.name)}
@@ -184,6 +237,40 @@ export default function ClientDetail() {
           </div>
         )}
       </div>
+
+      {history.length > 0 && (
+        <div className="mt-8">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <History size={18} /> Histórico de atendimentos
+          </h2>
+          <div className="mt-3 flex flex-col divide-y divide-border rounded-xl border border-border bg-surface">
+            {(showAllHistory ? history : history.slice(0, HISTORY_PREVIEW)).map((a) => (
+              <div key={a.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 text-sm">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">
+                    {a.pet?.name} <span className="font-normal text-muted">· {a.items.map((i) => i.service.name).join(' + ')}</span>
+                  </p>
+                  <p className="text-xs text-muted">
+                    {formatShortDate(a.scheduled_at)} · {STATUS_LABEL[a.status]}
+                    {a.status !== 'cancelled' && (a.paid ? ' · pago' : ' · não pago')}
+                  </p>
+                </div>
+                <span className={`shrink-0 font-medium ${a.status === 'cancelled' ? 'text-muted line-through' : ''}`}>
+                  {formatPrice(a.price)}
+                </span>
+              </div>
+            ))}
+          </div>
+          {history.length > HISTORY_PREVIEW && (
+            <button
+              onClick={() => setShowAllHistory((v) => !v)}
+              className="mt-2 text-sm font-medium text-accent hover:underline"
+            >
+              {showAllHistory ? 'Mostrar menos' : `Ver todos (${history.length})`}
+            </button>
+          )}
+        </div>
+      )}
 
       {editing && (
         <Modal title="Editar cliente" onClose={() => setEditing(false)}>

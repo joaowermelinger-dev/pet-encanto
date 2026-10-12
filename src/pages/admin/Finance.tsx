@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react'
-import { Banknote, CreditCard, Plus, QrCode, Trash2, Wallet } from 'lucide-react'
+import { Banknote, CreditCard, Download, Plus, QrCode, Trash2, Wallet } from 'lucide-react'
 import { useCreateExpense, useDeleteExpense, useFinanceSummary } from '../../hooks/useFinance'
 import { ApiError } from '../../api/client'
 import { localISODate } from '../../utils/date'
+import { downloadFinanceReport } from '../../utils/financeReport'
 
 function todayISO(): string {
   return localISODate()
@@ -37,6 +38,19 @@ export default function Finance() {
   const [amount, setAmount] = useState('')
   const [expenseDate, setExpenseDate] = useState(todayISO())
   const [error, setError] = useState<string | null>(null)
+  const [exporting, setExporting] = useState(false)
+
+  async function handleExport() {
+    if (!summary) return
+    setExporting(true)
+    try {
+      await downloadFinanceReport(dateFrom, dateTo, summary)
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : 'Não foi possível gerar o relatório.')
+    } finally {
+      setExporting(false)
+    }
+  }
 
   function setPreset(preset: 'today' | 'week' | 'month') {
     const now = new Date()
@@ -83,6 +97,13 @@ export default function Finance() {
           <h1 className="text-2xl font-semibold">Financeiro</h1>
           <p className="mt-1 text-sm text-muted">Receita dos atendimentos pagos e despesas do período.</p>
         </div>
+        <button
+          onClick={handleExport}
+          disabled={!summary || exporting}
+          className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium hover:bg-surface-muted disabled:opacity-60"
+        >
+          <Download size={16} /> {exporting ? 'Gerando…' : 'Baixar relatório (Excel)'}
+        </button>
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
