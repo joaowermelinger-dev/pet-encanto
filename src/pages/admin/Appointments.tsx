@@ -42,6 +42,33 @@ function addDays(iso: string, delta: number): string {
   return localISODate(date)
 }
 
+/** Segunda-feira da semana da data (AAAA-MM-DD). */
+function mondayOf(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  const weekday = new Date(y, m - 1, d).getDay()
+  return addDays(iso, -((weekday + 6) % 7))
+}
+
+function formatWeekLabel(monday: string): string {
+  const fmt = (iso: string) => {
+    const [y, m, d] = iso.split('-').map(Number)
+    return new Date(y, m - 1, d).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+  }
+  return `Semana de ${fmt(monday)} a ${fmt(addDays(monday, 6))}`
+}
+
+/** Duração usada quando os serviços não têm duração cadastrada. */
+const DEFAULT_DURATION = 60
+
+function toMinutes(hhmm: string): number {
+  const [h, m] = hhmm.split(':').map(Number)
+  return h * 60 + m
+}
+
+function appointmentDuration(a: Appointment): number {
+  return a.items.reduce((sum, i) => sum + (i.service.duration_minutes ?? 0), 0)
+}
+
 function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
 }
@@ -58,7 +85,12 @@ function appointmentNames(a: Appointment): { animal: string; client: string } {
 
 export default function Appointments() {
   const [date, setDate] = useState(todayISO())
-  const { data: appointments, isLoading } = useAppointments(`${date}T00:00:00`, `${date}T23:59:59`)
+  const [view, setView] = useState<'day' | 'week'>('day')
+  const weekStart = mondayOf(date)
+  const rangeStart = view === 'day' ? date : weekStart
+  const rangeEnd = view === 'day' ? date : addDays(weekStart, 6)
+  const { data: appointments, isLoading } = useAppointments(`${rangeStart}T00:00:00`, `${rangeEnd}T23:59:59`)
+  const step = view === 'day' ? 1 : 7
   const updateAppointment = useUpdateAppointment()
   const deleteAppointment = useDeleteAppointment()
 
@@ -126,7 +158,9 @@ export default function Appointments() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Atendimentos</h1>
-          <p className="mt-1 text-sm capitalize text-muted">{formatDateLabel(date)}</p>
+          <p className={`mt-1 text-sm text-muted ${view === 'day' ? 'capitalize' : ''}`}>
+            {view === 'day' ? formatDateLabel(date) : formatWeekLabel(weekStart)}
+          </p>
         </div>
         <button
           onClick={() => setShowForm(true)}
@@ -137,7 +171,22 @@ export default function Appointments() {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <button onClick={() => setDate((d) => addDays(d, -1))} className="rounded-lg border border-border p-2 hover:bg-surface-muted" aria-label="Dia anterior">
+        <div className="flex gap-1 rounded-lg border border-border bg-surface p-1 text-sm">
+          {(['day', 'week'] as const).map((v) => (
+            <button
+              key={v}
+              onClick={() => setView(v)}
+              className={`rounded-md px-3 py-1 ${view === v ? 'bg-accent text-accent-foreground' : 'text-muted hover:text-foreground'}`}
+            >
+              {v === 'day' ? 'Dia' : 'Semana'}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => setDate((d) => addDays(d, -step))}
+          className="rounded-lg border border-border p-2 hover:bg-surface-muted"
+          aria-label={view === 'day' ? 'Dia anterior' : 'Semana anterior'}
+        >
           <ChevronLeft size={16} />
         </button>
         <input
@@ -146,7 +195,11 @@ export default function Appointments() {
           onChange={(e) => setDate(e.target.value)}
           className="rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-accent"
         />
-        <button onClick={() => setDate((d) => addDays(d, 1))} className="rounded-lg border border-border p-2 hover:bg-surface-muted" aria-label="Próximo dia">
+        <button
+          onClick={() => setDate((d) => addDays(d, step))}
+          className="rounded-lg border border-border p-2 hover:bg-surface-muted"
+          aria-label={view === 'day' ? 'Próximo dia' : 'Próxima semana'}
+        >
           <ChevronRight size={16} />
         </button>
         <button onClick={() => setDate(todayISO())} className="rounded-lg px-3 py-2 text-sm text-accent hover:underline">
@@ -154,104 +207,184 @@ export default function Appointments() {
         </button>
       </div>
 
-      <div className="mt-5">
-        {isLoading ? (
-          <div className="flex flex-col gap-2">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="h-16 animate-pulse rounded-xl border border-border bg-surface-muted" />
-            ))}
-          </div>
-        ) : sorted.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-16 text-center">
-            <CalendarDays size={28} className="text-muted" />
-            <p className="text-sm text-muted">Nenhum atendimento para esse dia.</p>
-            <button onClick={() => setShowForm(true)} className="text-sm font-medium text-accent hover:underline">
-              Criar atendimento
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-col divide-y divide-border rounded-xl border border-border bg-surface">
-            {sorted.map((a) => {
-              const { animal, client } = appointmentNames(a)
-              return (
-                <div key={a.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-4">
-                  <div className="flex items-start gap-3 sm:contents">
-                    <span className="w-14 shrink-0 text-sm font-medium">{formatTime(a.scheduled_at)}</span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium">
-                        {animal} {client && <span className="font-normal text-muted">· {client}</span>}
-                        {!a.pet && <span className="ml-1.5 rounded bg-gold/25 px-1.5 py-0.5 text-[10px] font-medium text-gold-foreground">avulso</span>}
-                        {a.subscription_id && <span className="ml-1.5 rounded bg-sage/25 px-1.5 py-0.5 text-[10px] font-medium text-sage-foreground">clubinho</span>}
-                      </p>
-                      <p className="text-sm text-muted">
-                        {a.items.map((i) => i.service.name).join(' + ')} · {formatPrice(a.price)}
-                      </p>
+      {view === 'week' ? (
+        <WeekView
+          weekStart={weekStart}
+          appointments={sorted}
+          isLoading={isLoading}
+          onOpenDay={(day) => {
+            setDate(day)
+            setView('day')
+          }}
+        />
+      ) : (
+        <div className="mt-5">
+          {isLoading ? (
+            <div className="flex flex-col gap-2">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="h-16 animate-pulse rounded-xl border border-border bg-surface-muted" />
+              ))}
+            </div>
+          ) : sorted.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-16 text-center">
+              <CalendarDays size={28} className="text-muted" />
+              <p className="text-sm text-muted">Nenhum atendimento para esse dia.</p>
+              <button onClick={() => setShowForm(true)} className="text-sm font-medium text-accent hover:underline">
+                Criar atendimento
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col divide-y divide-border rounded-xl border border-border bg-surface">
+              {sorted.map((a) => {
+                const { animal, client } = appointmentNames(a)
+                return (
+                  <div key={a.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-4">
+                    <div className="flex items-start gap-3 sm:contents">
+                      <span className="w-14 shrink-0 text-sm font-medium">{formatTime(a.scheduled_at)}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-medium">
+                          {animal} {client && <span className="font-normal text-muted">· {client}</span>}
+                          {!a.pet && <span className="ml-1.5 rounded bg-gold/25 px-1.5 py-0.5 text-[10px] font-medium text-gold-foreground">avulso</span>}
+                          {a.subscription_id && <span className="ml-1.5 rounded bg-sage/25 px-1.5 py-0.5 text-[10px] font-medium text-sage-foreground">clubinho</span>}
+                        </p>
+                        <p className="text-sm text-muted">
+                          {a.items.map((i) => i.service.name).join(' + ')} · {formatPrice(a.price)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 pl-[4.25rem] sm:shrink-0 sm:pl-0">
+                      <label
+                        className={`flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${
+                          a.paid ? 'bg-sage/25 text-sage-foreground' : 'bg-surface-muted text-muted'
+                        }`}
+                      >
+                        <CircleDollarSign size={13} />
+                        <select
+                          value={a.paid ? a.payment_method ?? 'cash' : ''}
+                          onChange={(e) => handlePaymentChange(a, e.target.value)}
+                          className="bg-transparent outline-none"
+                        >
+                          <option value="">Não pago</option>
+                          <option value="cash">Pago · Dinheiro</option>
+                          <option value="card">Pago · Cartão</option>
+                          <option value="pix">Pago · Pix</option>
+                          <option value="other">Pago · Outro</option>
+                        </select>
+                      </label>
+                      <span className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ${STATUS_CLASS[a.status]}`}>
+                        {STATUS_LABEL[a.status]}
+                      </span>
+                      {a.status === 'scheduled' && (
+                        <div className="flex shrink-0 gap-1">
+                          <button
+                            onClick={() => handleStatusChange(a, 'completed')}
+                            aria-label="Marcar como concluído"
+                            className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-accent"
+                          >
+                            <Check size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleStatusChange(a, 'cancelled')}
+                            aria-label="Cancelar"
+                            className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => setEditing(a)}
+                        aria-label="Editar atendimento"
+                        className="shrink-0 rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-accent"
+                      >
+                        <Pencil size={15} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(a)}
+                        aria-label="Apagar atendimento"
+                        className="shrink-0 rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
+                      >
+                        <Trash2 size={15} />
+                      </button>
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-2 pl-[4.25rem] sm:shrink-0 sm:pl-0">
-                    <label
-                      className={`flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs font-medium ${
-                        a.paid ? 'bg-sage/25 text-sage-foreground' : 'bg-surface-muted text-muted'
-                      }`}
-                    >
-                      <CircleDollarSign size={13} />
-                      <select
-                        value={a.paid ? a.payment_method ?? 'cash' : ''}
-                        onChange={(e) => handlePaymentChange(a, e.target.value)}
-                        className="bg-transparent outline-none"
-                      >
-                        <option value="">Não pago</option>
-                        <option value="cash">Pago · Dinheiro</option>
-                        <option value="card">Pago · Cartão</option>
-                        <option value="pix">Pago · Pix</option>
-                        <option value="other">Pago · Outro</option>
-                      </select>
-                    </label>
-                    <span className={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ${STATUS_CLASS[a.status]}`}>
-                      {STATUS_LABEL[a.status]}
-                    </span>
-                    {a.status === 'scheduled' && (
-                      <div className="flex shrink-0 gap-1">
-                        <button
-                          onClick={() => handleStatusChange(a, 'completed')}
-                          aria-label="Marcar como concluído"
-                          className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-accent"
-                        >
-                          <Check size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleStatusChange(a, 'cancelled')}
-                          aria-label="Cancelar"
-                          className="rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
-                        >
-                          <X size={16} />
-                        </button>
-                      </div>
-                    )}
-                    <button
-                      onClick={() => setEditing(a)}
-                      aria-label="Editar atendimento"
-                      className="shrink-0 rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-accent"
-                    >
-                      <Pencil size={15} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(a)}
-                      aria-label="Apagar atendimento"
-                      className="shrink-0 rounded-lg p-1.5 text-muted hover:bg-surface-muted hover:text-red-600"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {showForm && <AppointmentFormModal date={date} onClose={() => setShowForm(false)} />}
       {editing && <AppointmentFormModal date={date} appointment={editing} onClose={() => setEditing(null)} />}
+    </div>
+  )
+}
+
+interface WeekViewProps {
+  weekStart: string
+  appointments: Appointment[]
+  isLoading: boolean
+  onOpenDay: (day: string) => void
+}
+
+/** Visão da semana (segunda a domingo), só leitura: clicar no dia abre a agenda daquele dia. */
+function WeekView({ weekStart, appointments, isLoading, onOpenDay }: WeekViewProps) {
+  const today = todayISO()
+  const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
+  const byDay = new Map<string, Appointment[]>()
+  for (const a of appointments) {
+    const day = localISODate(new Date(a.scheduled_at))
+    byDay.set(day, [...(byDay.get(day) ?? []), a])
+  }
+
+  if (isLoading) {
+    return <div className="mt-5 h-64 animate-pulse rounded-xl border border-border bg-surface-muted" />
+  }
+
+  return (
+    <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+      {days.map((day) => {
+        const list = byDay.get(day) ?? []
+        const [y, m, d] = day.split('-').map(Number)
+        const label = new Date(y, m - 1, d).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })
+        const active = list.filter((a) => a.status !== 'cancelled').length
+        return (
+          <div
+            key={day}
+            className={`flex flex-col rounded-xl border bg-surface ${day === today ? 'border-accent' : 'border-border'}`}
+          >
+            <button
+              onClick={() => onOpenDay(day)}
+              className="flex flex-col border-b border-border px-3 py-2 text-left text-sm hover:bg-surface-muted"
+            >
+              <span className="font-medium capitalize">{label}</span>
+              <span className="text-xs text-muted">
+                {active === 0 ? 'Livre' : `${active} ${active === 1 ? 'atendimento' : 'atendimentos'}`}
+              </span>
+            </button>
+            <div className="flex flex-col gap-1.5 p-2">
+              {list.length === 0 ? (
+                <p className="px-1 py-2 text-xs text-muted">Nenhum atendimento.</p>
+              ) : (
+                list.map((a) => {
+                  const { animal } = appointmentNames(a)
+                  return (
+                    <div
+                      key={a.id}
+                      className={`rounded-lg px-2 py-1.5 text-xs ${STATUS_CLASS[a.status]}`}
+                      title={a.items.map((i) => i.service.name).join(' + ')}
+                    >
+                      <span className="font-semibold">{formatTime(a.scheduled_at)}</span> {animal}
+                      <p className="truncate opacity-80">{a.items.map((i) => i.service.name).join(' + ')}</p>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -293,6 +426,24 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
 
   const saving = createAppointment.isPending || updateAppointment.isPending
   const total = items.reduce((sum, i) => sum + (Number(i.price) || 0), 0)
+
+  // Aviso (não bloqueia) quando o horário bate com outro atendimento do mesmo dia.
+  const { data: sameDay } = useAppointments(`${dateValue}T00:00:00`, `${dateValue}T23:59:59`)
+  const conflicts = useMemo(() => {
+    if (!time || status === 'cancelled') return []
+    const start = toMinutes(time)
+    const ownDuration = items.reduce(
+      (sum, i) => sum + (services?.find((s) => s.id === i.service_id)?.duration_minutes ?? 0),
+      0,
+    )
+    const end = start + (ownDuration || DEFAULT_DURATION)
+    return (sameDay ?? []).filter((a) => {
+      if (a.id === appointment?.id || a.status === 'cancelled') return false
+      const otherStart = toMinutes(a.scheduled_at.slice(11, 16))
+      const otherEnd = otherStart + (appointmentDuration(a) || DEFAULT_DURATION)
+      return start < otherEnd && otherStart < end
+    })
+  }, [sameDay, time, items, services, status, appointment?.id])
 
   function addService(serviceId: number) {
     if (!serviceId || items.some((i) => i.service_id === serviceId)) return
@@ -540,6 +691,15 @@ function AppointmentFormModal({ date, appointment, onClose }: AppointmentFormMod
             />
           </label>
         </div>
+        {conflicts.length > 0 && (
+          <p className="rounded-lg bg-gold/20 px-3 py-2 text-sm text-gold-foreground">
+            ⚠ Esse horário já tem{' '}
+            {conflicts
+              .map((a) => `${appointmentNames(a).animal} às ${formatTime(a.scheduled_at)}`)
+              .join(', ')}
+            . Dá para salvar mesmo assim.
+          </p>
+        )}
 
         {isEdit && (
           <label className="text-sm">

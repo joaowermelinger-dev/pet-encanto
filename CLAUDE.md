@@ -5,7 +5,7 @@
 > Ao terminar uma alteração, atualize este mapa (se a estrutura mudou) e
 > adicione a entrada no changelog (`src/data/changelog.ts`).
 >
-> Última atualização do mapa: 2026-10-12 (versão do app: 2.4)
+> Última atualização do mapa: 2026-10-12 (versão do app: 2.5)
 
 ## O que é
 
@@ -45,12 +45,12 @@ src/pages/admin/<Página>.tsx   tela
 | Funcionalidade | Backend (models / routes) | Frontend (api / hooks / tela) |
 |---|---|---|
 | Login | `user.py`, `refresh_token.py` / `auth.py` (`/auth/login, logout, me, refresh`) | `api/auth.ts`, `auth/AuthContext.tsx`, `auth/ProtectedRoute.tsx`, `pages/Login.tsx` |
-| Clientes | `client.py` / `clients.py` (CRUD; GET `/{id}` traz pets) | `api/clients.ts`, `useClients.ts`, `admin/Clients.tsx`, `admin/ClientDetail.tsx` |
-| Pets | `pet.py` / `pets.py` (CRUD) | `api/pets.ts`, `usePets.ts`, dentro de `ClientDetail.tsx` |
+| Clientes | `client.py` / `clients.py` (CRUD; GET `/{id}` traz pets) | `api/clients.ts`, `useClients.ts`, `admin/Clients.tsx` (filtro "Sumidos"; busca por nome/telefone/pet feita no navegador), `admin/ClientDetail.tsx` (histórico dos pets) |
+| Pets | `pet.py` / `pets.py` (CRUD) | `api/pets.ts`, `usePets.ts`, dentro de `ClientDetail.tsx` (`PetFormModal`: criar/editar com porte, nascimento, observações) |
 | Serviços (catálogo) | `service.py` / `services.py` (CRUD) | `api/services.ts`, `useServices.ts`, `components/settings/ServiceCatalog.tsx` |
-| Atendimentos | `appointment.py`, `appointment_service.py` / `appointments.py` (GET, POST, PATCH, DELETE) | `api/appointments.ts`, `useAppointments.ts`, `admin/Appointments.tsx` (maior tela, ~26 KB) |
+| Atendimentos | `appointment.py`, `appointment_service.py` / `appointments.py` (GET, POST, PATCH, DELETE; GET sem datas traz todos) | `api/appointments.ts`, `useAppointments.ts` (`useAllAppointments` para histórico/sumidos), `admin/Appointments.tsx` (visão Dia/Semana; aviso de horário ocupado no formulário; maior tela) |
 | Clubinho | `subscription.py` / `subscriptions.py` (+ `/{id}/extend`), lógica em `services/subscription_service.py` | `api/subscriptions.ts`, `useSubscriptions.ts`, `admin/Clubinho.tsx` |
-| Financeiro | `expense.py` / `expenses.py`, `finance.py` (`/finance/summary`) | `api/expenses.ts`, `api/finance.ts`, `useFinance.ts`, `admin/Finance.tsx` |
+| Financeiro | `expense.py` / `expenses.py`, `finance.py` (`/finance/summary`) | `api/expenses.ts`, `api/finance.ts`, `useFinance.ts`, `admin/Finance.tsx`, relatório CSV em `utils/financeReport.ts` |
 | Galeria | `pet_photo.py` / `pet_photos.py` (upload em `backend/uploads/`) | `api/petPhotos.ts`, `usePetPhotos.ts`, `admin/Gallery.tsx` |
 | Dados do petshop | `shop_info.py` (linha única id=1) / `shop_info.py` | `api/shopInfo.ts`, `useShopInfo.ts`, `components/settings/ShopInfoForm.tsx` |
 | Rotas públicas | / `public.py` (`/public/shop-info`, `/public/gallery`) | `api/public.ts`, `usePublicShopInfo.ts`, `usePublicGallery.ts` |
@@ -73,6 +73,7 @@ Apoio: `PawDecor` (enfeites de patinha), `Reveal` (animação ao rolar). Link de
 - **Clubinho**: assinatura de um pet a um serviço, frequência `weekly`/`biweekly`/`monthly`, status `active`/`paused`/`cancelled`. Gera atendimentos normais com `subscription_id`; cancelar cancela os futuros agendados.
 - **Financeiro**: receita (atendimentos pagos), pendente, despesas, líquido, receita por forma de pagamento e por dia.
 - **Galeria**: foto pode ser ligada a um pet ou avulsa; só aparece na landing se `is_public`.
+- **Visita / sumido** (`src/utils/visits.ts`): visita = atendimento já passado e não cancelado. Cliente sumido = última visita há mais de 30/60 dias e nada agendado. Atendimento avulso não entra (não tem cliente cadastrado).
 - Enums ficam em `backend/app/models/common.py` e espelhados em `src/types/index.ts`.
 - Valores em dinheiro vêm do backend como **string** (Decimal).
 - **Fuso horário**: tudo em horário de Brasília. `backend/app/core/timezone.py` (`LOCAL_TZ`, `to_local`, `LocalDateTime`, `local_day_bounds`): horário sem fuso que chega na API é tratado como Brasília e a API devolve sempre com `-03:00`. Nos schemas use `LocalDateTime` em vez de `datetime` para horários de agenda. No front, data de hoje via `src/utils/date.ts` (`localISODate`), nunca `toISOString().slice(0, 10)` (dá a data em UTC).
@@ -87,4 +88,4 @@ Apoio: `PawDecor` (enfeites de patinha), `Reveal` (animação ao rolar). Link de
 
 ## Changelog
 
-`src/data/changelog.ts`: array `CHANGELOG`, entrada mais nova **no topo**. Cada entrada: `id`, `version`, `date` (AAAA-MM-DD), `sections[]` com `title` e `changes[]` (`kind`: `'novo' | 'melhoria' | 'correção'`, `text`). Cada dia de trabalho vira **uma** versão; sobe o minor (2.3 → 2.4). Versão atual: **2.4** (2026-10-09).
+`src/data/changelog.ts`: array `CHANGELOG`, entrada mais nova **no topo**. Cada entrada: `id`, `version`, `date` (AAAA-MM-DD), `sections[]` com `title` e `changes[]` (`kind`: `'novo' | 'melhoria' | 'correção'`, `text`). Cada dia de trabalho vira **uma** versão; sobe o minor (2.3 → 2.4). Versão atual: **2.5** (2026-10-12).

@@ -23,6 +23,56 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.5',
+    version: '2.5',
+    date: '2026-10-12',
+    sections: [
+      {
+        title: 'Clientes',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Histórico na ficha do cliente: todos os atendimentos dos pets, do mais recente ao mais antigo. Cada pet mostra a última visita, quantas visitas teve e quanto já gastou.',
+          },
+          {
+            kind: 'novo',
+            text: 'Filtro "Sumidos" na lista de clientes: mostra quem não aparece há mais de 30 ou 60 dias e não tem nada agendado, com um botão "Chamar" que abre o WhatsApp com uma mensagem pronta.',
+          },
+          {
+            kind: 'novo',
+            text: 'Agora dá para editar o pet, com porte, data de nascimento (mostra a idade) e observações como alergias e temperamento, que aparecem em destaque na ficha.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'A busca de clientes acha também pelo telefone e pelo nome do pet, sem diferenciar acentos. Cada cliente mostra os nomes dos pets na lista.',
+          },
+        ],
+      },
+      {
+        title: 'Atendimentos',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Agenda da semana: o botão "Semana" mostra de segunda a domingo, com os horários de cada dia e os dias livres. Clicar no dia abre a agenda daquele dia.',
+          },
+          {
+            kind: 'melhoria',
+            text: 'Ao marcar ou editar um atendimento, aparece um aviso se o horário já estiver ocupado por outro atendimento (o salvamento continua liberado).',
+          },
+        ],
+      },
+      {
+        title: 'Financeiro',
+        changes: [
+          {
+            kind: 'novo',
+            text: 'Botão "Baixar relatório (Excel)": baixa o período escolhido com o resumo, a receita por forma de pagamento e por dia, as despesas e a lista de atendimentos.',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: '2.4',
     version: '2.4',
     date: '2026-10-09',

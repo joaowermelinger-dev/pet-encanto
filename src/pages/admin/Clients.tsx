@@ -1,18 +1,85 @@
-import { useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronRight, Mail, Phone, Plus, Search, Users } from 'lucide-react'
+import { ChevronRight, Mail, MessageCircle, PawPrint, Phone, Plus, Search, Users } from 'lucide-react'
 import { useClients, useCreateClient } from '../../hooks/useClients'
+import { useAllAppointments } from '../../hooks/useAppointments'
+import { usePets } from '../../hooks/usePets'
 import { ApiError } from '../../api/client'
 import Modal from '../../components/Modal'
+import { daysSince, formatShortDate, isPastVisit } from '../../utils/visits'
+import { whatsappLink } from '../../utils/whatsapp'
+
+/** Minúsculas e sem acento, para "joão" achar "Joao". */
+function normalize(text: string): string {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+}
 
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/)
   return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase()
 }
 
+/** "Sumido": última visita há mais de N dias e nada agendado pela frente. */
+type AwayFilter = 'all' | 30 | 60
+
+interface VisitInfo {
+  lastVisit: string | null
+  hasUpcoming: boolean
+}
+
 export default function Clients() {
   const [search, setSearch] = useState('')
-  const { data: clients, isLoading } = useClients(search)
+  const [away, setAway] = useState<AwayFilter>('all')
+  // Busca feita aqui no navegador: nome do dono, telefone (só os dígitos) ou nome do pet.
+  const { data: everyClient, isLoading } = useClients()
+  const { data: allPets } = usePets()
+
+  const petsByClient = useMemo(() => {
+    const map = new Map<number, string[]>()
+    for (const p of allPets ?? []) map.set(p.client_id, [...(map.get(p.client_id) ?? []), p.name])
+    return map
+  }, [allPets])
+
+  const allClients = useMemo(() => {
+    const term = normalize(search.trim())
+    if (!term) return everyClient
+    const digits = search.replace(/\D/g, '')
+    return (everyClient ?? []).filter(
+      (c) =>
+        normalize(c.name).includes(term) ||
+        (digits.length >= 3 && c.phone.replace(/\D/g, '').includes(digits)) ||
+        (petsByClient.get(c.id) ?? []).some((pet) => normalize(pet).includes(term)),
+    )
+  }, [everyClient, search, petsByClient])
+  const { data: appointments } = useAllAppointments()
+
+  const visitsByClient = useMemo(() => {
+    const now = new Date()
+    const info = new Map<number, VisitInfo>()
+    for (const a of appointments ?? []) {
+      const clientId = a.pet?.client_id
+      if (clientId === undefined || a.status === 'cancelled') continue
+      const v = info.get(clientId) ?? { lastVisit: null, hasUpcoming: false }
+      if (isPastVisit(a, now)) {
+        if (!v.lastVisit || a.scheduled_at > v.lastVisit) v.lastVisit = a.scheduled_at
+      } else {
+        v.hasUpcoming = true
+      }
+      info.set(clientId, v)
+    }
+    return info
+  }, [appointments])
+
+  const clients = useMemo(() => {
+    if (away === 'all') return allClients
+    return (allClients ?? [])
+      .filter((c) => {
+        const v = visitsByClient.get(c.id)
+        return !!v?.lastVisit && !v.hasUpcoming && daysSince(v.lastVisit) > away
+      })
+      .sort((a, b) => visitsByClient.get(a.id)!.lastVisit!.localeCompare(visitsByClient.get(b.id)!.lastVisit!))
+  }, [allClients, away, visitsByClient])
+
   const createClient = useCreateClient()
 
   const [showForm, setShowForm] = useState(false)
@@ -55,15 +122,37 @@ export default function Clients() {
         </button>
       </div>
 
-      <div className="relative mt-5 w-full max-w-72">
-        <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
-        <input
-          placeholder="Buscar por nome…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm outline-none focus:border-accent"
-        />
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        <div className="relative w-full max-w-72">
+          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+          <input
+            placeholder="Buscar por nome, telefone ou pet…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm outline-none focus:border-accent"
+          />
+        </div>
+        <div className="flex gap-1 rounded-lg border border-border bg-surface p-1 text-sm">
+          {([
+            ['all', 'Todos'],
+            [30, 'Sumidos +30 dias'],
+            [60, 'Sumidos +60 dias'],
+          ] as const).map(([value, label]) => (
+            <button
+              key={value}
+              onClick={() => setAway(value)}
+              className={`rounded-md px-3 py-1 ${away === value ? 'bg-accent text-accent-foreground' : 'text-muted hover:text-foreground'}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
+      {away !== 'all' && (
+        <p className="mt-2 text-sm text-muted">
+          Clientes que não aparecem há mais de {away} dias e não têm nada agendado. Os mais antigos primeiro.
+        </p>
+      )}
 
       <div className="mt-4">
         {isLoading ? (
@@ -76,9 +165,13 @@ export default function Clients() {
           <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border py-16 text-center">
             <Users size={32} className="text-muted" />
             <p className="text-sm text-muted">
-              {search ? 'Nenhum cliente encontrado.' : 'Nenhum cliente cadastrado ainda.'}
+              {away !== 'all'
+                ? 'Nenhum cliente sumido. 🎉'
+                : search
+                  ? 'Nenhum cliente encontrado.'
+                  : 'Nenhum cliente cadastrado ainda.'}
             </p>
-            {!search && (
+            {!search && away === 'all' && (
               <button onClick={() => setShowForm(true)} className="text-sm font-medium text-accent hover:underline">
                 Cadastrar o primeiro cliente
               </button>
@@ -105,14 +198,37 @@ export default function Clients() {
                         <Mail size={13} /> {c.email}
                       </p>
                     )}
+                    {(petsByClient.get(c.id)?.length ?? 0) > 0 && (
+                      <p className="mt-0.5 flex items-center gap-1.5 truncate text-sm text-muted">
+                        <PawPrint size={13} /> {petsByClient.get(c.id)!.join(', ')}
+                      </p>
+                    )}
+                    {away !== 'all' && visitsByClient.get(c.id)?.lastVisit && (
+                      <p className="mt-1 text-xs font-medium text-gold-foreground">
+                        Última visita {formatShortDate(visitsByClient.get(c.id)!.lastVisit!)} (há{' '}
+                        {daysSince(visitsByClient.get(c.id)!.lastVisit!)} dias)
+                      </p>
+                    )}
                   </div>
                 </div>
-                <Link
-                  to={`/admin/clients/${c.id}`}
-                  className="mt-3 flex items-center justify-center gap-1 self-end rounded-lg px-3 py-1.5 text-sm font-medium text-accent hover:bg-accent/10"
-                >
-                  Ver detalhes <ChevronRight size={15} />
-                </Link>
+                <div className="mt-3 flex items-center justify-end gap-1">
+                  {away !== 'all' && (
+                    <a
+                      href={whatsappLink(c.phone, `Oi, ${c.name.split(' ')[0]}! Tudo bem? Aqui é do Pet Encanto. Faz um tempinho que não vemos seu pet por aqui, que tal agendar um banho? 🐾`)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-sage-foreground hover:bg-sage/15"
+                    >
+                      <MessageCircle size={15} /> Chamar
+                    </a>
+                  )}
+                  <Link
+                    to={`/admin/clients/${c.id}`}
+                    className="flex items-center justify-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-accent hover:bg-accent/10"
+                  >
+                    Ver detalhes <ChevronRight size={15} />
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
