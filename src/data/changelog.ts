@@ -61,15 +61,6 @@ export const CHANGELOG: ChangelogEntry[] = [
           },
         ],
       },
-      {
-        title: 'Financeiro',
-        changes: [
-          {
-            kind: 'novo',
-            text: 'Botão "Baixar relatório (Excel)": baixa o período escolhido com o resumo, a receita por forma de pagamento e por dia, as despesas e a lista de atendimentos.',
-          },
-        ],
-      },
     ],
   },
   {
