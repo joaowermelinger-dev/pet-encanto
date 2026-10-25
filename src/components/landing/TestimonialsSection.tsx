@@ -1,6 +1,6 @@
 import { MessageCircleHeart } from 'lucide-react'
-import PawDecor from './PawDecor'
 import Reveal from './Reveal'
+import SectionHeading from './SectionHeading'
 
 /**
  * Espaço reservado pros depoimentos reais dos clientes — de propósito sem
@@ -10,17 +10,21 @@ import Reveal from './Reveal'
  */
 export default function TestimonialsSection() {
   return (
-    <section className="relative overflow-hidden py-16 sm:py-24">
-      <PawDecor />
-      <Reveal className="relative mx-auto max-w-3xl px-4 text-center">
-        <h2 className="font-display text-3xl font-semibold sm:text-4xl">Nossos clientes</h2>
-        <div className="mx-auto mt-8 flex max-w-md flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-surface p-10">
-          <MessageCircleHeart size={32} className="text-muted/60" />
-          <p className="text-sm text-muted">
-            Em breve, depoimentos reais de quem já confia no cuidado da Pet Encanto.
-          </p>
-        </div>
-      </Reveal>
+    <section className="relative py-20 sm:py-28">
+      <div className="relative mx-auto max-w-3xl px-5">
+        <SectionHeading eyebrow="Depoimentos" title="Nossos clientes" />
+        <Reveal delay={100}>
+          <div className="relative mx-auto mt-10 flex max-w-lg flex-col items-center gap-4 rounded-3xl border border-border bg-surface px-8 py-12 text-center shadow-soft">
+            <span aria-hidden className="absolute -top-7 left-1/2 -translate-x-1/2 font-display text-7xl leading-none text-gold">
+              “
+            </span>
+            <span className="flex size-14 items-center justify-center rounded-full bg-gold/15 text-gold-foreground">
+              <MessageCircleHeart size={26} />
+            </span>
+            <p className="text-pretty text-muted">Em breve, depoimentos reais de quem já confia no cuidado da Pet Encanto.</p>
+          </div>
+        </Reveal>
+      </div>
     </section>
   )
 }

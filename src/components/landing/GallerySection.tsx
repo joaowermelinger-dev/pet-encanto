@@ -1,46 +1,44 @@
 import { Camera } from 'lucide-react'
 import { usePublicGallery } from '../../hooks/usePublicGallery'
-import PawDecor from './PawDecor'
 import Reveal from './Reveal'
+import SectionHeading from './SectionHeading'
 
 export default function GallerySection() {
   const { data: photos, isLoading } = usePublicGallery()
 
   return (
-    <section
-      id="galeria"
-      className="relative overflow-hidden bg-gradient-to-b from-surface-muted via-surface-muted to-background py-16 sm:py-24"
-    >
-      <PawDecor />
-      <div className="relative mx-auto max-w-5xl px-4">
-        <Reveal className="text-center">
-          <h2 className="font-display text-3xl font-semibold sm:text-4xl">Um cuidado que dá para ver</h2>
-          <p className="mx-auto mt-3 max-w-xl text-muted">Fotos dos nossos clientes de quatro patas.</p>
-        </Reveal>
+    <section id="galeria" className="relative bg-surface-muted py-20 sm:py-28">
+      <div className="relative mx-auto max-w-6xl px-5">
+        <SectionHeading eyebrow="Galeria" title="Um cuidado que dá para ver" subtitle="Fotos dos nossos clientes de quatro patas." />
 
         {isLoading ? (
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             {[0, 1, 2, 3, 4].map((i) => (
-              <div key={i} className={`aspect-square animate-pulse rounded-2xl bg-surface ${i === 0 ? 'col-span-2 row-span-2' : ''}`} />
+              <div key={i} className={`aspect-square animate-pulse rounded-3xl bg-surface ${i === 0 ? 'col-span-2 row-span-2' : ''}`} />
             ))}
           </div>
         ) : !photos || photos.length === 0 ? (
-          <div className="mx-auto mt-10 flex max-w-md flex-col items-center gap-3 rounded-2xl border border-dashed border-border py-12 text-center">
-            <Camera size={26} className="text-muted" />
+          <div className="mx-auto mt-12 flex max-w-md flex-col items-center gap-3 rounded-3xl border-2 border-dashed border-border bg-surface/60 py-14 text-center">
+            <Camera size={28} className="text-muted" />
             <p className="text-sm text-muted">Em breve, fotos de verdade direto do nosso dia a dia.</p>
           </div>
         ) : (
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             {photos.map((photo, index) => (
               <Reveal key={photo.id} delay={index * 70} className={index === 0 ? 'col-span-2 row-span-2' : ''}>
-                <div className="relative flex aspect-square size-full items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface shadow-soft">
-                  <img src={photo.image_url} alt={photo.caption ?? 'Foto da Pet Encanto'} className="size-full object-cover" />
+                <figure className="group relative aspect-square size-full overflow-hidden rounded-3xl bg-surface shadow-soft">
+                  <img
+                    src={photo.image_url}
+                    alt={photo.caption ?? 'Foto da Pet Encanto'}
+                    loading="lazy"
+                    className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                   {photo.caption && (
-                    <span className="absolute bottom-2 left-2 rounded-full bg-surface/90 px-2.5 py-1 text-[11px] font-medium text-muted shadow-soft">
+                    <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent px-4 pb-3 pt-8 text-xs font-semibold text-white sm:text-sm">
                       {photo.caption}
-                    </span>
+                    </figcaption>
                   )}
-                </div>
+                </figure>
               </Reveal>
             ))}
           </div>

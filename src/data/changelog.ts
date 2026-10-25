@@ -23,6 +23,22 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.6',
+    version: '2.6',
+    date: '2026-10-25',
+    sections: [
+      {
+        title: 'Site (página inicial)',
+        changes: [
+          { kind: 'melhoria', text: 'Visual novo da página inicial: cores mais quentes e contrastadas, fonte mais arredondada nos textos, títulos maiores e mais espaço entre as seções.' },
+          { kind: 'melhoria', text: 'Topo novo: menu fixo que fica translúcido ao rolar, foto principal em formato de arco com a logo e botões maiores.' },
+          { kind: 'melhoria', text: 'Serviços em cards clicáveis (o card inteiro abre o WhatsApp), diferenciais num bloco verde de destaque e chamada para agendar em dourado.' },
+          { kind: 'melhoria', text: 'Celular: botões ocupando a largura da tela, cards mais compactos e menu mais fácil de tocar.' },
+        ],
+      },
+    ],
+  },
+  {
     id: '2.5',
     version: '2.5',
     date: '2026-10-12',

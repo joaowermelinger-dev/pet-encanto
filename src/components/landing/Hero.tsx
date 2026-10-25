@@ -1,8 +1,7 @@
-import { Heart, PawPrint, ShieldCheck } from 'lucide-react'
+import { Heart, MessageCircle, PawPrint, ShieldCheck, Sparkles } from 'lucide-react'
 import { usePublicGallery } from '../../hooks/usePublicGallery'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { whatsappLink } from '../../utils/whatsapp'
-import PawDecor from './PawDecor'
 import Reveal from './Reveal'
 
 const TRUST_BADGES = [
@@ -12,83 +11,91 @@ const TRUST_BADGES = [
 ]
 
 /**
- * Banner grande no topo da landing. Por enquanto usa um fundo decorativo
- * (gradiente + patinhas) no lugar de uma foto real — trocar assim que
- * tivermos uma (ver Fase 6, galeria).
+ * Banner grande no topo da landing. A foto é a primeira foto pública da
+ * galeria (ver /admin/gallery), num recorte em arco; sem foto, cai num
+ * fundo decorativo com as cores da marca.
  */
 export default function Hero() {
   const { data: shopInfo } = usePublicShopInfo()
   const { data: gallery } = usePublicGallery()
   const heroPhoto = gallery?.[0]
 
-  return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-sage/25 via-gold/10 to-background">
-      <PawDecor variant="hero" />
+  const ctaHref = shopInfo?.whatsapp
+    ? whatsappLink(shopInfo.whatsapp, 'Olá! Gostaria de agendar um horário para meu pet.')
+    : '#contato'
+  const ctaExternal = Boolean(shopInfo?.whatsapp)
 
-      <div className="relative mx-auto grid max-w-5xl grid-cols-1 items-center gap-10 px-4 py-16 sm:py-20 lg:grid-cols-2 lg:py-28">
+  return (
+    <section className="relative">
+      {/* Manchas de cor suaves no fundo. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-32 top-8 size-[28rem] rounded-full bg-sage/20 blur-3xl" />
+        <div className="absolute -right-24 top-48 size-[24rem] rounded-full bg-gold/20 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 pb-16 pt-8 sm:pb-24 sm:pt-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pb-28 lg:pt-16">
         <Reveal className="text-center lg:text-left">
-          <p className="flex items-center justify-center gap-3 font-display text-3xl font-bold text-accent sm:text-5xl lg:justify-start">
-            <PawPrint className="shrink-0 text-gold" size={28} />
+          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-4 py-1.5 font-display text-lg font-semibold italic text-accent shadow-soft">
+            <PawPrint className="shrink-0 text-gold" size={18} />
             Bem-vindos!
-            <PawPrint className="shrink-0 text-sage" size={28} />
+            <PawPrint className="shrink-0 text-sage" size={18} />
           </p>
-          <h1 className="mt-3 text-2xl font-semibold sm:text-3xl">Banho, tosa e muito carinho 🐶🐱</h1>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-muted lg:mx-0">
+          <h1 className="mt-6 text-balance font-display text-[2.6rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4.25rem]">
+            Banho, tosa e <span className="italic text-accent">muito carinho</span> 🐶🐱
+          </h1>
+          <p className="mx-auto mt-6 max-w-xl text-pretty text-lg text-muted sm:text-xl lg:mx-0">
             Cuidamos do seu pet como se fosse nosso. Confira nossos serviços e agende uma visita.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-            {shopInfo?.whatsapp ? (
-              <a
-                href={whatsappLink(shopInfo.whatsapp, 'Olá! Gostaria de agendar um horário para meu pet.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground shadow-soft hover:bg-[var(--accent-hover)]"
-              >
-                Agende hoje
-              </a>
-            ) : (
-              <a
-                href="#contato"
-                className="rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground shadow-soft hover:bg-[var(--accent-hover)]"
-              >
-                Agende hoje
-              </a>
-            )}
+          <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center lg:justify-start">
+            <a
+              href={ctaHref}
+              target={ctaExternal ? '_blank' : undefined}
+              rel={ctaExternal ? 'noopener noreferrer' : undefined}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-4 text-base font-bold text-accent-foreground shadow-soft-lg hover:-translate-y-0.5 hover:bg-[var(--accent-hover)]"
+            >
+              <MessageCircle size={18} /> Agende hoje
+            </a>
             <a
               href="#servicos"
-              className="rounded-full border border-accent px-6 py-3 font-medium text-accent hover:bg-accent/10"
+              className="inline-flex items-center justify-center rounded-full border-2 border-accent/25 bg-surface/60 px-7 py-[14px] text-base font-bold text-accent hover:border-accent hover:bg-surface"
             >
               Ver serviços
             </a>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:justify-start">
+          <ul className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 lg:justify-start">
             {TRUST_BADGES.map(({ icon: Icon, label }) => (
-              <span key={label} className="flex items-center gap-1.5 text-sm text-muted">
-                <Icon size={16} className="text-sage-foreground" /> {label}
-              </span>
+              <li key={label} className="flex items-center gap-2 text-sm font-semibold text-foreground/75">
+                <span className="flex size-8 items-center justify-center rounded-full bg-sage/20 text-sage-fg">
+                  <Icon size={15} />
+                </span>
+                {label}
+              </li>
             ))}
-          </div>
+          </ul>
         </Reveal>
 
-        {/* Usa a primeira foto pública da galeria (ver /admin/gallery); sem
-            nenhuma foto ainda, cai num cartão decorativo com as cores da marca. */}
-        <Reveal
-          delay={150}
-          className="relative mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-3xl bg-gradient-to-br from-sage/30 via-gold/20 to-surface-muted shadow-soft-lg"
-        >
-          {heroPhoto ? (
-            <img
-              src={heroPhoto.image_url}
-              alt={heroPhoto.caption ?? 'Pet Encanto'}
-              className="size-full object-cover"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <PawPrint size={72} className="text-accent/25" />
-            </div>
-          )}
+        <Reveal delay={150} className="relative mx-auto w-full max-w-[19rem] sm:max-w-md">
+          {/* Moldura dourada deslocada atrás da foto. */}
+          <div aria-hidden className="absolute inset-0 translate-x-4 translate-y-4 rounded-t-full rounded-b-[2.5rem] border-2 border-gold/60" />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-gradient-to-br from-sage/40 via-gold/25 to-surface-muted shadow-soft-lg">
+            {heroPhoto ? (
+              <img src={heroPhoto.image_url} alt={heroPhoto.caption ?? 'Pet Encanto'} className="size-full object-cover" />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <PawPrint size={88} className="text-accent/25" />
+              </div>
+            )}
+          </div>
+          <img
+            src="/logo.png"
+            alt=""
+            aria-hidden
+            className="absolute -bottom-6 -left-4 size-24 rounded-full object-cover shadow-soft-lg ring-[6px] ring-background sm:-left-8 sm:size-28"
+          />
+          <Sparkles aria-hidden className="absolute -right-3 top-10 text-gold" size={30} />
+          <Sparkles aria-hidden className="absolute -left-6 top-1/3 text-sage" size={20} />
         </Reveal>
       </div>
     </section>

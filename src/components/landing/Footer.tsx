@@ -35,28 +35,30 @@ export default function Footer() {
   const hasSocial = data?.instagram_url || data?.whatsapp
 
   return (
-    <footer className="bg-accent text-accent-foreground">
-      <div className="mx-auto max-w-5xl px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+    <footer className="mt-4 bg-[#2f2114] text-accent-foreground">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-16">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1.4fr_1fr_1.2fr]">
           <div>
-            <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="Pet Encanto" className="size-8 rounded-full object-cover" />
-              <span className="font-display text-lg font-semibold">Pet Encanto</span>
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="Pet Encanto" className="size-14 rounded-full object-cover" />
+              <span className="font-display text-2xl font-semibold">
+                Pet <span className="italic text-gold">Encanto</span>
+              </span>
             </div>
-            <p className="mt-3 text-sm text-accent-foreground/70">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-accent-foreground/70">
               Banho, tosa e muito carinho para o seu melhor amigo.
             </p>
             {hasSocial && (
-              <div className="mt-4 flex items-center gap-2">
+              <div className="mt-5 flex items-center gap-2">
                 {data?.instagram_url && (
                   <a
                     href={data.instagram_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram"
-                    className="flex size-9 items-center justify-center rounded-full bg-white/10 text-accent-foreground hover:bg-white/20"
+                    className="flex size-11 items-center justify-center rounded-full bg-white/10 text-accent-foreground hover:bg-gold hover:text-gold-foreground"
                   >
-                    <InstagramIcon size={16} />
+                    <InstagramIcon size={18} />
                   </a>
                 )}
                 {data?.whatsapp && (
@@ -65,9 +67,9 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="WhatsApp"
-                    className="flex size-9 items-center justify-center rounded-full bg-white/10 text-accent-foreground hover:bg-white/20"
+                    className="flex size-11 items-center justify-center rounded-full bg-white/10 text-accent-foreground hover:bg-gold hover:text-gold-foreground"
                   >
-                    <MessageCircle size={16} />
+                    <MessageCircle size={18} />
                   </a>
                 )}
               </div>
@@ -75,8 +77,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-accent-foreground/60">Navegação</p>
-            <ul className="mt-3 flex flex-col gap-2 text-sm">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-gold">Navegação</p>
+            <ul className="mt-4 flex flex-col gap-2.5 text-sm">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <a href={link.href} className="text-accent-foreground/80 hover:text-accent-foreground">
@@ -88,8 +90,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-accent-foreground/60">Atendimento</p>
-            <ul className="mt-3 flex flex-col gap-2 text-sm text-accent-foreground/80">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-gold">Atendimento</p>
+            <ul className="mt-4 flex flex-col gap-2.5 text-sm text-accent-foreground/80">
               <li>{data?.address ?? '—'}</li>
               <li>{data?.phone ?? '—'}</li>
               <li>{data?.opening_hours ?? '—'}</li>
@@ -97,7 +99,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 py-4 text-center text-xs text-accent-foreground/60">
+      <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-accent-foreground/60">
         © {new Date().getFullYear()} Pet Encanto. Feito com carinho.
       </div>
     </footer>

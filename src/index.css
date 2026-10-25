@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/nunito';
 
 /*
   Paleta da marca (inspirada na logo): marrom (ação/texto), verde sálvia
@@ -24,6 +25,7 @@
 
   --font-sans: 'Inter Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-rounded: 'Nunito Variable', 'Inter Variable', system-ui, sans-serif;
 }
 
 :root {
@@ -98,4 +100,43 @@ a {
   box-shadow:
     0 20px 48px -12px rgba(74, 54, 32, 0.14),
     0 4px 12px -2px rgba(74, 54, 32, 0.05);
+}
+
+/*
+  Visual da landing page (2.6). As cores ficam só dentro de `.landing`, então
+  a área administrativa continua com a paleta de cima. Mesma família da logo
+  (marrom, sálvia, dourado, creme), só mais contrastada e "quente".
+*/
+.landing {
+  --bg: #fbf6ee;
+  --surface: #fffdf9;
+  --surface-muted: #f4ecdf;
+  --border: #eadfcd;
+  --fg: #3b2a19;
+  --muted: #7a6552;
+  --accent: #5a3e25;
+  --accent-hover: #6f4e30;
+  --accent-fg: #fffaf2;
+  --sage: #8fa088;
+  --sage-fg: #3d4a39;
+  --sage-deep: #4e5d4a;
+  --gold: #c9a06a;
+  --gold-fg: #4a3420;
+
+  font-family: var(--font-rounded);
+  background-color: var(--bg);
+  color: var(--fg);
+  overflow-x: clip;
+}
+.landing .font-display {
+  letter-spacing: -0.015em;
+}
+html:has(.landing) {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.landing) {
+    scroll-behavior: auto;
+  }
 }

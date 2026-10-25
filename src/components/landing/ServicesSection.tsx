@@ -1,8 +1,8 @@
 import { ArrowRight, Award, Car, Droplet, Droplets, Ear, Palette, Scissors, Sparkles, Stethoscope, Wind } from 'lucide-react'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { whatsappLink } from '../../utils/whatsapp'
-import PawDecor from './PawDecor'
 import Reveal from './Reveal'
+import SectionHeading from './SectionHeading'
 
 // Lista fixa, definida pelo dono do petshop — não vem do catálogo do admin
 // (que serve só pros valores usados internamente nos atendimentos). Sem
@@ -24,37 +24,39 @@ export default function ServicesSection() {
   const { data: shopInfo } = usePublicShopInfo()
 
   return (
-    <section id="servicos" className="relative overflow-hidden py-16 sm:py-24">
-      <PawDecor />
-      <div className="relative mx-auto max-w-5xl px-4">
-        <Reveal className="text-center">
-          <h2 className="font-display text-3xl font-semibold sm:text-4xl">Serviços para deixar seu pet ainda mais feliz</h2>
-          <p className="mx-auto mt-3 max-w-xl text-muted">Conheça os cuidados que oferecemos. Valores combinados direto pelo WhatsApp.</p>
-        </Reveal>
+    <section id="servicos" className="relative py-20 sm:py-28">
+      <div className="relative mx-auto max-w-6xl px-5">
+        <SectionHeading
+          eyebrow="Serviços"
+          title="Serviços para deixar seu pet ainda mais feliz"
+          subtitle="Conheça os cuidados que oferecemos. Valores combinados direto pelo WhatsApp."
+        />
 
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-5">
           {SERVICES.map((service, index) => {
             const Icon = service.icon
             const link = shopInfo?.whatsapp
               ? whatsappLink(shopInfo.whatsapp, `Olá! Gostaria de agendar: ${service.name}.`)
               : '#contato'
             return (
-              <Reveal key={service.name} delay={index * 60}>
-                <div className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-6 shadow-soft transition hover:-translate-y-0.5 hover:border-accent/40">
-                  <span className="flex size-11 items-center justify-center rounded-full bg-sage/20 text-sage-foreground">
-                    <Icon size={20} />
+              <Reveal key={service.name} delay={(index % 5) * 60}>
+                <a
+                  href={link}
+                  target={shopInfo?.whatsapp ? '_blank' : undefined}
+                  rel={shopInfo?.whatsapp ? 'noopener noreferrer' : undefined}
+                  className="group flex h-full gap-4 rounded-3xl border border-border bg-surface p-5 shadow-soft transition duration-300 hover:-translate-y-1 hover:border-gold/60 hover:shadow-soft-lg lg:flex-col lg:p-6"
+                >
+                  <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-sage/15 text-sage-fg transition-colors duration-300 group-hover:bg-sage-deep group-hover:text-white">
+                    <Icon size={22} />
                   </span>
-                  <h3 className="mt-4 font-display text-lg font-semibold">{service.name}</h3>
-                  <p className="mt-1.5 flex-1 text-sm text-muted">{service.description}</p>
-                  <a
-                    href={link}
-                    target={shopInfo?.whatsapp ? '_blank' : undefined}
-                    rel={shopInfo?.whatsapp ? 'noopener noreferrer' : undefined}
-                    className="mt-4 flex items-center gap-1.5 text-sm font-medium text-accent group-hover:gap-2.5"
-                  >
-                    Agendar {service.name.split(' ')[0]} <ArrowRight size={14} />
-                  </a>
-                </div>
+                  <span className="flex flex-1 flex-col">
+                    <span className="font-display text-lg font-semibold leading-snug lg:mt-1">{service.name}</span>
+                    <span className="mt-1.5 flex-1 text-sm leading-relaxed text-muted">{service.description}</span>
+                    <span className="mt-4 inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-bold text-accent transition-[gap] group-hover:gap-2.5">
+                      Agendar {service.name.split(' ')[0]} <ArrowRight size={15} />
+                    </span>
+                  </span>
+                </a>
               </Reveal>
             )
           })}

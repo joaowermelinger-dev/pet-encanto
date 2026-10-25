@@ -5,7 +5,7 @@
 > Ao terminar uma alteração, atualize este mapa (se a estrutura mudou) e
 > adicione a entrada no changelog (`src/data/changelog.ts`).
 >
-> Última atualização do mapa: 2026-10-12 (versão do app: 2.5)
+> Última atualização do mapa: 2026-10-25 (versão do app: 2.6)
 
 ## O que é
 
@@ -63,7 +63,8 @@ Telas do admin: `src/App.tsx` (rotas) e o menu lateral em `src/pages/admin/Admin
 
 `src/pages/Landing.tsx` monta, nesta ordem, os componentes de `src/components/landing/`:
 `AnnouncementBar` → `Header` → `Hero` → `ServicesSection` → `GallerySection` → `TestimonialsSection` → `WhyChooseSection` → `CtaBanner` → `ContactSection` → `Footer`.
-Apoio: `PawDecor` (enfeites de patinha), `Reveal` (animação ao rolar). Link de WhatsApp: `src/utils/whatsapp.ts`. Estilos globais/cores: `src/index.css`. Logo: `public/logo.png`.
+Apoio: `SectionHeading` (rótulo + título + subtítulo de cada seção), `Reveal` (animação ao rolar). Link de WhatsApp: `src/utils/whatsapp.ts`. Logo: `public/logo.png`.
+Cores/fontes: `src/index.css`. A landing fica dentro de `<div className="landing">`, que sobrescreve as variáveis de cor (paleta própria) e usa a fonte Nunito; o admin continua com as cores do `:root` e Inter. Títulos em Fraunces (`font-display`).
 
 ## Regras de negócio importantes
 
@@ -88,4 +89,4 @@ Apoio: `PawDecor` (enfeites de patinha), `Reveal` (animação ao rolar). Link de
 
 ## Changelog
 
-`src/data/changelog.ts`: array `CHANGELOG`, entrada mais nova **no topo**. Cada entrada: `id`, `version`, `date` (AAAA-MM-DD), `sections[]` com `title` e `changes[]` (`kind`: `'novo' | 'melhoria' | 'correção'`, `text`). Cada dia de trabalho vira **uma** versão; sobe o minor (2.3 → 2.4). Versão atual: **2.5** (2026-10-12).
+`src/data/changelog.ts`: array `CHANGELOG`, entrada mais nova **no topo**. Cada entrada: `id`, `version`, `date` (AAAA-MM-DD), `sections[]` com `title` e `changes[]` (`kind`: `'novo' | 'melhoria' | 'correção'`, `text`). Cada dia de trabalho vira **uma** versão; sobe o minor (2.3 → 2.4). Versão atual: **2.6** (2026-10-25).

@@ -11,7 +11,7 @@ import Footer from '../components/landing/Footer'
 
 export default function Landing() {
   return (
-    <div>
+    <div className="landing">
       <AnnouncementBar />
       <Header />
       <Hero />
