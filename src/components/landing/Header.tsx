@@ -6,7 +6,6 @@ import { whatsappLink } from '../../utils/whatsapp'
 
 const LINKS = [
   { href: '#servicos', label: 'Serviços' },
-  { href: '#galeria', label: 'Galeria' },
   { href: '#diferenciais', label: 'Diferenciais' },
   { href: '#contato', label: 'Localização' },
 ]

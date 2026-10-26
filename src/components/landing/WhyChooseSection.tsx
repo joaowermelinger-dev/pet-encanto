@@ -45,11 +45,8 @@ export default function WhyChooseSection() {
             </div>
 
             <Reveal delay={200} className="relative mx-auto aspect-square w-full max-w-xs sm:max-w-sm lg:max-w-md">
-              <div className="absolute left-0 top-0 aspect-square w-[68%] overflow-hidden rounded-full bg-gradient-to-br from-gold/70 to-gold/30 shadow-soft-lg ring-8 ring-white/10">
+              <div className="absolute inset-[8%] overflow-hidden rounded-full bg-gradient-to-br from-gold/70 to-gold/30 shadow-soft-lg ring-8 ring-white/10">
                 <img src="/why-choose-dog.png" alt="Cachorro feliz" className="size-full scale-110 object-contain object-bottom" />
-              </div>
-              <div className="absolute bottom-0 right-0 aspect-square w-[52%] overflow-hidden rounded-full bg-gradient-to-br from-[#e9e1d3] to-[#cfc4b0] shadow-soft-lg ring-8 ring-sage-deep">
-                <img src="/why-choose-cat.png" alt="Gato feliz" className="size-full scale-110 object-contain object-bottom" />
               </div>
             </Reveal>
           </div>

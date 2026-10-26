@@ -1,5 +1,4 @@
 import { Heart, MessageCircle, PawPrint, ShieldCheck, Sparkles } from 'lucide-react'
-import { usePublicGallery } from '../../hooks/usePublicGallery'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { whatsappLink } from '../../utils/whatsapp'
 import Reveal from './Reveal'
@@ -11,14 +10,11 @@ const TRUST_BADGES = [
 ]
 
 /**
- * Banner grande no topo da landing. A foto é a primeira foto pública da
- * galeria (ver /admin/gallery), num recorte em arco; sem foto, cai num
- * fundo decorativo com as cores da marca.
+ * Banner grande no topo da landing. A foto (public/hero-cachorro.webp,
+ * proporção 4:5) aparece num recorte em arco.
  */
 export default function Hero() {
   const { data: shopInfo } = usePublicShopInfo()
-  const { data: gallery } = usePublicGallery()
-  const heroPhoto = gallery?.[0]
 
   const ctaHref = shopInfo?.whatsapp
     ? whatsappLink(shopInfo.whatsapp, 'Olá! Gostaria de agendar um horário para meu pet.')
@@ -41,7 +37,7 @@ export default function Hero() {
             <PawPrint className="shrink-0 text-sage" size={18} />
           </p>
           <h1 className="mt-6 text-balance font-display text-[2.6rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4.25rem]">
-            Banho, tosa e <span className="italic text-accent">muito carinho</span> 🐶🐱
+            Banho, tosa e <span className="italic text-accent">muito carinho</span> 🐶
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-pretty text-lg text-muted sm:text-xl lg:mx-0">
             Cuidamos do seu pet como se fosse nosso. Confira nossos serviços e agende uma visita.
@@ -80,13 +76,13 @@ export default function Hero() {
           {/* Moldura dourada deslocada atrás da foto. */}
           <div aria-hidden className="absolute inset-0 translate-x-4 translate-y-4 rounded-t-full rounded-b-[2.5rem] border-2 border-gold/60" />
           <div className="relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-[2.5rem] bg-gradient-to-br from-sage/40 via-gold/25 to-surface-muted shadow-soft-lg">
-            {heroPhoto ? (
-              <img src={heroPhoto.image_url} alt={heroPhoto.caption ?? 'Pet Encanto'} className="size-full object-cover" />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <PawPrint size={88} className="text-accent/25" />
-              </div>
-            )}
+            <img
+              src="/hero-cachorro.webp"
+              alt="Cachorrinho feliz, enrolado na toalha depois do banho"
+              width={1122}
+              height={1402}
+              className="size-full object-cover"
+            />
           </div>
           <img
             src="/logo.png"
