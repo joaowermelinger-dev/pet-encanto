@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Comparar fontes — Pet Encanto</title>
+<style>
+@font-face{font-family:'F-Fraunces';src:url(/comparar-fontes/fraunces-latin-wght-normal.woff2);font-weight:100 900;font-style:normal}
+@font-face{font-family:'F-Fraunces';src:url(/comparar-fontes/fraunces-latin-wght-italic.woff2);font-weight:100 900;font-style:italic}
+@font-face{font-family:'F-Newsreader';src:url(/comparar-fontes/newsreader-latin-wght-normal.woff2);font-weight:200 800;font-style:normal}
+@font-face{font-family:'F-Newsreader';src:url(/comparar-fontes/newsreader-latin-wght-italic.woff2);font-weight:200 800;font-style:italic}
+@font-face{font-family:'F-Playfair';src:url(/comparar-fontes/playfair-display-latin-wght-normal.woff2);font-weight:400 900;font-style:normal}
+@font-face{font-family:'F-Playfair';src:url(/comparar-fontes/playfair-display-latin-wght-italic.woff2);font-weight:400 900;font-style:italic}
+@font-face{font-family:'F-Nunito';src:url(/comparar-fontes/nunito-latin-wght-normal.woff2);font-weight:200 1000}
+:root{--bg:#fbf6ee;--surface:#fffdf9;--muted-bg:#f4ecdf;--border:#eadfcd;--fg:#3b2a19;--muted:#7a6552;--accent:#5a3e25;--gold:#c9a06a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'F-Nunito',system-ui,sans-serif}
+header{text-align:center;padding:40px 20px 8px}
+header h1{font:700 22px 'F-Nunito';margin:0 0 6px}
+header p{margin:0;color:var(--muted)}
+.grid{display:grid;gap:20px;padding:24px;max-width:1280px;margin:0 auto;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:28px 26px 32px;box-shadow:0 8px 30px -4px rgba(74,54,32,.08)}
+.tag{display:inline-block;background:var(--muted-bg);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.name{font-size:13px;color:var(--muted);margin:10px 0 22px}
+.eyebrow{display:inline-block;background:#e8ebe3;border-radius:999px;padding:5px 12px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+h2.t{margin:14px 0 12px;font-size:44px;line-height:1.05;font-weight:600;letter-spacing:-.015em}
+h2.t em{color:var(--accent)}
+p.s{margin:0 0 22px;font-size:17px;line-height:1.6;color:var(--muted)}
+h3.sv{margin:0 0 4px;font-size:22px;font-weight:600}
+.row{border:1px solid var(--border);border-radius:18px;padding:14px 16px;margin-top:10px;background:#fff}
+.row p{margin:0;font-size:15px;color:var(--muted);line-height:1.5}
+.btn{display:inline-block;margin-top:18px;background:var(--accent);color:#fffaf2;font-weight:800;padding:12px 22px;border-radius:999px;font-size:15px}
+.f1 .t,.f1 .sv{font-family:'F-Fraunces',Georgia,serif}
+.f2 .t,.f2 .sv{font-family:'F-Newsreader',Georgia,serif}
+.f2 h2.t{font-size:48px}
+.f3 .t,.f3 .sv{font-family:'F-Playfair',Georgia,serif}
+.f3 h2.t{font-size:40px}
+@media(max-width:600px){h2.t{font-size:36px!important}.grid{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Comparar fontes dos títulos</h1>
+  <p>Mesmo texto, três opções. Os textos corridos usam Nunito nas três. (Página só para avaliar, não faz parte do site.)</p>
+</header>
+<div class="grid">
+  <article class="card f1">
+    <span class="tag">1 · Atual</span><div class="name">Fraunces + Nunito</div>
+    <span class="eyebrow">Serviços</span>
+    <h2 class="t">Banho, tosa e <em><i>muito carinho</i></em></h2>
+    <p class="s">Cuidamos do seu pet como se fosse nosso. Confira nossos serviços e agende uma visita.</p>
+    <h3 class="sv">Banho dermatológico</h3>
+    <div class="row"><p>Cuidado especial pra peles sensíveis, com produtos indicados.</p></div>
+    <div class="row"><h3 class="sv" style="font-size:19px">Tosa da raça</h3><p>Corte no padrão da raça, com atenção aos detalhes.</p></div>
+    <a class="btn">Agende hoje</a>
+  </article>
+  <article class="card f2">
+    <span class="tag">2 · Elegante</span><div class="name">Newsreader + Nunito</div>
+    <span class="eyebrow">Serviços</span>
+    <h2 class="t">Banho, tosa e <em><i>muito carinho</i></em></h2>
+    <p class="s">Cuidamos do seu pet como se fosse nosso. Confira nossos serviços e agende uma visita.</p>
+    <h3 class="sv">Banho dermatológico</h3>
+    <div class="row"><p>Cuidado especial pra peles sensíveis, com produtos indicados.</p></div>
+    <div class="row"><h3 class="sv" style="font-size:19px">Tosa da raça</h3><p>Corte no padrão da raça, com atenção aos detalhes.</p></div>
+    <a class="btn">Agende hoje</a>
+  </article>
+  <article class="card f3">
+    <span class="tag">3 · Clássica</span><div class="name">Playfair Display + Nunito</div>
+    <span class="eyebrow">Serviços</span>
+    <h2 class="t">Banho, tosa e <em><i>muito carinho</i></em></h2>
+    <p class="s">Cuidamos do seu pet como se fosse nosso. Confira nossos serviços e agende uma visita.</p>
+    <h3 class="sv">Banho dermatológico</h3>
+    <div class="row"><p>Cuidado especial pra peles sensíveis, com produtos indicados.</p></div>
+    <div class="row"><h3 class="sv" style="font-size:19px">Tosa da raça</h3><p>Corte no padrão da raça, com atenção aos detalhes.</p></div>
+    <a class="btn">Agende hoje</a>
+  </article>
+</div>
+</body>
+</html>
