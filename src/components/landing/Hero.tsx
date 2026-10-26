@@ -31,13 +31,13 @@ export default function Hero() {
 
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 pb-16 pt-8 sm:pb-24 sm:pt-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pb-28 lg:pt-16">
         <Reveal className="text-center lg:text-left">
-          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-4 py-1.5 font-display text-lg font-semibold italic text-accent shadow-soft">
+          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-4 py-1.5 font-script text-lg text-accent shadow-soft">
             <PawPrint className="shrink-0 text-gold" size={18} />
             Bem-vindos!
             <PawPrint className="shrink-0 text-sage" size={18} />
           </p>
           <h1 className="mt-6 text-balance font-display text-[2.6rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4.25rem]">
-            Banho, tosa e <span className="italic text-accent">muito carinho</span> 🐶
+            Banho, tosa e <span className="font-script text-accent">muito carinho</span> 🐶
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-pretty text-lg text-muted sm:text-xl lg:mx-0">
             Cuidamos do seu pet como se fosse nosso. Confira nossos serviços e agende uma visita.

@@ -41,7 +41,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               <img src="/logo.png" alt="Pet Encanto" className="size-14 rounded-full object-cover" />
               <span className="font-display text-2xl font-semibold">
-                Pet <span className="italic text-gold">Encanto</span>
+                Pet <span className="font-script text-gold">Encanto</span>
               </span>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-accent-foreground/70">

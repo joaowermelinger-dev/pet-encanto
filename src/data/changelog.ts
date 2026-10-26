@@ -36,6 +36,7 @@ export const CHANGELOG: ChangelogEntry[] = [
           { kind: 'melhoria', text: 'Foto nova na abertura (cachorrinho depois do banho) e ilustração só de cachorro nos diferenciais; tudo que era de gato saiu do site.' },
           { kind: 'melhoria', text: 'Saíram do site a faixa do topo e a seção Galeria (o link também saiu do menu e do rodapé).' },
           { kind: 'melhoria', text: 'A tela Galeria saiu do menu do painel; as fotos já enviadas continuam guardadas.' },
+          { kind: 'melhoria', text: 'Destaques da página inicial ("Bem-vindos!", "muito carinho", "Encanto" no topo e no rodapé) em letra de mão (Pacifico); títulos seguem em Fraunces e textos em Nunito.' },
           { kind: 'melhoria', text: 'Celular: botões ocupando a largura da tela, cards mais compactos e menu mais fácil de tocar.' },
         ],
       },

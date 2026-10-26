@@ -64,7 +64,7 @@ Telas do admin: `src/App.tsx` (rotas) e o menu lateral em `src/pages/admin/Admin
 `src/pages/Landing.tsx` monta, nesta ordem, os componentes de `src/components/landing/`:
 `Header` → `Hero` → `ServicesSection` → `TestimonialsSection` → `WhyChooseSection` → `CtaBanner` → `ContactSection` → `Footer`.
 `ServicesSection` tem a lista fixa de serviços em 3 abas (Banho / Tosa / Extras); o 1º de cada aba é o destaque. Apoio: `SectionHeading` (rótulo + título + subtítulo de cada seção), `Reveal` (animação ao rolar). Link de WhatsApp: `src/utils/whatsapp.ts`. Logo: `public/logo.png`. Foto da abertura: `public/hero-cachorro.webp` (4:5, fixa; não vem mais da galeria). A landing não mostra mais galeria nem gatos (o petshop atende só cachorros).
-Cores/fontes: `src/index.css`. A landing fica dentro de `<div className="landing">`, que sobrescreve as variáveis de cor (paleta própria) e usa a fonte Nunito; o admin continua com as cores do `:root` e Inter. Títulos em Fraunces (`font-display`).
+Cores/fontes: `src/index.css`. A landing fica dentro de `<div className="landing">`, que sobrescreve as variáveis de cor (paleta própria) e usa a fonte Nunito; o admin continua com as cores do `:root` e Inter. Títulos em Fraunces (`font-display`); palavras de destaque ("muito carinho", "Encanto", "Bem-vindos!") em Pacifico (classe `font-script`, só dentro de `.landing`).
 
 ## Regras de negócio importantes
 

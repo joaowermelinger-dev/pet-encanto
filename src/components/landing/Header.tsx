@@ -35,7 +35,7 @@ export default function Header() {
         <a href="#" className="flex items-center gap-2.5">
           <img src="/logo.png" alt="Pet Encanto" className="size-11 rounded-full object-cover shadow-soft sm:size-12" />
           <span className="font-display text-xl font-semibold tracking-tight">
-            Pet <span className="italic text-accent">Encanto</span>
+            Pet <span className="font-script text-accent">Encanto</span>
           </span>
         </a>
 

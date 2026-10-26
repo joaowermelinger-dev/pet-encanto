@@ -18,7 +18,7 @@ export default function CtaBanner() {
         </div>
         <div className="relative">
           <h2 className="text-balance font-display text-3xl font-semibold sm:text-5xl">
-            Seu pet merece esse <span className="italic text-gold">carinho</span>
+            Seu pet merece esse <span className="font-script text-gold">carinho</span>
           </h2>
           <p className="mx-auto mt-4 max-w-md text-pretty text-accent-foreground/80 sm:text-lg">
             Agende um horário e deixe seu pet ainda mais feliz. Fale com a gente pelo WhatsApp e marque uma visita.
