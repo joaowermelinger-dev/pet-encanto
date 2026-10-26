@@ -23,6 +23,26 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.6',
+    version: '2.6',
+    date: '2026-10-26',
+    sections: [
+      {
+        title: 'Site (página inicial)',
+        changes: [
+          { kind: 'melhoria', text: 'Visual novo da página inicial: cores mais quentes e contrastadas, fonte mais arredondada nos textos, títulos maiores e mais espaço entre as seções.' },
+          { kind: 'melhoria', text: 'Topo novo: menu fixo que fica translúcido ao rolar, foto principal em formato de arco com a logo e botões maiores.' },
+          { kind: 'melhoria', text: 'Serviços divididos em abas (Banho, Tosa e Extras), com um serviço em destaque num card escuro e os outros em lista; cada um abre o WhatsApp. Diferenciais num bloco verde e chamada para agendar em dourado.' },
+          { kind: 'melhoria', text: 'Foto nova na abertura (cachorrinho depois do banho) e ilustração só de cachorro nos diferenciais; tudo que era de gato saiu do site.' },
+          { kind: 'melhoria', text: 'Saíram do site a faixa do topo e a seção Galeria (o link também saiu do menu e do rodapé).' },
+          { kind: 'melhoria', text: 'A tela Galeria saiu do menu do painel; as fotos já enviadas continuam guardadas.' },
+          { kind: 'melhoria', text: 'Destaques da página inicial ("Bem-vindos!", "muito carinho", "Encanto" no topo e no rodapé) em letra de mão (Pacifico); títulos seguem em Fraunces e textos em Nunito.' },
+          { kind: 'melhoria', text: 'Celular: botões ocupando a largura da tela, cards mais compactos e menu mais fácil de tocar.' },
+        ],
+      },
+    ],
+  },
+  {
     id: '2.5',
     version: '2.5',
     date: '2026-10-12',

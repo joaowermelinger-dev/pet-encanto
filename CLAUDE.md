@@ -5,12 +5,12 @@
 > Ao terminar uma alteração, atualize este mapa (se a estrutura mudou) e
 > adicione a entrada no changelog (`src/data/changelog.ts`).
 >
-> Última atualização do mapa: 2026-10-12 (versão do app: 2.5)
+> Última atualização do mapa: 2026-10-26 (versão do app: 2.6)
 
 ## O que é
 
 App de petshop (banho, tosa etc.) com duas partes:
-- **Landing page pública** (`/`): apresentação, serviços (lista fixa, sem preço; valor combinado pelo WhatsApp), galeria de fotos, depoimentos, diferenciais, contato.
+- **Landing page pública** (`/`): apresentação, serviços (lista fixa, sem preço; valor combinado pelo WhatsApp), depoimentos, diferenciais, contato.
 - **Área administrativa** (`/admin`), login único do dono: clientes e pets, atendimentos, Clubinho (assinaturas recorrentes), financeiro, galeria, configurações, atualizações (changelog).
 
 Interface toda em português. No ar: pet-encanto.vercel.app
@@ -62,8 +62,9 @@ Telas do admin: `src/App.tsx` (rotas) e o menu lateral em `src/pages/admin/Admin
 ## Landing page
 
 `src/pages/Landing.tsx` monta, nesta ordem, os componentes de `src/components/landing/`:
-`AnnouncementBar` → `Header` → `Hero` → `ServicesSection` → `GallerySection` → `TestimonialsSection` → `WhyChooseSection` → `CtaBanner` → `ContactSection` → `Footer`.
-Apoio: `PawDecor` (enfeites de patinha), `Reveal` (animação ao rolar). Link de WhatsApp: `src/utils/whatsapp.ts`. Estilos globais/cores: `src/index.css`. Logo: `public/logo.png`.
+`Header` → `Hero` → `ServicesSection` → `TestimonialsSection` → `WhyChooseSection` → `CtaBanner` → `ContactSection` → `Footer`.
+`ServicesSection` tem a lista fixa de serviços em 3 abas (Banho / Tosa / Extras); o 1º de cada aba é o destaque. Apoio: `SectionHeading` (rótulo + título + subtítulo de cada seção), `Reveal` (animação ao rolar). Link de WhatsApp: `src/utils/whatsapp.ts`. Logo: `public/logo.png`. Foto da abertura: `public/hero-cachorro.webp` (4:5, fixa; não vem mais da galeria). A landing não mostra mais galeria nem gatos (o petshop atende só cachorros).
+Cores/fontes: `src/index.css`. A landing fica dentro de `<div className="landing">`, que sobrescreve as variáveis de cor (paleta própria) e usa a fonte Nunito; o admin continua com as cores do `:root` e Inter. Títulos em Fraunces (`font-display`); palavras de destaque ("muito carinho", "Encanto", "Bem-vindos!") em Pacifico (classe `font-script`, só dentro de `.landing`).
 
 ## Regras de negócio importantes
 
@@ -72,7 +73,7 @@ Apoio: `PawDecor` (enfeites de patinha), `Reveal` (animação ao rolar). Link de
 - Status: `scheduled`, `completed`, `cancelled`. Pagamento: `paid` + `payment_method` (`cash`, `card`, `pix`, `other`; nulo enquanto não pago). Forma de pagamento pode ser trocada direto na lista.
 - **Clubinho**: assinatura de um pet a um serviço, frequência `weekly`/`biweekly`/`monthly`, status `active`/`paused`/`cancelled`. Gera atendimentos normais com `subscription_id`; cancelar cancela os futuros agendados.
 - **Financeiro**: receita (atendimentos pagos), pendente, despesas, líquido, receita por forma de pagamento e por dia.
-- **Galeria**: foto pode ser ligada a um pet ou avulsa; só aparece na landing se `is_public`.
+- **Galeria**: foto pode ser ligada a um pet ou avulsa. A landing não exibe mais a galeria, e a tela `admin/Gallery.tsx` está escondida do menu (rota `/admin/gallery` e API continuam).
 - **Visita / sumido** (`src/utils/visits.ts`): visita = atendimento já passado e não cancelado. Cliente sumido = última visita há mais de 30/60 dias e nada agendado. Atendimento avulso não entra (não tem cliente cadastrado).
 - Enums ficam em `backend/app/models/common.py` e espelhados em `src/types/index.ts`.
 - Valores em dinheiro vêm do backend como **string** (Decimal).
@@ -88,4 +89,4 @@ Apoio: `PawDecor` (enfeites de patinha), `Reveal` (animação ao rolar). Link de
 
 ## Changelog
 
-`src/data/changelog.ts`: array `CHANGELOG`, entrada mais nova **no topo**. Cada entrada: `id`, `version`, `date` (AAAA-MM-DD), `sections[]` com `title` e `changes[]` (`kind`: `'novo' | 'melhoria' | 'correção'`, `text`). Cada dia de trabalho vira **uma** versão; sobe o minor (2.3 → 2.4). Versão atual: **2.5** (2026-10-12).
+`src/data/changelog.ts`: array `CHANGELOG`, entrada mais nova **no topo**. Cada entrada: `id`, `version`, `date` (AAAA-MM-DD), `sections[]` com `title` e `changes[]` (`kind`: `'novo' | 'melhoria' | 'correção'`, `text`). Cada dia de trabalho vira **uma** versão; sobe o minor (2.3 → 2.4). Versão atual: **2.6** (2026-10-26).

@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react'
+import { MessageCircle, PawPrint } from 'lucide-react'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { whatsappLink } from '../../utils/whatsapp'
 import Reveal from './Reveal'
@@ -8,22 +8,31 @@ export default function CtaBanner() {
   if (!shopInfo?.whatsapp) return null
 
   return (
-    <Reveal
-      as="section"
-      className="mx-4 my-4 rounded-3xl bg-accent px-6 py-14 text-center text-accent-foreground shadow-soft-lg sm:mx-auto sm:max-w-5xl sm:px-12"
-    >
-      <h2 className="font-display text-2xl font-semibold sm:text-3xl">Seu pet merece esse carinho</h2>
-      <p className="mx-auto mt-3 max-w-md text-accent-foreground/80">
-        Agende um horário e deixe seu pet ainda mais feliz. Fale com a gente pelo WhatsApp e marque uma visita.
-      </p>
-      <a
-        href={whatsappLink(shopInfo.whatsapp, 'Olá! Gostaria de agendar um horário para meu pet.')}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-6 inline-flex items-center gap-2 rounded-full bg-surface px-6 py-3 font-medium text-accent hover:bg-surface-muted"
-      >
-        <MessageCircle size={18} /> Agende agora pelo WhatsApp
-      </a>
-    </Reveal>
+    <section className="px-5 pt-20 sm:pt-28">
+      <Reveal className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] bg-accent px-6 py-16 text-center text-accent-foreground shadow-soft-lg sm:px-12 sm:py-20">
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-16 -top-16 size-64 rounded-full border-[28px] border-gold/15" />
+          <div className="absolute -bottom-20 -right-10 size-72 rounded-full bg-gold/10" />
+          <PawPrint className="absolute right-[12%] top-8 rotate-12 text-gold/30" size={40} />
+          <PawPrint className="absolute bottom-8 left-[10%] -rotate-12 text-gold/25" size={30} />
+        </div>
+        <div className="relative">
+          <h2 className="text-balance font-display text-3xl font-semibold sm:text-5xl">
+            Seu pet merece esse <span className="font-script text-gold">carinho</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-pretty text-accent-foreground/80 sm:text-lg">
+            Agende um horário e deixe seu pet ainda mais feliz. Fale com a gente pelo WhatsApp e marque uma visita.
+          </p>
+          <a
+            href={whatsappLink(shopInfo.whatsapp, 'Olá! Gostaria de agendar um horário para meu pet.')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-4 text-[15px] sm:px-7 sm:text-base font-bold text-gold-foreground shadow-soft-lg hover:-translate-y-0.5 hover:bg-[#d6b07c] sm:w-auto"
+          >
+            <MessageCircle size={19} /> Agende agora pelo WhatsApp
+          </a>
+        </div>
+      </Reveal>
+    </section>
   )
 }

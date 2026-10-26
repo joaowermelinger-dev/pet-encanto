@@ -9,7 +9,6 @@ const NAV_ITEMS = [
   { to: '/admin/appointments', label: 'Atendimentos' },
   { to: '/admin/clubinho', label: 'Clubinho' },
   { to: '/admin/finance', label: 'Financeiro' },
-  { to: '/admin/gallery', label: 'Galeria' },
   { to: '/admin/updates', label: 'Atualizações' },
   { to: '/admin/settings', label: 'Configurações' },
 ]

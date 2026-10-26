@@ -1,7 +1,7 @@
 import { Clock, MapPin, Navigation, Phone } from 'lucide-react'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
-import PawDecor from './PawDecor'
 import Reveal from './Reveal'
+import SectionHeading from './SectionHeading'
 
 export default function ContactSection() {
   const { data } = usePublicShopInfo()
@@ -9,57 +9,54 @@ export default function ContactSection() {
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.address)}`
     : undefined
 
-  return (
-    <section id="contato" className="relative overflow-hidden py-16 sm:py-24">
-      <PawDecor />
-      <div className="relative mx-auto max-w-5xl px-4">
-        <Reveal className="text-center">
-          <h2 className="font-display text-3xl font-semibold sm:text-4xl">Estamos esperando por vocês</h2>
-          <p className="mx-auto mt-3 max-w-xl text-muted">
-            Vem conhecer o espaço e tirar suas dúvidas — será um prazer receber você e seu pet.
-          </p>
-        </Reveal>
+  const cards = [
+    { icon: MapPin, title: 'Endereço', lines: [data?.address ?? 'carregando…'] },
+    {
+      icon: Phone,
+      title: 'Telefone',
+      lines: [data?.phone ?? 'carregando…', ...(data?.whatsapp ? [`WhatsApp: ${data.whatsapp}`] : [])],
+    },
+    { icon: Clock, title: 'Horário', lines: [data?.opening_hours ?? 'carregando…'] },
+  ]
 
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Reveal delay={0}>
-            <div className="flex items-start gap-3 rounded-2xl border border-border bg-surface p-5 shadow-soft">
-              <MapPin size={18} className="mt-0.5 shrink-0 text-accent" />
-              <div>
-                <p className="font-medium">Endereço</p>
-                <p className="mt-0.5 text-sm text-muted">{data?.address ?? 'carregando…'}</p>
+  return (
+    <section id="contato" className="relative py-20 sm:py-28">
+      <div className="relative mx-auto max-w-6xl px-5">
+        <SectionHeading
+          eyebrow="Localização"
+          title="Estamos esperando por vocês"
+          subtitle="Vem conhecer o espaço e tirar suas dúvidas — será um prazer receber você e seu pet."
+        />
+
+        <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+          {cards.map(({ icon: Icon, title, lines }, index) => (
+            <Reveal key={title} delay={index * 80}>
+              <div className="flex h-full items-start gap-4 rounded-3xl border border-border bg-surface p-6 shadow-soft">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
+                  <Icon size={20} />
+                </span>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted">{title}</p>
+                  {lines.map((line) => (
+                    <p key={line} className="mt-1 font-semibold leading-snug">
+                      {line}
+                    </p>
+                  ))}
+                </div>
               </div>
-            </div>
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="flex items-start gap-3 rounded-2xl border border-border bg-surface p-5 shadow-soft">
-              <Phone size={18} className="mt-0.5 shrink-0 text-accent" />
-              <div>
-                <p className="font-medium">Telefone</p>
-                <p className="mt-0.5 text-sm text-muted">{data?.phone ?? 'carregando…'}</p>
-                {data?.whatsapp && <p className="text-sm text-muted">WhatsApp: {data.whatsapp}</p>}
-              </div>
-            </div>
-          </Reveal>
-          <Reveal delay={160}>
-            <div className="flex items-start gap-3 rounded-2xl border border-border bg-surface p-5 shadow-soft">
-              <Clock size={18} className="mt-0.5 shrink-0 text-accent" />
-              <div>
-                <p className="font-medium">Horário</p>
-                <p className="mt-0.5 text-sm text-muted">{data?.opening_hours ?? 'carregando…'}</p>
-              </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          ))}
         </div>
 
         {mapsLink && (
-          <Reveal delay={240} className="mt-8 flex justify-center">
+          <Reveal delay={240} className="mt-10 flex justify-center">
             <a
               href={mapsLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground hover:bg-[var(--accent-hover)]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-accent bg-transparent px-7 py-3.5 font-bold text-accent hover:bg-accent hover:text-accent-foreground sm:w-auto"
             >
-              <Navigation size={16} /> Como chegar
+              <Navigation size={17} /> Como chegar
             </a>
           </Reveal>
         )}
