@@ -2,7 +2,7 @@ import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { SCHEDULE_MESSAGE, whatsappLink } from '../../utils/whatsapp'
 import ButtonLink from './ButtonLink'
 
-/** Abertura da landing (inspirada numa referência do Pedro): bloco bege, forma verde atrás da foto (public/hero-banho.webp), selo do Taxi Dog e rabiscos só no computador. */
+/** Abertura da landing (inspirada numa referência do Pedro): sem bloco de fundo, forma verde atrás da foto (public/hero-banho.webp), selo do Taxi Dog e rabiscos só no computador. */
 export default function Hero() {
   const { data: shopInfo } = usePublicShopInfo()
 
@@ -11,11 +11,11 @@ export default function Hero() {
 
   return (
     <section className="mx-auto max-w-[88rem] px-5 pt-4 lg:px-10">
-      <div className="relative grid grid-cols-1 items-center gap-6 overflow-hidden rounded-lg bg-surface-muted px-6 pt-10 sm:px-10 lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:px-14 lg:pt-0">
+      <div className="relative grid grid-cols-1 items-center gap-6 pt-6 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
         {/* Rabiscos discretos no fundo (traço fino, sem brilho). */}
         <Doodles />
 
-        <div className="relative lg:py-20">
+        <div className="relative lg:py-16">
           <p className="landing-enter text-sm font-bold uppercase tracking-[0.14em] text-sage-deep">Banho e tosa</p>
           <h1 className="landing-enter mt-3 text-balance font-display text-[2.5rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl xl:text-7xl">
             Banho, tosa e <span className="text-sage-deep">muito carinho.</span>
@@ -51,10 +51,10 @@ export default function Hero() {
           )}
         </div>
 
-        <div className="relative mx-auto w-full max-w-[24rem] self-end sm:max-w-md lg:mr-0 lg:max-w-[38rem]">
+        <div className="relative mx-auto w-full max-w-[24rem] sm:max-w-md lg:mr-0 lg:max-w-[38rem]">
           {/* Forma grande atrás do cachorro, saindo pela borda de baixo. */}
-          <svg aria-hidden viewBox="0 0 400 300" className="absolute -bottom-6 left-1/2 w-[112%] -translate-x-1/2 text-sage">
-            <path fill="currentColor" d="M20 300 C10 210 60 120 150 95 C230 72 270 20 330 40 C390 60 400 150 390 300 Z" />
+          <svg aria-hidden viewBox="0 0 400 360" className="absolute bottom-[2%] left-1/2 w-[104%] -translate-x-1/2 text-sage">
+            <path fill="currentColor" d="M60 300 C10 260 20 170 80 130 C140 90 180 110 230 60 C280 15 360 30 385 100 C410 170 390 250 340 300 C290 350 120 350 60 300 Z" />
           </svg>
           <img
             src="/hero-banho.webp"
