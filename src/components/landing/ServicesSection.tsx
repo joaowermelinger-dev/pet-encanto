@@ -14,9 +14,10 @@ interface Service {
 // (que serve só pros valores usados internamente nos atendimentos). Sem
 // preços aqui: o cliente combina o valor direto pelo WhatsApp. O primeiro
 // serviço de cada aba é o destaque (card escuro à esquerda).
-const CATEGORIES: { label: string; items: Service[] }[] = [
+const CATEGORIES: { label: string; image: string; items: Service[] }[] = [
   {
     label: 'Banho',
+    image: '/servico-banho.webp',
     items: [
       { name: 'Banho', description: 'Com produtos suaves e hidratantes.', cta: 'Agendar banho' },
       { name: 'Banho dermatológico', description: 'Para peles sensíveis, com produtos indicados.', cta: 'Agendar banho' },
@@ -26,6 +27,7 @@ const CATEGORIES: { label: string; items: Service[] }[] = [
   },
   {
     label: 'Tosa',
+    image: '/servico-tosa.webp',
     items: [
       { name: 'Tosa geral', description: 'Corte completo, com o pelo na medida certa.', cta: 'Agendar tosa' },
       { name: 'Tosa da raça', description: 'Corte no padrão da raça, com atenção aos detalhes.', cta: 'Agendar tosa' },
@@ -34,6 +36,7 @@ const CATEGORIES: { label: string; items: Service[] }[] = [
   },
   {
     label: 'Extras',
+    image: '/servico-extras.webp',
     items: [
       { name: 'Taxi Dog', description: 'Buscamos e levamos seu pet.', cta: 'Agendar taxi' },
       { name: 'Corte de unha', description: 'Rápido e seguro.', cta: 'Agendar corte' },
@@ -46,7 +49,7 @@ export default function ServicesSection() {
   const { data: shopInfo } = usePublicShopInfo()
   const [tab, setTab] = useState(0)
 
-  const { items } = CATEGORIES[tab]
+  const { items, image } = CATEGORIES[tab]
   const [featured, ...rest] = items
 
   const linkFor = (service: Service) =>
@@ -58,7 +61,7 @@ export default function ServicesSection() {
       <div className="mx-auto max-w-[88rem] px-5 lg:px-10">
         <SectionHeading title="Serviços" subtitle="Os valores são combinados pelo WhatsApp." />
 
-        <div role="tablist" aria-label="Categorias de serviços" className="mt-8 flex gap-6 border-b border-border">
+        <div role="tablist" aria-label="Categorias de serviços" className="mt-8 flex gap-2 border-b border-border pb-3">
           {CATEGORIES.map((category, index) => {
             const active = index === tab
             return (
@@ -67,8 +70,8 @@ export default function ServicesSection() {
                 role="tab"
                 aria-selected={active}
                 onClick={() => setTab(index)}
-                className={`-mb-px border-b-2 pb-3 text-base font-bold sm:text-lg ${
-                  active ? 'border-accent text-foreground' : 'border-transparent text-muted hover:text-foreground'
+                className={`rounded-lg px-5 py-2 text-base font-bold sm:text-lg ${
+                  active ? 'bg-accent text-accent-foreground' : 'text-foreground/80 hover:bg-surface-muted'
                 }`}
               >
                 {category.label}
@@ -77,33 +80,47 @@ export default function ServicesSection() {
           })}
         </div>
 
-        <div key={tab} role="tabpanel" className="landing-fade mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[5fr_7fr] lg:gap-8">
-          <div className="flex flex-col justify-end rounded-lg bg-foreground p-6 text-background sm:p-8 lg:min-h-[20rem]">
-            <h3 className="font-display text-3xl font-semibold sm:text-4xl">{featured.name}</h3>
-            <p className="mt-2 text-pretty leading-relaxed text-background/80">{featured.description}</p>
-            <a
-              href={linkFor(featured)}
-              {...linkProps}
-              className="group mt-6 inline-flex items-center gap-2 self-start rounded-md bg-background px-5 py-3 font-bold text-foreground hover:bg-surface-muted"
-            >
-              {featured.cta}
-              <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">→</span>
-            </a>
+        <div key={tab} role="tabpanel" className="landing-fade mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[5fr_6fr] lg:gap-8">
+          <div className="relative flex flex-col overflow-hidden rounded-lg bg-accent text-accent-foreground sm:min-h-[22rem] sm:flex-row">
+            <img
+              src={image}
+              alt=""
+              className="aspect-[4/3] w-full object-cover sm:absolute sm:inset-y-0 sm:right-0 sm:aspect-auto sm:h-full sm:w-[60%] sm:[mask-image:linear-gradient(to_right,transparent,black_22%)]"
+            />
+            {/* formas verdes */}
+            <svg aria-hidden viewBox="0 0 300 80" className="absolute -top-2 left-[6%] hidden w-[45%] text-sage/70 sm:block">
+              <path fill="currentColor" d="M0 0 H300 C270 40 230 70 170 60 C110 50 60 75 20 50 C5 40 0 20 0 0 Z" />
+            </svg>
+            <svg aria-hidden viewBox="0 0 400 90" className="absolute -bottom-2 left-0 w-full text-sage/60 sm:w-[55%]">
+              <path fill="currentColor" d="M0 90 V40 C60 10 120 20 170 45 C220 70 290 30 340 50 C370 62 390 80 400 90 Z" />
+            </svg>
+            <div className="relative flex flex-col p-6 pb-12 sm:max-w-[18rem] sm:justify-center sm:p-8">
+              <h3 className="font-display text-4xl font-semibold sm:text-5xl">{featured.name}</h3>
+              <p className="mt-3 text-pretty leading-relaxed text-accent-foreground/85">{featured.description}</p>
+              <a
+                href={linkFor(featured)}
+                {...linkProps}
+                className="group mt-6 inline-flex items-center gap-2 self-start rounded-md bg-background px-5 py-3 font-bold text-foreground hover:bg-surface-muted"
+              >
+                {featured.cta}
+                <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+              </a>
+            </div>
           </div>
 
-          <ul className="divide-y divide-border border-y border-border">
+          <ul className="flex flex-col gap-4">
             {rest.map((service) => (
               <li key={service.name}>
                 <a
                   href={linkFor(service)}
                   {...linkProps}
-                  className="group flex flex-col gap-1 py-5 hover:pl-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+                  className="group flex flex-col gap-4 rounded-lg border border-border bg-surface p-5 shadow-[0_2px_10px_rgba(60,40,20,0.06)] hover:border-accent/40 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-6"
                 >
                   <span>
-                    <span className="block font-display text-xl font-semibold">{service.name}</span>
+                    <span className="block font-display text-xl font-semibold sm:text-2xl">{service.name}</span>
                     <span className="mt-1 block text-pretty text-muted">{service.description}</span>
                   </span>
-                  <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-bold text-accent">
+                  <span className="inline-flex items-center gap-2 self-start whitespace-nowrap rounded-md border border-foreground/70 px-4 py-2.5 text-sm font-bold group-hover:bg-foreground group-hover:text-background sm:self-auto">
                     {service.cta}
                     <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">→</span>
                   </span>
