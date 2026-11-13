@@ -54,7 +54,7 @@ export default function ServicesSection() {
   const linkProps = shopInfo?.whatsapp ? { target: '_blank', rel: 'noopener noreferrer' } : {}
 
   return (
-    <section id="servicos" className="py-16 sm:py-24">
+    <section id="servicos" className="pb-16 pt-12 sm:pb-24 sm:pt-14">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading title="Serviços" subtitle="Os valores são combinados pelo WhatsApp." />
 

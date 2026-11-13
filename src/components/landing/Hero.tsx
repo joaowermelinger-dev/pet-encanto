@@ -9,10 +9,8 @@ export default function Hero() {
   const ctaHref = shopInfo?.whatsapp ? whatsappLink(shopInfo.whatsapp, SCHEDULE_MESSAGE) : '#contato'
 
   return (
-    // Em telas grandes o topo ocupa a altura da tela: texto alinhado com o
-    // resto da página (max-w-6xl) e a foto preenchendo a metade direita até a borda.
-    <section className="grid grid-cols-1 lg:min-h-[min(calc(100svh-4.25rem),56rem)] lg:grid-cols-2">
-      <div className="flex flex-col justify-center px-5 pb-12 pt-8 sm:pt-12 lg:py-16 lg:pl-[max(1.25rem,calc((100vw-72rem)/2+1.25rem))] lg:pr-16">
+    <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-5 pb-6 pt-8 sm:pt-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
+      <div>
         <h1 className="landing-enter text-balance font-display text-[2.5rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl">
           Banho, tosa e muito carinho.
         </h1>
@@ -47,7 +45,7 @@ export default function Hero() {
         )}
       </div>
 
-      <div className="relative mx-5 aspect-[4/5] overflow-hidden rounded-lg sm:mx-auto sm:w-full sm:max-w-md lg:mx-0 lg:aspect-auto lg:max-w-none lg:rounded-none">
+      <div className="relative mx-auto aspect-[4/5] w-full max-w-[20rem] overflow-hidden rounded-lg sm:max-w-sm lg:max-w-[22rem]">
         <img
           src="/hero-cachorro.webp"
           alt="Cachorrinho enrolado na toalha depois do banho"
