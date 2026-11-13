@@ -36,6 +36,7 @@ export const CHANGELOG: ChangelogEntry[] = [
           { kind: 'melhoria', text: 'Letra de mão (Pacifico) só no nome "Encanto". Textos mais diretos, sem frases feitas; cantos menos arredondados e sem animação ao rolar a página.' },
           { kind: 'melhoria', text: 'Saiu a seção de depoimentos (volta quando houver depoimentos reais).' },
           { kind: 'melhoria', text: 'Abertura nova: foto nova (golden retriever no banho) sobre uma forma verde, "muito carinho" em verde e rabiscos à mão (corações, patinhas, bolhas e ondas).' },
+          { kind: 'melhoria', text: 'Linha ondulada fina separando as seções da página.' },
           { kind: 'novo', text: 'Selo redondo do Taxi Dog na foto da abertura, que abre o WhatsApp para agendar.' },
           { kind: 'melhoria', text: 'Conteúdo mais largo em telas grandes (menos margem vazia nas laterais), topo mais compacto e foto um pouco maior, alinhada à direita.' },
           { kind: 'melhoria', text: 'Animações discretas: o topo aparece suavemente ao abrir a página, a troca de abas dos serviços tem transição e as setas/botões se mexem ao passar o mouse.' },
