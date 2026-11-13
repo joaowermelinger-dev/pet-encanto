@@ -15,7 +15,7 @@ export default function Hero() {
           Banho, tosa e muito carinho.
         </h1>
         <p className="landing-enter [animation-delay:120ms] mt-5 max-w-lg text-pretty text-lg text-muted sm:text-xl">
-          Atendemos só cachorros. Escolha o serviço e chame a gente no WhatsApp: o horário e o valor são combinados por lá.
+          Banho e tosa só para cachorros. Escolha o serviço e agende pelo WhatsApp.
         </p>
 
         <div className="landing-enter [animation-delay:240ms] mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
