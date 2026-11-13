@@ -79,21 +79,47 @@ export default function Hero() {
   )
 }
 
+const Heart = ({ filled = false }: { filled?: boolean }) => (
+  <svg viewBox="0 0 24 22" className="size-full" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
+    <path d="M12 20 C12 20 2 13.5 2 7.5 C2 4 4.6 2 7.3 2 C9.5 2 11 3.3 12 5 C13 3.3 14.5 2 16.7 2 C19.4 2 22 4 22 7.5 C22 13.5 12 20 12 20 Z" />
+  </svg>
+)
+
+const Paw = ({ filled = false }: { filled?: boolean }) => (
+  <svg viewBox="0 0 24 24" className="size-full" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8">
+    <path d="M12 13 C8.5 13 6 16 6 18.5 C6 20.5 7.6 21.5 9.3 21 C10.4 20.7 11.2 20.3 12 20.3 C12.8 20.3 13.6 20.7 14.7 21 C16.4 21.5 18 20.5 18 18.5 C18 16 15.5 13 12 13 Z" />
+    <ellipse cx="4.5" cy="10.5" rx="2.2" ry="2.8" />
+    <ellipse cx="9" cy="5.5" rx="2.2" ry="3" />
+    <ellipse cx="15" cy="5.5" rx="2.2" ry="3" />
+    <ellipse cx="19.5" cy="10.5" rx="2.2" ry="2.8" />
+  </svg>
+)
+
+const Squiggle = () => (
+  <svg viewBox="0 0 60 16" className="size-full" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <path d="M2 8 q7 -10 14 0 t14 0 t14 0 t14 0" />
+  </svg>
+)
+
+const Bubbles = () => (
+  <svg viewBox="0 0 40 40" className="size-full" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="26" r="9" />
+    <circle cx="28" cy="12" r="6" />
+    <circle cx="31" cy="30" r="3.5" />
+  </svg>
+)
+
+/** Rabiscos à mão no fundo da abertura (corações, patinhas, bolhas de banho, ondas). */
 function Doodles() {
   return (
-    <svg aria-hidden className="pointer-events-none absolute inset-0 hidden size-full text-accent/25 lg:block" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      {/* coração */}
-      <svg x="52%" y="12%" overflow="visible"><path d="M0 6 C0 0 8 -2 10 4 C12 -2 20 0 20 6 C20 13 10 18 10 18 C10 18 0 13 0 6 Z" /></svg>
-      {/* patinha */}
-      <svg x="46%" y="80%" overflow="visible">
-        <ellipse cx="10" cy="14" rx="6" ry="5" />
-        <circle cx="3" cy="6" r="2.5" />
-        <circle cx="8" cy="2" r="2.5" />
-        <circle cx="14" cy="2" r="2.5" />
-        <circle cx="19" cy="6" r="2.5" />
-      </svg>
-      {/* rabisco ondulado */}
-      <svg x="4%" y="8%" overflow="visible"><path d="M0 0 q6 -8 12 0 t12 0 t12 0" /></svg>
-    </svg>
+    <div aria-hidden className="pointer-events-none absolute inset-0">
+      <span className="absolute left-[3%] top-[3%] w-12 text-accent/30 lg:left-[2%] lg:top-[6%] lg:w-16"><Squiggle /></span>
+      <span className="absolute right-[6%] top-[30%] size-7 -rotate-12 text-sage-deep/60 lg:left-[49%] lg:right-auto lg:top-[11%] lg:size-9"><Heart /></span>
+      <span className="absolute right-[4%] top-[2%] size-5 rotate-12 text-gold lg:left-[56%] lg:right-auto lg:top-[30%] lg:size-6"><Heart filled /></span>
+      <span className="absolute bottom-[38%] left-[5%] size-7 rotate-[18deg] text-sage/80 lg:bottom-[12%] lg:left-[46%] lg:size-9"><Paw filled /></span>
+      <span className="absolute bottom-[45%] right-[5%] hidden size-8 -rotate-12 text-accent/30 sm:block lg:bottom-auto lg:left-[52%] lg:right-auto lg:top-[52%]"><Paw /></span>
+      <span className="absolute bottom-[30%] right-[3%] size-9 text-sage-deep/40 lg:bottom-auto lg:left-[42%] lg:right-auto lg:top-[4%] lg:size-10"><Bubbles /></span>
+      <span className="absolute bottom-[6%] left-[38%] hidden w-14 text-gold/80 lg:block"><Squiggle /></span>
+    </div>
   )
 }
