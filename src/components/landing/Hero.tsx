@@ -2,7 +2,7 @@ import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
 import { SCHEDULE_MESSAGE, whatsappLink } from '../../utils/whatsapp'
 import ButtonLink from './ButtonLink'
 
-/** Abertura da landing: título, um botão de agendar e a foto (public/hero-cachorro.webp, 4:5). */
+/** Abertura da landing: título, um botão de agendar e a foto (public/hero-banho.webp, fundo transparente, com arco atrás). */
 export default function Hero() {
   const { data: shopInfo } = usePublicShopInfo()
 
@@ -45,15 +45,18 @@ export default function Hero() {
         )}
       </div>
 
-      <div className="relative mx-auto aspect-[4/5] w-full max-w-[20rem] overflow-hidden rounded-lg sm:max-w-sm lg:mr-0 lg:max-w-[28rem]">
+      <div className="relative mx-auto w-full max-w-[22rem] sm:max-w-md lg:mr-0 lg:max-w-[34rem]">
+        {/* Arco verde-claro atrás da foto (escolha do Pedro). */}
+        <div aria-hidden className="absolute inset-x-[10%] bottom-[10%] top-[2%] rounded-t-full bg-sage/40" />
         <img
-          src="/hero-cachorro.webp"
-          alt="Cachorrinho enrolado na toalha depois do banho"
-          width={1122}
-          height={1402}
-          className="landing-photo absolute inset-0 size-full object-cover object-[50%_30%]"
+          src="/hero-banho.webp"
+          alt="Golden retriever com espuma de banho, toalha e escova"
+          width={1100}
+          height={1001}
+          className="landing-photo relative w-full"
         />
       </div>
     </section>
   )
 }
+
