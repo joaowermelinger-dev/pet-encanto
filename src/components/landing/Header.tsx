@@ -26,7 +26,7 @@ export default function Header() {
     <header
       className={`sticky top-0 z-20 border-b bg-background ${scrolled || menuOpen ? 'border-border' : 'border-transparent'}`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
+      <div className="mx-auto flex max-w-[88rem] items-center justify-between gap-4 px-5 lg:px-10 py-3">
         <a href="#" className="flex items-center gap-2.5">
           <img src="/logo.png" alt="Pet Encanto" className="size-11 rounded-full object-cover" />
           <span className="font-display text-xl font-semibold tracking-tight">
@@ -64,7 +64,7 @@ export default function Header() {
       </div>
 
       {menuOpen && (
-        <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-5 pb-5 pt-1 lg:hidden">
+        <nav className="mx-auto flex max-w-[88rem] flex-col gap-1 px-5 lg:px-10 pb-5 pt-1 lg:hidden">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}

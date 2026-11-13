@@ -55,7 +55,7 @@ export default function ServicesSection() {
 
   return (
     <section id="servicos" className="pb-16 pt-12 sm:pb-24 sm:pt-14">
-      <div className="mx-auto max-w-6xl px-5">
+      <div className="mx-auto max-w-[88rem] px-5 lg:px-10">
         <SectionHeading title="Serviços" subtitle="Os valores são combinados pelo WhatsApp." />
 
         <div role="tablist" aria-label="Categorias de serviços" className="mt-8 flex gap-6 border-b border-border">

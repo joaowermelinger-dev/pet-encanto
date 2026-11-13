@@ -12,7 +12,7 @@ const REASONS = [
 export default function WhyChooseSection() {
   return (
     <section id="diferenciais" className="bg-sage-deep py-16 text-white sm:py-24">
-      <div className="mx-auto max-w-6xl px-5">
+      <div className="mx-auto max-w-[88rem] px-5 lg:px-10">
         <SectionHeading title="Como cuidamos" tone="dark" />
 
         <ol className="mt-10 grid grid-cols-1 gap-x-12 sm:grid-cols-2">

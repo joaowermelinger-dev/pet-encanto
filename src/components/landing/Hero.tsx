@@ -9,9 +9,9 @@ export default function Hero() {
   const ctaHref = shopInfo?.whatsapp ? whatsappLink(shopInfo.whatsapp, SCHEDULE_MESSAGE) : '#contato'
 
   return (
-    <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-5 pb-6 pt-8 sm:pt-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
+    <section className="mx-auto grid max-w-[88rem] grid-cols-1 items-center gap-10 px-5 lg:px-10 pb-6 pt-8 sm:pt-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
       <div>
-        <h1 className="landing-enter text-balance font-display text-[2.5rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+        <h1 className="landing-enter text-balance font-display text-[2.5rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl xl:text-7xl">
           Banho, tosa e muito carinho.
         </h1>
         <p className="landing-enter [animation-delay:120ms] mt-5 max-w-lg text-pretty text-lg text-muted sm:text-xl">
@@ -45,7 +45,7 @@ export default function Hero() {
         )}
       </div>
 
-      <div className="relative mx-auto aspect-[4/5] w-full max-w-[20rem] overflow-hidden rounded-lg sm:max-w-sm lg:max-w-[22rem]">
+      <div className="relative mx-auto aspect-[4/5] w-full max-w-[20rem] overflow-hidden rounded-lg sm:max-w-sm lg:mr-0 lg:max-w-[28rem]">
         <img
           src="/hero-cachorro.webp"
           alt="Cachorrinho enrolado na toalha depois do banho"

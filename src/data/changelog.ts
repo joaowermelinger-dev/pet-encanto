@@ -35,7 +35,7 @@ export const CHANGELOG: ChangelogEntry[] = [
           { kind: 'melhoria', text: 'Serviços sem ícones, com abas sublinhadas e lista simples; "Como cuidamos" virou lista numerada (sem grade de cartões e sem a foto do cachorro recortado); contato num bloco único com endereço, telefone, WhatsApp e horário.' },
           { kind: 'melhoria', text: 'Letra de mão (Pacifico) só no nome "Encanto". Textos mais diretos, sem frases feitas; cantos menos arredondados e sem animação ao rolar a página.' },
           { kind: 'melhoria', text: 'Saiu a seção de depoimentos (volta quando houver depoimentos reais).' },
-          { kind: 'melhoria', text: 'Topo mais compacto: menos espaço vazio embaixo da abertura e os Serviços já aparecem na primeira tela do computador.' },
+          { kind: 'melhoria', text: 'Conteúdo mais largo em telas grandes (menos margem vazia nas laterais), topo mais compacto e foto um pouco maior, alinhada à direita.' },
           { kind: 'melhoria', text: 'Animações discretas: o topo aparece suavemente ao abrir a página, a troca de abas dos serviços tem transição e as setas/botões se mexem ao passar o mouse.' },
           { kind: 'correção', text: 'Texto que aparece no Google e ao compartilhar o link não fala mais em produtos e galeria.' },
         ],
