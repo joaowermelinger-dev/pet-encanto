@@ -9,7 +9,6 @@ export default function Hero() {
   const ctaHref = shopInfo?.whatsapp ? whatsappLink(shopInfo.whatsapp, SCHEDULE_MESSAGE) : '#contato'
 
   return (
-<<<<<<< HEAD
     // Em telas grandes o topo ocupa a altura da tela: texto alinhado com o
     // resto da página (max-w-6xl) e a foto preenchendo a metade direita até a borda.
     <section className="grid grid-cols-1 lg:min-h-[min(calc(100svh-4.25rem),56rem)] lg:grid-cols-2">
@@ -22,18 +21,6 @@ export default function Hero() {
         </p>
 
         <div className="landing-enter [animation-delay:240ms] mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-=======
-    <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-5 pb-16 pt-8 sm:pb-20 sm:pt-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:pb-24">
-      <div>
-        <h1 className="text-balance font-display text-[2.5rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl">
-          Banho, tosa e muito carinho.
-        </h1>
-        <p className="mt-5 max-w-lg text-pretty text-lg text-muted sm:text-xl">
-          Atendemos só cachorros. Escolha o serviço e chame a gente no WhatsApp: o horário e o valor são combinados por lá.
-        </p>
-
-        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
->>>>>>> origin/claude/project-thread-csdeh8
           <ButtonLink href={ctaHref} external={Boolean(shopInfo?.whatsapp)}>
             Agendar pelo WhatsApp
           </ButtonLink>
@@ -43,11 +30,7 @@ export default function Hero() {
         </div>
 
         {(shopInfo?.address || shopInfo?.opening_hours) && (
-<<<<<<< HEAD
           <dl className="landing-enter [animation-delay:360ms] mt-10 hidden gap-3 border-t border-border pt-6 text-sm sm:grid sm:grid-cols-2">
-=======
-          <dl className="mt-10 grid gap-3 border-t border-border pt-6 text-sm sm:grid-cols-2">
->>>>>>> origin/claude/project-thread-csdeh8
             {shopInfo?.address && (
               <div>
                 <dt className="font-bold">Endereço</dt>
@@ -64,21 +47,13 @@ export default function Hero() {
         )}
       </div>
 
-<<<<<<< HEAD
       <div className="relative mx-5 aspect-[4/5] overflow-hidden rounded-lg sm:mx-auto sm:w-full sm:max-w-md lg:mx-0 lg:aspect-auto lg:max-w-none lg:rounded-none">
-=======
-      <div className="mx-auto w-full max-w-[20rem] sm:max-w-md">
->>>>>>> origin/claude/project-thread-csdeh8
         <img
           src="/hero-cachorro.webp"
           alt="Cachorrinho enrolado na toalha depois do banho"
           width={1122}
           height={1402}
-<<<<<<< HEAD
           className="landing-photo absolute inset-0 size-full object-cover object-[50%_30%]"
-=======
-          className="aspect-[4/5] w-full rounded-lg object-cover"
->>>>>>> origin/claude/project-thread-csdeh8
         />
       </div>
     </section>

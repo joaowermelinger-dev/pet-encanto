@@ -21,11 +21,7 @@ export default function ButtonLink({ variant = 'primary', external, className = 
     <a
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       {...props}
-<<<<<<< HEAD
       className={`inline-flex items-center justify-center gap-2 rounded-md px-6 py-3.5 text-base font-bold hover:-translate-y-px active:translate-y-0 ${VARIANTS[variant]} ${className}`}
-=======
-      className={`inline-flex items-center justify-center gap-2 rounded-md px-6 py-3.5 text-base font-bold ${VARIANTS[variant]} ${className}`}
->>>>>>> origin/claude/project-thread-csdeh8
     >
       {children}
     </a>

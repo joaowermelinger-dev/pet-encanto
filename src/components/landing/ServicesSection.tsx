@@ -54,11 +54,7 @@ export default function ServicesSection() {
   const linkProps = shopInfo?.whatsapp ? { target: '_blank', rel: 'noopener noreferrer' } : {}
 
   return (
-<<<<<<< HEAD
     <section id="servicos" className="py-16 sm:py-24">
-=======
-    <section id="servicos" className="border-t border-border py-16 sm:py-24">
->>>>>>> origin/claude/project-thread-csdeh8
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading title="Serviços" subtitle="Os valores são combinados pelo WhatsApp." />
 
@@ -81,27 +77,17 @@ export default function ServicesSection() {
           })}
         </div>
 
-<<<<<<< HEAD
         <div key={tab} role="tabpanel" className="landing-fade mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[5fr_7fr] lg:gap-8">
-=======
-        <div role="tabpanel" className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[5fr_7fr] lg:gap-8">
->>>>>>> origin/claude/project-thread-csdeh8
           <div className="flex flex-col justify-end rounded-lg bg-foreground p-6 text-background sm:p-8 lg:min-h-[20rem]">
             <h3 className="font-display text-3xl font-semibold sm:text-4xl">{featured.name}</h3>
             <p className="mt-2 text-pretty leading-relaxed text-background/80">{featured.description}</p>
             <a
               href={linkFor(featured)}
               {...linkProps}
-<<<<<<< HEAD
               className="group mt-6 inline-flex items-center gap-2 self-start rounded-md bg-background px-5 py-3 font-bold text-foreground hover:bg-surface-muted"
             >
               {featured.cta}
               <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">→</span>
-=======
-              className="mt-6 inline-flex self-start rounded-md bg-background px-5 py-3 font-bold text-foreground hover:bg-surface-muted"
-            >
-              {featured.cta} →
->>>>>>> origin/claude/project-thread-csdeh8
             </a>
           </div>
 
@@ -111,24 +97,15 @@ export default function ServicesSection() {
                 <a
                   href={linkFor(service)}
                   {...linkProps}
-<<<<<<< HEAD
                   className="group flex flex-col gap-1 py-5 hover:pl-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
-=======
-                  className="group flex flex-col gap-1 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
->>>>>>> origin/claude/project-thread-csdeh8
                 >
                   <span>
                     <span className="block font-display text-xl font-semibold">{service.name}</span>
                     <span className="mt-1 block text-pretty text-muted">{service.description}</span>
                   </span>
-<<<<<<< HEAD
                   <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-bold text-accent">
                     {service.cta}
                     <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">→</span>
-=======
-                  <span className="whitespace-nowrap text-sm font-bold text-accent group-hover:underline underline-offset-4">
-                    {service.cta} →
->>>>>>> origin/claude/project-thread-csdeh8
                   </span>
                 </a>
               </li>
