@@ -1,6 +1,5 @@
 import Header from '../components/landing/Header'
 import Hero from '../components/landing/Hero'
-import TaxiDogBanner from '../components/landing/TaxiDogBanner'
 import ServicesSection from '../components/landing/ServicesSection'
 import WhyChooseSection from '../components/landing/WhyChooseSection'
 import CtaBanner from '../components/landing/CtaBanner'
@@ -12,7 +11,6 @@ export default function Landing() {
     <div className="landing">
       <Header />
       <Hero />
-      <TaxiDogBanner />
       <ServicesSection />
       <WhyChooseSection />
       <CtaBanner />
