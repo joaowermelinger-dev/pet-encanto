@@ -1,6 +1,7 @@
 import { MessageCircle } from 'lucide-react'
 import { usePublicShopInfo } from '../../hooks/usePublicShopInfo'
-import { whatsappLink } from '../../utils/whatsapp'
+import { SCHEDULE_MESSAGE, whatsappLink } from '../../utils/whatsapp'
+import { NAV_LINKS } from './navLinks'
 
 // lucide-react não tem mais ícones de marca (Instagram, etc.) — desenhado à
 // mão no mesmo estilo (stroke, viewBox 24x24) pra combinar com os outros.
@@ -23,18 +24,12 @@ function InstagramIcon({ size = 16 }: { size?: number }) {
   )
 }
 
-const NAV_LINKS = [
-  { href: '#servicos', label: 'Serviços' },
-  { href: '#diferenciais', label: 'Diferenciais' },
-  { href: '#contato', label: 'Localização' },
-]
-
 export default function Footer() {
   const { data } = usePublicShopInfo()
   const hasSocial = data?.instagram_url || data?.whatsapp
 
   return (
-    <footer className="mt-4 bg-[#2f2114] text-accent-foreground">
+    <footer className="bg-[#2f2114] text-accent-foreground">
       <div className="mx-auto max-w-6xl px-5 py-14 sm:py-16">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1.4fr_1fr_1.2fr]">
           <div>
@@ -45,7 +40,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-accent-foreground/70">
-              Banho, tosa e muito carinho para o seu melhor amigo.
+              Banho e tosa para cachorros.
             </p>
             {hasSocial && (
               <div className="mt-5 flex items-center gap-2">
@@ -55,18 +50,18 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram"
-                    className="flex size-11 items-center justify-center rounded-full bg-white/10 text-accent-foreground hover:bg-gold hover:text-gold-foreground"
+                    className="flex size-11 items-center justify-center rounded-md bg-white/10 text-accent-foreground hover:bg-gold hover:text-gold-foreground"
                   >
                     <InstagramIcon size={18} />
                   </a>
                 )}
                 {data?.whatsapp && (
                   <a
-                    href={whatsappLink(data.whatsapp, 'Olá! Gostaria de agendar um horário para meu pet.')}
+                    href={whatsappLink(data.whatsapp, SCHEDULE_MESSAGE)}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="WhatsApp"
-                    className="flex size-11 items-center justify-center rounded-full bg-white/10 text-accent-foreground hover:bg-gold hover:text-gold-foreground"
+                    className="flex size-11 items-center justify-center rounded-md bg-white/10 text-accent-foreground hover:bg-gold hover:text-gold-foreground"
                   >
                     <MessageCircle size={18} />
                   </a>
@@ -99,7 +94,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-accent-foreground/60">
-        © {new Date().getFullYear()} Pet Encanto. Feito com carinho.
+        © {new Date().getFullYear()} Pet Encanto.
       </div>
     </footer>
   )

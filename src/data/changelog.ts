@@ -23,6 +23,24 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    id: '2.7',
+    version: '2.7',
+    date: '2026-11-13',
+    sections: [
+      {
+        title: 'Site (página inicial)',
+        changes: [
+          { kind: 'melhoria', text: 'Visual mais simples e com cara própria: saíram as manchas de luz no fundo, os cartões translúcidos, os brilhinhos, as patinhas soltas, as etiquetas acima dos títulos e o emoji do título.' },
+          { kind: 'melhoria', text: 'Abertura com um botão só (agendar pelo WhatsApp), link para os serviços e endereço/horário logo abaixo; foto sem moldura em arco.' },
+          { kind: 'melhoria', text: 'Serviços sem ícones, com abas sublinhadas e lista simples; "Como cuidamos" virou lista numerada (sem grade de cartões e sem a foto do cachorro recortado); contato num bloco único com endereço, telefone, WhatsApp e horário.' },
+          { kind: 'melhoria', text: 'Letra de mão (Pacifico) só no nome "Encanto". Textos mais diretos, sem frases feitas; cantos menos arredondados e sem animação ao rolar a página.' },
+          { kind: 'melhoria', text: 'Saiu a seção de depoimentos (volta quando houver depoimentos reais).' },
+          { kind: 'correção', text: 'Texto que aparece no Google e ao compartilhar o link não fala mais em produtos e galeria.' },
+        ],
+      },
+    ],
+  },
+  {
     id: '2.6',
     version: '2.6',
     date: '2026-10-26',

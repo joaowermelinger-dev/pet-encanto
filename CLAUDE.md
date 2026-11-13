@@ -5,12 +5,12 @@
 > Ao terminar uma alteração, atualize este mapa (se a estrutura mudou) e
 > adicione a entrada no changelog (`src/data/changelog.ts`).
 >
-> Última atualização do mapa: 2026-10-26 (versão do app: 2.6)
+> Última atualização do mapa: 2026-11-13 (versão do app: 2.7)
 
 ## O que é
 
 App de petshop (banho, tosa etc.) com duas partes:
-- **Landing page pública** (`/`): apresentação, serviços (lista fixa, sem preço; valor combinado pelo WhatsApp), depoimentos, diferenciais, contato.
+- **Landing page pública** (`/`): apresentação, serviços (lista fixa, sem preço; valor combinado pelo WhatsApp), "Como cuidamos" (diferenciais), contato.
 - **Área administrativa** (`/admin`), login único do dono: clientes e pets, atendimentos, Clubinho (assinaturas recorrentes), financeiro, galeria, configurações, atualizações (changelog).
 
 Interface toda em português. No ar: pet-encanto.vercel.app
@@ -62,9 +62,11 @@ Telas do admin: `src/App.tsx` (rotas) e o menu lateral em `src/pages/admin/Admin
 ## Landing page
 
 `src/pages/Landing.tsx` monta, nesta ordem, os componentes de `src/components/landing/`:
-`Header` → `Hero` → `ServicesSection` → `TestimonialsSection` → `WhyChooseSection` → `CtaBanner` → `ContactSection` → `Footer`.
-`ServicesSection` tem a lista fixa de serviços em 3 abas (Banho / Tosa / Extras); o 1º de cada aba é o destaque. Apoio: `SectionHeading` (rótulo + título + subtítulo de cada seção), `Reveal` (animação ao rolar). Link de WhatsApp: `src/utils/whatsapp.ts`. Logo: `public/logo.png`. Foto da abertura: `public/hero-cachorro.webp` (4:5, fixa; não vem mais da galeria). A landing não mostra mais galeria nem gatos (o petshop atende só cachorros).
-Cores/fontes: `src/index.css`. A landing fica dentro de `<div className="landing">`, que sobrescreve as variáveis de cor (paleta própria) e usa a fonte Nunito; o admin continua com as cores do `:root` e Inter. Títulos em Fraunces (`font-display`); palavras de destaque ("muito carinho", "Encanto", "Bem-vindos!") em Pacifico (classe `font-script`, só dentro de `.landing`).
+`Header` → `Hero` → `ServicesSection` → `WhyChooseSection` → `CtaBanner` → `ContactSection` → `Footer`.
+`ServicesSection` tem a lista fixa de serviços em 3 abas (Banho / Tosa / Extras); o 1º de cada aba é o destaque. Apoio: `SectionHeading` (título + subtítulo, alinhado à esquerda), `ButtonLink` (botão único da landing), `navLinks.ts` (menu do topo e rodapé). Mensagem padrão do WhatsApp: `SCHEDULE_MESSAGE` em `src/utils/whatsapp.ts`. Link de WhatsApp: `src/utils/whatsapp.ts`. Logo: `public/logo.png`. Foto da abertura: `public/hero-cachorro.webp` (4:5, fixa; não vem mais da galeria). A landing não mostra mais galeria nem gatos (o petshop atende só cachorros).
+Cores/fontes: `src/index.css`. A landing fica dentro de `<div className="landing">`, que sobrescreve as variáveis de cor (paleta própria) e usa a fonte Nunito; o admin continua com as cores do `:root` e Inter. Títulos em Fraunces (`font-display`); Pacifico (classe `font-script`) **só no nome "Encanto"**.
+
+**Sem cara de site feito por IA** (pedido do Pedro, 2.7): na landing não usar manchas desfocadas/glow, vidro (backdrop-blur), etiqueta acima de título, emoji, ícones decorativos em quadradinho, grade de cartões iguais, depoimentos inventados, animação ao rolar nem cantos muito arredondados (`rounded-md`/`rounded-lg`). Fotos atuais não são do petshop; trocar pelas reais quando o Pedro enviar.
 
 ## Regras de negócio importantes
 
@@ -89,4 +91,4 @@ Cores/fontes: `src/index.css`. A landing fica dentro de `<div className="landing
 
 ## Changelog
 
-`src/data/changelog.ts`: array `CHANGELOG`, entrada mais nova **no topo**. Cada entrada: `id`, `version`, `date` (AAAA-MM-DD), `sections[]` com `title` e `changes[]` (`kind`: `'novo' | 'melhoria' | 'correção'`, `text`). Cada dia de trabalho vira **uma** versão; sobe o minor (2.3 → 2.4). Versão atual: **2.6** (2026-10-26).
+`src/data/changelog.ts`: array `CHANGELOG`, entrada mais nova **no topo**. Cada entrada: `id`, `version`, `date` (AAAA-MM-DD), `sections[]` com `title` e `changes[]` (`kind`: `'novo' | 'melhoria' | 'correção'`, `text`). Cada dia de trabalho vira **uma** versão; sobe o minor (2.3 → 2.4). Versão atual: **2.7** (2026-11-13).
