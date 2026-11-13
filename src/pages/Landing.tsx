@@ -1,7 +1,6 @@
 import Header from '../components/landing/Header'
 import Hero from '../components/landing/Hero'
 import ServicesSection from '../components/landing/ServicesSection'
-import TestimonialsSection from '../components/landing/TestimonialsSection'
 import WhyChooseSection from '../components/landing/WhyChooseSection'
 import CtaBanner from '../components/landing/CtaBanner'
 import ContactSection from '../components/landing/ContactSection'
@@ -13,7 +12,6 @@ export default function Landing() {
       <Header />
       <Hero />
       <ServicesSection />
-      <TestimonialsSection />
       <WhyChooseSection />
       <CtaBanner />
       <ContactSection />

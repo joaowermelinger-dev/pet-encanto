@@ -5,3 +5,6 @@ export function whatsappLink(rawPhone: string, message?: string): string {
   const query = message ? `?text=${encodeURIComponent(message)}` : ''
   return `https://wa.me/${withCountry}${query}`
 }
+
+/** Mensagem padrão dos botões "agendar" da página inicial. */
+export const SCHEDULE_MESSAGE = 'Olá! Gostaria de agendar um horário para meu pet.'
