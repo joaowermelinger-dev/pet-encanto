@@ -1,9 +1,9 @@
 import SectionHeading from './SectionHeading'
 
 const REASONS = [
-  { title: 'Carinho no atendimento', description: 'Cada cachorro é tratado com paciência e atenção individual.' },
+  { title: 'Carinho no atendimento', description: 'Cada pet é tratado com paciência e atenção individual.' },
   { title: 'Profissionais preparados', description: 'Equipe experiente e sempre atualizada em boas práticas.' },
-  { title: 'Ambiente seguro e confortável', description: 'Espaço limpo e pensado para o bem-estar do seu cachorro.' },
+  { title: 'Ambiente seguro e confortável', description: 'Espaço limpo e pensado para o bem-estar do seu pet.' },
   { title: 'Produtos de qualidade', description: 'Shampoos e produtos selecionados para pele e pelagem.' },
   { title: 'Atendimento personalizado', description: 'Cada serviço se adapta ao jeito e à necessidade de cada um.' },
   { title: 'Pontualidade', description: 'Horário combinado é horário cumprido.' },

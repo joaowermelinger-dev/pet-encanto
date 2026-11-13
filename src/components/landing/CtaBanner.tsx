@@ -12,7 +12,7 @@ export default function CtaBanner() {
         <div>
           <h2 className="text-balance font-display text-3xl font-semibold sm:text-4xl">Quer marcar um horário?</h2>
           <p className="mt-2 max-w-md text-pretty text-accent-foreground/80">
-            Chame no WhatsApp, diga o serviço e o nome do seu cachorro.
+            Chame no WhatsApp, diga o serviço e o nome do seu pet.
           </p>
         </div>
         <ButtonLink

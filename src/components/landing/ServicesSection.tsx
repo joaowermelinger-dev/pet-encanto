@@ -35,7 +35,7 @@ const CATEGORIES: { label: string; items: Service[] }[] = [
   {
     label: 'Extras',
     items: [
-      { name: 'Taxi Dog', description: 'Buscamos e levamos seu cachorro.', cta: 'Agendar taxi' },
+      { name: 'Taxi Dog', description: 'Buscamos e levamos seu pet.', cta: 'Agendar taxi' },
       { name: 'Corte de unha', description: 'Rápido e seguro.', cta: 'Agendar corte' },
       { name: 'Limpeza de orelhas', description: 'Higiene para evitar infecções e desconforto.', cta: 'Agendar limpeza' },
     ],

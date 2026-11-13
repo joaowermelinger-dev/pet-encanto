@@ -40,7 +40,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-accent-foreground/70">
-              Banho e tosa para cachorros.
+              Banho e tosa para o seu pet.
             </p>
             {hasSocial && (
               <div className="mt-5 flex items-center gap-2">
