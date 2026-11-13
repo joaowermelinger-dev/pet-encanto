@@ -62,7 +62,7 @@ Telas do admin: `src/App.tsx` (rotas) e o menu lateral em `src/pages/admin/Admin
 ## Landing page
 
 `src/pages/Landing.tsx` monta, nesta ordem, os componentes de `src/components/landing/`:
-`Header` → `Hero` → `ServicesSection` → `WhyChooseSection` → `CtaBanner` → `ContactSection` → `Footer`.
+`Header` → `Hero` → `TaxiDogBanner` (faixa verde do Taxi Dog) → `ServicesSection` → `WhyChooseSection` → `CtaBanner` → `ContactSection` → `Footer`.
 `ServicesSection` tem a lista fixa de serviços em 3 abas (Banho / Tosa / Extras); o 1º de cada aba é o destaque. Apoio: `SectionHeading` (título + subtítulo, alinhado à esquerda), `ButtonLink` (botão único da landing), `navLinks.ts` (menu do topo e rodapé). Mensagem padrão do WhatsApp: `SCHEDULE_MESSAGE` em `src/utils/whatsapp.ts`. Link de WhatsApp: `src/utils/whatsapp.ts`. Logo: `public/logo.png`. Foto da abertura: `public/hero-banho.webp` (PNG recortado, fundo transparente, com arco verde-claro atrás; tamanho médio, Pedro não quer foto gigante/até a borda). `hero-cachorro.webp` ficou sem uso. A landing não mostra mais galeria nem gatos. Textos falam em "pet", não em "só cachorros" (pedido do Pedro, 13/11/2026).
 Cores/fontes: `src/index.css`. A landing fica dentro de `<div className="landing">`, que sobrescreve as variáveis de cor (paleta própria) e usa a fonte Nunito; o admin continua com as cores do `:root` e Inter. Títulos em Fraunces (`font-display`); Pacifico (classe `font-script`) **só no nome "Encanto"**.
 
