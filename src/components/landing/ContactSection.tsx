@@ -17,7 +17,7 @@ export default function ContactSection() {
 
   return (
     <section id="contato" className="py-16 sm:py-24">
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 md:grid-cols-[1fr_1.4fr] md:gap-16">
+      <div className="mx-auto grid max-w-[88rem] gap-8 px-5 lg:px-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
         <div>
           <SectionHeading title="Onde estamos" subtitle="Venha conhecer o espaço e tirar suas dúvidas." />
           {mapsLink && (
